@@ -63,11 +63,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 			$this->data = array();
 			foreach ($this->selection as $row) {
 				$row = $this->refTable !== NULL
-						? ($this->refColumn !== NULL
-								? $row->ref($this->refTable, $this->refColumn)
-								: $row->{$this->refTable}
-						)
-						: $row;
+					? ($this->refColumn !== NULL
+							? $row->ref($this->refTable, $this->refColumn)
+							: $row->{$this->refTable}
+					)
+					: $row;
 
 				$class = $this->entity;
 				$entity = new $class($row);
