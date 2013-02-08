@@ -21,7 +21,7 @@ class Book extends YetORM\Entity
 
 
 	/** @return string */
-	function getYear()
+	function getWritten()
 	{
 		return $this->row->written;
 	}

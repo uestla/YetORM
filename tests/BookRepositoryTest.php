@@ -15,7 +15,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$expected = array(
 			'id' => 1,
 			'title' => '1001 tipu a triku pro PHP',
-			'year' => '2010',
+			'written' => '2010',
 		);
 
 		$this->assertEquals($expected, $book->toArray());
@@ -131,6 +131,54 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 
+	function testCreate()
+	{
+		$book = $this->createTestingBook();
+
+		$this->assertTrue($book instanceof Book);
+		$this->assertEquals(array(
+			'id' => 5,
+			'title' => 'Texy 2',
+			'written' => '2008',
+
+		), $book->toArray());
+
+		$this->assertEquals('David Grudl', $book->getAuthor()->getName());
+	}
+
+
+
+	function testEdit()
+	{
+		$book = static::getRepository()->findById(5);
+		$rows = static::getRepository()->edit($book, array(
+			'written' => '2006',
+		));
+
+		$this->assertEquals(1, $rows);
+		$this->assertEquals(array(
+			'id' => 5,
+			'title' => 'Texy 2',
+			'written' => '2006',
+
+		), $book->toArray());
+	}
+
+
+
+	function testRemove()
+	{
+		$repo = static::getRepository();
+		$this->assertEquals(5, count($repo->findAll()));
+
+		$rows = $repo->remove($repo->findById(5));
+		$this->assertEquals(1, $rows);
+
+		$this->assertEquals(4, count($repo->findAll()));
+	}
+
+
+
 	// =========================================
 
 	protected static function getRepository()
@@ -142,6 +190,17 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		}
 
 		return $repo;
+	}
+
+
+
+	protected function createTestingBook()
+	{
+		return static::getRepository()->create(array(
+			'author_id' => 12,
+			'title' => 'Texy 2',
+			'written' => '2008',
+		));
 	}
 
 }

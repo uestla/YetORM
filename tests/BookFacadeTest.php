@@ -17,17 +17,17 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 			array(
 				'id' => 1,
 				'title' => '1001 tipu a triku pro PHP',
-				'year' => '2010',
+				'written' => '2010',
 			),
 			array(
 				'id' => 2,
 				'title' => 'JUSH',
-				'year' => '2007',
+				'written' => '2007',
 			),
 			array(
 				'id' => 4,
 				'title' => 'Dibi',
-				'year' => '2005',
+				'written' => '2005',
 			),
 
 		), $books);

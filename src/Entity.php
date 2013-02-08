@@ -31,6 +31,14 @@ class Entity extends Nette\Object
 
 
 
+	/** @return NActiveRow */
+	function getActiveRow()
+	{
+		return $this->row;
+	}
+
+
+
 	/**
 	 * @param  string
 	 * @param  string
