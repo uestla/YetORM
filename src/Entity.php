@@ -46,7 +46,7 @@ class Entity extends Nette\Object
 	 * @param  string
 	 * @return EntityCollection
 	 */
-	protected function getMany($relTable, $entityTable, $throughColumn, $entity)
+	protected function getMany($entity, $relTable, $entityTable, $throughColumn = NULL)
 	{
 		return new EntityCollection($this->row->related($relTable), $entity, $entityTable, $throughColumn);
 	}
