@@ -153,6 +153,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$book = static::getRepository()->findById(5);
 		$rows = static::getRepository()->edit($book, array(
 			'written' => '2006',
+			'author_id' => 11,
 		));
 
 		$this->assertEquals(1, $rows);
@@ -162,6 +163,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 			'written' => '2006',
 
 		), $book->toArray());
+
+		$this->assertEquals('Jakub Vrana', $book->getAuthor()->getName());
 	}
 
 
