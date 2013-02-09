@@ -22,8 +22,7 @@ class BookFacade
 	{
 		return $this->repository->findAll()
 				->orderBy('written', TRUE)
-				->limit(3)
-				->getData();
+				->limit(3);
 	}
 
 }

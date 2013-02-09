@@ -36,7 +36,7 @@ class Book extends YetORM\Entity
 
 
 
-	/** @return EntityCollection */
+	/** @return YetORM\EntityCollection */
 	function getTags()
 	{
 		return $this->getMany('Tag', 'book_tag', 'tag');

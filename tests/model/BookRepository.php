@@ -47,7 +47,7 @@ class BookRepository extends YetORM\Repository
 
 
 
-	/** @return EntityCollection */
+	/** @return YetORM\EntityCollection */
 	function findByTag($name)
 	{
 		return $this->createCollection($this->getTable()->where('book_tag:tag.name', $name));
@@ -55,7 +55,7 @@ class BookRepository extends YetORM\Repository
 
 
 
-	/** @return EntityCollection */
+	/** @return YetORM\EntityCollection */
 	function findAll()
 	{
 		return $this->createCollection($this->getTable());
