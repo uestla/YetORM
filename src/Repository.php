@@ -48,6 +48,32 @@ abstract class Repository extends Nette\Object
 
 
 	/**
+	 * @param  NSelection
+	 * @param  string|NULL
+	 * @param  string|NULL
+	 * @param  string|NULL
+	 * @return EntityCollection
+	 */
+	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
+	{
+		if ($entity === NULL) {
+			if ($this->entity === NULL) {
+				if (!$this->parseName($name)) {
+					throw new Nette\InvalidStateException("Entity class not set.");
+				}
+
+				$this->entity = ucfirst($name);
+			}
+
+			$entity = $this->entity;
+		}
+
+		return new EntityCollection($selection, $entity, $refTable, $refColumn);
+	}
+
+
+
+	/**
 	 * @param  string|NULL
 	 * @return NSelection
 	 */
@@ -146,7 +172,7 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function begin()
 	{
-		if (self::$transactionCounter[ $dsn = $this->connection->dsn ] === 0) {
+		if (self::$transactionCounter[$dsn = $this->connection->dsn] === 0) {
 			$this->connection->beginTransaction();
 		}
 
