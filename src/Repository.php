@@ -86,14 +86,14 @@ abstract class Repository extends Nette\Object
 
 
 
-	// === LOWEND CRUD OPERATIONS ====================================================
+	// === LOW-END CRUD OPERATIONS ====================================================
 
 	/**
 	 * @param  mixed
 	 * @param  string
 	 * @return NActiveRow
 	 */
-	protected function insert($values, $table = NULL)
+	protected function insertRow($values, $table = NULL)
 	{
 		$this->begin();
 			$row = $this->getTable($table)->insert($values);
@@ -109,7 +109,7 @@ abstract class Repository extends Nette\Object
 	 * @param  mixed
 	 * @return int
 	 */
-	protected function update(NActiveRow $row, $values)
+	protected function updateRow(NActiveRow $row, $values)
 	{
 		$this->begin();
 
@@ -130,7 +130,7 @@ abstract class Repository extends Nette\Object
 	 * @param  NActiveRow
 	 * @return int
 	 */
-	protected function delete(NActiveRow $row)
+	protected function deleteRow(NActiveRow $row)
 	{
 		$this->begin();
 			$rows = $row->delete();

@@ -10,7 +10,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	function create($values)
 	{
-		return new Book($this->insert($values));
+		return new Book($this->insertRow($values));
 	}
 
 
@@ -22,7 +22,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	function edit(Book $book, $values)
 	{
-		return $this->update($book->getActiveRow(), $values);
+		return $this->updateRow($book->getActiveRow(), $values);
 	}
 
 
@@ -34,7 +34,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	function remove(Book $book)
 	{
-		return $this->delete($book->getActiveRow());
+		return $this->deleteRow($book->getActiveRow());
 	}
 
 
