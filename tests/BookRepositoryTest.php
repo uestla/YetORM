@@ -8,7 +8,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testEntity()
 	{
-		$book = static::getRepository()->findById(1);
+		$book = static::getBookRepository()->findById(1);
 
 		$this->assertTrue($book instanceof Book);
 
@@ -25,7 +25,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testOneToOne()
 	{
-		$book = static::getRepository()->findById(1);
+		$book = static::getBookRepository()->findById(1);
 		$author = $book->getAuthor();
 		$this->assertEquals('Jakub Vrana', $author->getName());
 	}
@@ -34,7 +34,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testOneToMany()
 	{
-		$book = static::getRepository()->findById(1);
+		$book = static::getBookRepository()->findById(1);
 		$tags = array();
 		foreach ($book->getTags() as $tag) {
 			$tags[] = $tag->getName();
@@ -48,7 +48,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testSearch()
 	{
 		$books = array();
-		foreach (static::getRepository()->findByTag('PHP') as $book) {
+		foreach (static::getBookRepository()->findByTag('PHP') as $book) {
 			$books[] = $book->getTitle();
 		}
 
@@ -59,8 +59,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCount()
 	{
-		$allBooks = static::getRepository()->findAll();
-		$bookTags = static::getRepository()->findById(3)->getTags();
+		$allBooks = static::getBookRepository()->findAll();
+		$bookTags = static::getBookRepository()->findById(3)->getTags();
 
 		$this->assertEquals(4, count($allBooks->limit(2))); // data not received yet -> count as non-limited
 		$this->assertEquals(2, count($allBooks->limit(2)->getData())); // data received
@@ -73,7 +73,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testPresenterFlow()
 	{
 		// load data
-		$books = static::getRepository()->findAll();
+		$books = static::getBookRepository()->findAll();
 
 		// paginate result
 		$paginator = new Nette\Utils\Paginator;
@@ -115,7 +115,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		ob_start();
 
-			foreach (static::getRepository()->findAll() as $book) {
+			foreach (static::getBookRepository()->findAll() as $book) {
 				foreach ($book->getTags()->orderBy('tag.name', TRUE) as $tag) {
 					echo $tag->getName(), ', ';
 				}
@@ -150,31 +150,36 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testEdit()
 	{
-		$book = static::getRepository()->findById(5);
-		$rows = static::getRepository()->edit($book, array(
-			'written' => '2006',
-			'author_id' => 11,
-		));
+		$repo = static::getBookRepository();
+
+		$book = $repo->findById(5);
+		$book->setTitle('New title');
+		$this->assertEquals('New title', $book->getTitle());
+
+		$rows = $repo->persist($book);
+		$this->assertEquals(1, $rows);
+		$this->assertEquals('New title', $book->getTitle());
+
+
+		$author = static::getAuthorRepository()->findById(13);
+		$this->assertEquals('Geek', $author->getName());
+
+		$this->assertEquals('David Grudl', $book->getAuthor()->getName());
+		$book->setAuthor($author);
+		$rows = $repo->persist($book);
 
 		$this->assertEquals(1, $rows);
-		$this->assertEquals(array(
-			'id' => 5,
-			'title' => 'Texy 2',
-			'written' => '2006',
-
-		), $book->toArray());
-
-		$this->assertEquals('Jakub Vrana', $book->getAuthor()->getName());
+		$this->assertEquals('Geek', $book->getAuthor()->getName());
 	}
 
 
 
-	function testRemove()
+	function testDelete()
 	{
-		$repo = static::getRepository();
+		$repo = static::getBookRepository();
 		$this->assertEquals(5, count($repo->findAll()));
 
-		$rows = $repo->remove($repo->findById(5));
+		$rows = $repo->delete($repo->findById(5));
 		$this->assertEquals(1, $rows);
 
 		$this->assertEquals(4, count($repo->findAll()));
@@ -184,7 +189,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	// =========================================
 
-	protected static function getRepository()
+	protected static function getBookRepository()
 	{
 		static $repo;
 
@@ -197,9 +202,22 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 
+	protected static function getAuthorRepository()
+	{
+		static $repo;
+
+		if ($repo === NULL) {
+			$repo = new AuthorRepository(getConnection());
+		}
+
+		return $repo;
+	}
+
+
+
 	protected function createTestingBook()
 	{
-		return static::getRepository()->create(array(
+		return static::getBookRepository()->create(array(
 			'author_id' => 12,
 			'title' => 'Texy 2',
 			'written' => '2008',

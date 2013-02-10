@@ -15,7 +15,7 @@ use Nette;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
-class Entity extends Nette\Object
+abstract class Entity extends Nette\Object
 {
 
 	/** @var NActiveRow */
@@ -32,7 +32,7 @@ class Entity extends Nette\Object
 
 
 	/** @return NActiveRow */
-	function getActiveRow()
+	final function getActiveRow()
 	{
 		return $this->row;
 	}

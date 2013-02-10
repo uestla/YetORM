@@ -15,30 +15,6 @@ class BookRepository extends YetORM\Repository
 
 
 
-	/**
-	 * @param  Book
-	 * @param  mixed
-	 * @return int
-	 */
-	function edit(Book $book, $values)
-	{
-		return $this->updateRow($book->getActiveRow(), $values);
-	}
-
-
-
-	/**
-	 * @param  Book
-	 * @param  mixed
-	 * @return int
-	 */
-	function remove(Book $book)
-	{
-		return $this->deleteRow($book->getActiveRow());
-	}
-
-
-
 	/** @return Book */
 	function findById($id)
 	{

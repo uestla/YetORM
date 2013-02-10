@@ -131,20 +131,13 @@ abstract class Repository extends Nette\Object
 
 
 	/**
-	 * @param  NActiveRow
-	 * @param  mixed
+	 * @param  Entity
 	 * @return int
 	 */
-	protected function updateRow(NActiveRow $row, $values)
+	function persist(Entity $entity)
 	{
 		$this->begin();
-
-			foreach ($values as $key => $val) {
-				$row->$key = $val;
-			}
-
-			$rows = $row->update();
-
+			$rows = $entity->getActiveRow()->update();
 		$this->commit();
 
 		return $rows;
@@ -153,13 +146,13 @@ abstract class Repository extends Nette\Object
 
 
 	/**
-	 * @param  NActiveRow
+	 * @param  Entity
 	 * @return int
 	 */
-	protected function deleteRow(NActiveRow $row)
+	function delete(Entity $entity)
 	{
 		$this->begin();
-			$rows = $row->delete();
+			$rows = $entity->getActiveRow()->delete();
 		$this->commit();
 
 		return $rows;
