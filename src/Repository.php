@@ -41,7 +41,7 @@ abstract class Repository extends Nette\Object
 		$this->connection = $connection;
 
 		if (!isset(self::$transactionCounter[$dsn = $connection->dsn])) {
-			self::$transactionCounter[ $dsn ] = 0;
+			self::$transactionCounter[$dsn] = 0;
 		}
 	}
 
