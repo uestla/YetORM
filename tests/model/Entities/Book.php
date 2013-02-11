@@ -1,6 +1,11 @@
 <?php
 
 
+/**
+ * @property string $title
+ * @property string $written
+ * @property-read int $id
+ */
 class Book extends YetORM\Entity
 {
 
@@ -8,46 +13,6 @@ class Book extends YetORM\Entity
 	function getId()
 	{
 		return $this->row->id;
-	}
-
-
-
-	/** @return string */
-	function getTitle()
-	{
-		return $this->row->title;
-	}
-
-
-
-	/**
-	 * @param  string
-	 * @return Book
-	 */
-	function setTitle($title)
-	{
-		$this->row->title = (string) $title;
-		return $this;
-	}
-
-
-
-	/** @return string */
-	function getWritten()
-	{
-		return $this->row->written;
-	}
-
-
-
-	/**
-	 * @param  string
-	 * @return Book
-	 */
-	function setWritten($written)
-	{
-		$this->row->written = (string) $written;
-		return $this;
 	}
 
 

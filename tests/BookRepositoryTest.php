@@ -6,6 +6,15 @@ require_once __DIR__ . '/db/connection.php';
 class BookRepositoryTest extends PHPUnit_Framework_TestCase
 {
 
+	function testProperties()
+	{
+		$book = static::getBookRepository()->findById(1);
+		$book->title = 'New title';
+		$this->assertEquals('New title', $book->title);
+	}
+
+
+
 	function testEntity()
 	{
 		$book = static::getBookRepository()->findById(1);
