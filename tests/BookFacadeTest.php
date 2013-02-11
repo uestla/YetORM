@@ -16,17 +16,17 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array(
 			array(
 				'id' => 1,
-				'title' => '1001 tipu a triku pro PHP',
+				'book_title' => '1001 tipu a triku pro PHP',
 				'written' => '2010',
 			),
 			array(
 				'id' => 2,
-				'title' => 'JUSH',
+				'book_title' => 'JUSH',
 				'written' => '2007',
 			),
 			array(
 				'id' => 4,
-				'title' => 'Dibi',
+				'book_title' => 'Dibi',
 				'written' => '2005',
 			),
 

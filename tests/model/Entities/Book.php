@@ -3,7 +3,7 @@
 
 /**
  * @property-read int $id
- * @property string $title
+ * @property string $book_title
  * @property string $written
  */
 class Book extends YetORM\Entity

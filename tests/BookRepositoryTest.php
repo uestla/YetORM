@@ -14,7 +14,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$expected = array(
 			'id' => 1,
-			'title' => '1001 tipu a triku pro PHP',
+			'book_title' => '1001 tipu a triku pro PHP',
 			'written' => '2010',
 		);
 
@@ -49,7 +49,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	{
 		$books = array();
 		foreach (static::getBookRepository()->findByTag('PHP') as $book) {
-			$books[] = $book->getTitle();
+			$books[] = $book->getBookTitle();
 		}
 
 		$this->assertEquals(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
@@ -85,8 +85,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		// render them ordered in template
 		$array = array();
-		foreach ($books->orderBy('title') as $book) {
-			$array[] = $book->getTitle();
+		foreach ($books->orderBy('book_title') as $book) {
+			$array[] = $book->getBookTitle();
 		}
 
 		$this->assertEquals(array('JUSH', 'Nette'), $array);
@@ -138,7 +138,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($book instanceof Book);
 		$this->assertEquals(array(
 			'id' => 5,
-			'title' => 'Texy 2',
+			'book_title' => 'Texy 2',
 			'written' => '2008',
 
 		), $book->toArray());
@@ -153,12 +153,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$repo = static::getBookRepository();
 
 		$book = $repo->findById(5);
-		$book->setTitle('New title');
-		$this->assertEquals('New title', $book->getTitle());
+		$book->setBookTitle('New title');
+		$this->assertEquals('New title', $book->getBookTitle());
 
 		$rows = $repo->persist($book);
 		$this->assertEquals(1, $rows);
-		$this->assertEquals('New title', $book->getTitle());
+		$this->assertEquals('New title', $book->getBookTitle());
 
 
 		$author = static::getAuthorRepository()->findById(13);
@@ -190,8 +190,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testProperties()
 	{
 		$book = static::getBookRepository()->findById(1);
-		$book->title = 'New title';
-		$this->assertEquals('New title', $book->title);
+		$book->book_title = 'New title';
+		$this->assertEquals('New title', $book->book_title);
 
 		$this->assertEquals('2010', $book->written);
 
@@ -249,7 +249,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	{
 		return static::getBookRepository()->create(array(
 			'author_id' => 12,
-			'title' => 'Texy 2',
+			'book_title' => 'Texy 2',
 			'written' => '2008',
 		));
 	}
