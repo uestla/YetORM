@@ -9,14 +9,6 @@
 class Book extends YetORM\Entity
 {
 
-	/** @return int */
-	function getId()
-	{
-		return $this->row->id;
-	}
-
-
-
 	/** @return Author */
 	function getAuthor()
 	{

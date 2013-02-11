@@ -6,15 +6,6 @@ require_once __DIR__ . '/db/connection.php';
 class BookRepositoryTest extends PHPUnit_Framework_TestCase
 {
 
-	function testProperties()
-	{
-		$book = static::getBookRepository()->findById(1);
-		$book->title = 'New title';
-		$this->assertEquals('New title', $book->title);
-	}
-
-
-
 	function testEntity()
 	{
 		$book = static::getBookRepository()->findById(1);
@@ -192,6 +183,28 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, $rows);
 
 		$this->assertEquals(4, count($repo->findAll()));
+	}
+
+
+
+	function testProperties()
+	{
+		$book = static::getBookRepository()->findById(1);
+		$book->title = 'New title';
+		$this->assertEquals('New title', $book->title);
+
+		$this->assertEquals('2010', $book->written);
+
+		try {
+			$book->id = 125;
+			$this->fail();
+
+		} catch (Nette\MemberAccessException $e) {}
+
+		$this->assertEquals(1, $book->id);
+
+		$this->assertTrue($book->author instanceof Author);
+		$this->assertTrue($book->tags instanceof YetORM\EntityCollection);
 	}
 
 
