@@ -109,12 +109,14 @@ abstract class Entity extends Nette\Object
 		} catch (Nette\MemberAccessException $e) {
 			if (strlen($name) > 3) {
 				$prefix = substr($name, 0, 3);
+				$prop = strtolower(NStrings::replace(substr($name, 3), '#(.)(?=[A-Z])#', '$1_')); // propName => prop_name
+
 				if ($prefix === 'set') { // set<Property>
-					$this->__set(lcfirst(substr($name, 3)), reset($args));
+					$this->__set($prop, reset($args));
 					return $this;
 
 				} elseif ($prefix === 'get') { // get<Property>
-					return $this->__get(lcfirst(substr($name, 3)));
+					return $this->__get($prop);
 				}
 			}
 
