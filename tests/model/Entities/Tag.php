@@ -1,13 +1,6 @@
 <?php
 
 
+/** @property-read string $name */
 class Tag extends YetORM\Entity
-{
-
-	/** @return string */
-	function getName()
-	{
-		return $this->row->name;
-	}
-
-}
+{}

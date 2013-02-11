@@ -103,17 +103,23 @@ abstract class Entity extends Nette\Object
 	 */
 	function __call($name, $args)
 	{
-		if (strlen($name) > 3) {
-			$prefix = substr($name, 0, 3);
-			if ($prefix === 'set') { // set<Property>
-				return $this->__set(lcfirst(substr($name, 3)), reset($args));
+		try {
+			return parent::__call($name, $args);
 
-			} elseif ($prefix === 'get') {
-				return $this->__get(lcfirst(substr($name, 3)));
+		} catch (Nette\MemberAccessException $e) {
+			if (strlen($name) > 3) {
+				$prefix = substr($name, 0, 3);
+				if ($prefix === 'set') { // set<Property>
+					$this->__set(lcfirst(substr($name, 3)), reset($args));
+					return $this;
+
+				} elseif ($prefix === 'get') { // get<Property>
+					return $this->__get(lcfirst(substr($name, 3)));
+				}
 			}
-		}
 
-		return parent::__call($name, $args);
+			throw $e;
+		}
 	}
 
 
@@ -124,16 +130,21 @@ abstract class Entity extends Nette\Object
 	 */
 	function & __get($name)
 	{
-		if ($this->hasProperty($name, FALSE, $type)) {
-			$value = $this->row->$name;
-			if (settype($value, $type) === FALSE) {
-				throw new Nette\InvalidArgumentException("Invalid property type.");
+		try {
+			return parent::__get($name);
+
+		} catch (Nette\MemberAccessException $e) {
+			if ($this->hasProperty($name, FALSE, $type)) {
+				$value = $this->row->$name;
+				if (settype($value, $type) === FALSE) {
+					throw new Nette\InvalidArgumentException("Invalid property type.");
+				}
+
+				return $value;
 			}
 
-			return $value;
+			throw $e;
 		}
-
-		return parent::__get($name);
 	}
 
 
@@ -145,16 +156,21 @@ abstract class Entity extends Nette\Object
 	 */
 	function __set($name, $value)
 	{
-		if ($this->hasProperty($name, TRUE, $type)) {
-			if (settype($value, $type) === FALSE) {
-				throw new Nette\InvalidArgumentException("Invalid property type.");
+		try {
+			return parent::__set($name, $value);
+
+		} catch (Nette\MemberAccessException $e) {
+			if ($this->hasProperty($name, TRUE, $type)) {
+				if (settype($value, $type) === FALSE) {
+					throw new Nette\InvalidArgumentException("Invalid property type.");
+				}
+
+				$this->row->$name = $value;
+				return ;
 			}
 
-			$this->row->$name = $value;
-			return $value;
+			throw $e;
 		}
-
-		return parent::__set($name, $value);
 	}
 
 
@@ -168,10 +184,10 @@ abstract class Entity extends Nette\Object
 	private function hasProperty($name, $writeAccess, & $type)
 	{
 		$anns = static::getReflection()->annotations;
-		foreach ($anns as $n => $vals) {
-			if ($n === 'property' || (!$writeAccess && $n === 'property-read')) {
-				foreach ($vals as $val) {
-					$split = NStrings::split($val, '#\s+#');
+		foreach ($anns as $key => $values) {
+			if ($key === 'property' || (!$writeAccess && $key === 'property-read')) {
+				foreach ($values as $tmp) {
+					$split = NStrings::split($tmp, '#\s+#');
 					if (count($split) >= 2) {
 						list($type, $var) = $split;
 						if ($var === '$' . $name) {
@@ -191,10 +207,10 @@ abstract class Entity extends Nette\Object
 	private function getProperties()
 	{
 		$props = array();
-		foreach (static::getReflection()->annotations as $n => $vals) {
-			if ($n === 'property' || $n === 'property-read') {
-				foreach ($vals as $val) {
-					$split = NStrings::split($val, '#\s+#');
+		foreach (static::getReflection()->annotations as $name => $values) {
+			if ($name === 'property' || $name === 'property-read') {
+				foreach ($values as $tmp) {
+					$split = NStrings::split($tmp, '#\s+#');
 					if (count($split) >= 2) {
 						list($type, $var) = $split;
 						$props[substr($var, 1)] = $type;

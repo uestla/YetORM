@@ -211,7 +211,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array(
 			'id' => 11,
 			'name' => 'Jakub Vrana',
-			'foo' => 'Hello world',
 
 		), $author->toArray());
 	}
