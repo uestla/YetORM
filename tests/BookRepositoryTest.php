@@ -205,6 +205,15 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$this->assertTrue($book->author instanceof Author);
 		$this->assertTrue($book->tags instanceof YetORM\EntityCollection);
+
+
+		$author = static::getAuthorRepository()->findById(11);
+		$this->assertEquals(array(
+			'id' => 11,
+			'name' => 'Jakub Vrana',
+			'foo' => 'Hello world',
+
+		), $author->toArray());
 	}
 
 

@@ -1,6 +1,7 @@
 <?php
 
 
+/** @property-read string $foo */
 class Author extends YetORM\Entity
 {
 
@@ -24,6 +25,14 @@ class Author extends YetORM\Entity
 	function getBooks()
 	{
 		return new YetORM\EntityCollection($this->row->related('book'), 'Book');
+	}
+
+
+
+	/** @return string */
+	function getFoo()
+	{
+		return 'Hello world';
 	}
 
 }

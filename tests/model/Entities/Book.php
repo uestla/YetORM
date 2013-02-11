@@ -2,9 +2,9 @@
 
 
 /**
+ * @property-read int $id
  * @property string $title
  * @property string $written
- * @property-read int $id
  */
 class Book extends YetORM\Entity
 {

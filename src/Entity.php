@@ -72,7 +72,7 @@ abstract class Entity extends Nette\Object
 					&& substr($method->name, 0, 3) === 'get' && strlen($method->name) > 3) {
 
 				$value = $method->invoke($this);
-				if (!($value instanceof EntityCollection) && !($value instanceof Entity)) {
+				if (!($value instanceof EntityCollection || $value instanceof Entity)) {
 					$values[lcfirst(substr($method->name, 3))] = $value;
 				}
 
@@ -80,23 +80,14 @@ abstract class Entity extends Nette\Object
 		}
 
 		// @property and @property-read annotations
-		foreach ($ref->annotations as $n => $vals) {
-			if ($n === 'property' || $n === 'property-read') {
-				foreach ($vals as $val) {
-					$split = NStrings::split($val, '#\s+#');
-					if (count($split) >= 2) {
-						list($type, $var) = $split;
-						$name = substr($var, 1);
-						$value = $this->row->$name;
-						if (settype($value, $type) === FALSE) {
-							throw new Nette\InvalidArgumentException("Invalid property type.");
-						}
-
-						if (!($value instanceof EntityCollection) && !($value instanceof Entity)) {
-							$values[$name] = $value;
-						}
-					}
+		foreach ($this->getProperties() as $name => $type) {
+			if (!isset($values[$name])) {
+				$value = $this->row->$name;
+				if (settype($value, $type) === FALSE) {
+					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
+
+				$values[$name] = $value;
 			}
 		}
 
@@ -133,7 +124,7 @@ abstract class Entity extends Nette\Object
 	 */
 	function & __get($name)
 	{
-		if ($this->_getProperty($name, FALSE, $type)) {
+		if ($this->hasProperty($name, FALSE, $type)) {
 			$value = $this->row->$name;
 			if (settype($value, $type) === FALSE) {
 				throw new Nette\InvalidArgumentException("Invalid property type.");
@@ -154,7 +145,7 @@ abstract class Entity extends Nette\Object
 	 */
 	function __set($name, $value)
 	{
-		if ($this->_getProperty($name, TRUE, $type)) {
+		if ($this->hasProperty($name, TRUE, $type)) {
 			if (settype($value, $type) === FALSE) {
 				throw new Nette\InvalidArgumentException("Invalid property type.");
 			}
@@ -174,7 +165,7 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @return bool
 	 */
-	final protected function _getProperty($name, $writeAccess, & $type)
+	private function hasProperty($name, $writeAccess, & $type)
 	{
 		$anns = static::getReflection()->annotations;
 		foreach ($anns as $n => $vals) {
@@ -192,6 +183,27 @@ abstract class Entity extends Nette\Object
 		}
 
 		return FALSE;
+	}
+
+
+
+	/** @return array */
+	private function getProperties()
+	{
+		$props = array();
+		foreach (static::getReflection()->annotations as $n => $vals) {
+			if ($n === 'property' || $n === 'property-read') {
+				foreach ($vals as $val) {
+					$split = NStrings::split($val, '#\s+#');
+					if (count($split) >= 2) {
+						list($type, $var) = $split;
+						$props[substr($var, 1)] = $type;
+					}
+				}
+			}
+		}
+
+		return $props;
 	}
 
 }
