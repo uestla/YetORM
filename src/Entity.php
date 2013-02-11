@@ -55,8 +55,8 @@ abstract class Entity extends Nette\Object
 
 
 	/**
-	 * Looks for all public get* methods and returns
-	 * associative array with corresponding values
+	 * Looks for all public get* methods and @property[-read] annotations
+	 * and returns associative array with corresponding values
 	 *
 	 * @return array
 	 */
