@@ -110,11 +110,11 @@ abstract class Entity extends Nette\Object
 			if (strlen($name) > 3) {
 				$prefix = substr($name, 0, 3);
 				if ($prefix === 'set') { // set<Property>
-					$this->__set(substr($name, 3), reset($args));
+					$this->__set(lcfirst(substr($name, 3)), reset($args));
 					return $this;
 
 				} elseif ($prefix === 'get') { // get<Property>
-					return $this->__get(substr($name, 3));
+					return $this->__get(lcfirst(substr($name, 3)));
 				}
 			}
 
@@ -161,8 +161,9 @@ abstract class Entity extends Nette\Object
 
 		} catch (Nette\MemberAccessException $e) {
 			if ($this->hasProperty($name, TRUE, $prop, $type)) {
-				if (settype($value, $type) === FALSE) {
-					throw new Nette\InvalidArgumentException("Invalid property type.");
+				$type = $type === 'bool' ? 'boolean' : $type; // accept 'bool' as well as 'boolean'
+				if (gettype($value) !== $type) {
+					throw new Nette\InvalidArgumentException("Invalid type - $type expected, " . gettype($value) . ' given.');
 				}
 
 				$this->row->$prop = $value;

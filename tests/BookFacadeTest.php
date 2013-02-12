@@ -18,16 +18,19 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 				'id' => 1,
 				'book_title' => '1001 tipu a triku pro PHP',
 				'written' => '2010',
+				'available' => TRUE,
 			),
 			array(
 				'id' => 2,
 				'book_title' => 'JUSH',
 				'written' => '2007',
+				'available' => TRUE,
 			),
 			array(
 				'id' => 4,
 				'book_title' => 'Dibi',
 				'written' => '2005',
+				'available' => TRUE,
 			),
 
 		), $books);

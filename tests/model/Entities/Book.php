@@ -5,6 +5,7 @@
  * @property-read int $id
  * @property string $book_title
  * @property string $written
+ * @property bool $available
  */
 class Book extends YetORM\Entity
 {
