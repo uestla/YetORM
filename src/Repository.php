@@ -56,19 +56,7 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
 	{
-		if ($entity === NULL) {
-			if ($this->entity === NULL) {
-				if (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Entity class not set.");
-				}
-
-				$this->entity = ucfirst($name);
-			}
-
-			$entity = $this->entity;
-		}
-
-		return new EntityCollection($selection, $entity, $refTable, $refColumn);
+		return new EntityCollection($selection, $this->getEntityClass($entity), $refTable, $refColumn);
 	}
 
 
@@ -79,19 +67,7 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function getTable($table = NULL)
 	{
-		if ($table === NULL) {
-			if ($this->table === NULL) {
-				if (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Table name not set.");
-				}
-
-				$this->table = strtolower($name);
-			}
-
-			$table = $this->table;
-		}
-
-		return $this->connection->table($table);
+		return $this->connection->table($this->getTableName($table));
 	}
 
 
@@ -108,6 +84,52 @@ abstract class Repository extends Nette\Object
 
 		$name = $m[1];
 		return TRUE;
+	}
+
+
+
+	/**
+	 * @param  string|NULL
+	 * @return string
+	 */
+	private function getTableName($table)
+	{
+		if ($table === NULL) {
+			if ($this->table === NULL) {
+				if (!$this->parseName($name)) {
+					throw new Nette\InvalidStateException("Table name not set.");
+				}
+
+				$this->table = strtolower($name);
+			}
+
+			$table = $this->table;
+		}
+
+		return $table;
+	}
+
+
+
+	/**
+	 * @param  string|NULL
+	 * @return string
+	 */
+	private function getEntityClass($entity)
+	{
+		if ($entity === NULL) {
+			if ($this->entity === NULL) {
+				if (!$this->parseName($name)) {
+					throw new Nette\InvalidStateException("Entity class not set.");
+				}
+
+				$this->entity = ucfirst($name);
+			}
+
+			$entity = $this->entity;
+		}
+
+		return $entity;
 	}
 
 
