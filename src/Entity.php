@@ -134,8 +134,8 @@ abstract class Entity extends Nette\Object
 			return parent::__get($name);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, FALSE, $type)) {
-				$value = $this->row->$name;
+			if ($this->hasProperty($name, FALSE, $prop, $type)) {
+				$value = $this->row->$prop;
 				if (settype($value, $type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
@@ -160,12 +160,12 @@ abstract class Entity extends Nette\Object
 			return parent::__set($name, $value);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, TRUE, $type)) {
+			if ($this->hasProperty($name, TRUE, $prop, $type)) {
 				if (settype($value, $type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
 
-				$this->row->$name = $value;
+				$this->row->$prop = $value;
 				return ;
 			}
 
@@ -179,12 +179,13 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @param  bool
 	 * @param  string
+	 * @param  string
 	 * @return bool
 	 */
-	private function hasProperty(& $name, $writeAccess, & $type)
+	private function hasProperty($name, $writeAccess, & $prop, & $type)
 	{
 		$anns = static::getReflection()->annotations;
-		$name = strtolower(NStrings::replace($name, '#(.)(?=[A-Z])#', '$1_')); // propName => prop_name
+		$prop = strtolower(NStrings::replace($name, '#(.)(?=[A-Z])#', '$1_')); // propName => prop_name
 
 		foreach ($anns as $key => $values) {
 			if ($key === 'property' || (!$writeAccess && $key === 'property-read')) {
@@ -192,7 +193,7 @@ abstract class Entity extends Nette\Object
 					$split = NStrings::split($tmp, '#\s+#');
 					if (count($split) >= 2) {
 						list($type, $var) = $split;
-						if ($var === '$' . $name) {
+						if ($var === '$' . $prop) {
 							return TRUE;
 						}
 					}
