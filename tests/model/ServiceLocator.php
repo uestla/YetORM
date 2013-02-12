@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/db/connection.php';
+
 
 class ServiceLocator
 {
@@ -9,6 +11,9 @@ class ServiceLocator
 
 	/** @var AuthorRepository */
 	protected static $authorRepository = NULL;
+
+	/** @var BookFacade */
+	protected static $bookFacade = NULL;
 
 
 
@@ -30,6 +35,17 @@ class ServiceLocator
 		}
 
 		return static::$authorRepository;
+	}
+
+
+
+	static function getBookFacade()
+	{
+		if (static::$bookFacade === NULL) {
+			static::$bookFacade = new BookFacade(static::getBookRepository());
+		}
+
+		return static::$bookFacade;
 	}
 
 
