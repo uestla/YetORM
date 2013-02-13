@@ -10,7 +10,11 @@ class BookRepository extends YetORM\Repository
 	 */
 	function create($values)
 	{
-		return new Book($this->insertRow($values));
+		$this->begin();
+			$row = $this->getTable()->insert($values);
+		$this->commit();
+
+		return new Book($row);
 	}
 
 

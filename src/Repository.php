@@ -137,22 +137,6 @@ abstract class Repository extends Nette\Object
 	// === LOW-END CRUD OPERATIONS ====================================================
 
 	/**
-	 * @param  mixed
-	 * @param  string
-	 * @return NActiveRow
-	 */
-	protected function insertRow($values, $table = NULL)
-	{
-		$this->begin();
-			$row = $this->getTable($table)->insert($values);
-		$this->commit();
-
-		return $row;
-	}
-
-
-
-	/**
 	 * @param  Entity
 	 * @return int
 	 */
