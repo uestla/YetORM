@@ -27,19 +27,20 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
-  `title` varchar(50) COLLATE utf8_czech_ci NOT NULL,
+  `book_title` varchar(50) COLLATE utf8_czech_ci NOT NULL,
   `written` year(4) NOT NULL,
+  `available` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `book_author` (`author_id`),
-  KEY `book_title` (`title`),
+  KEY `book_title` (`book_title`),
   CONSTRAINT `book_author` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `book` (`id`, `author_id`, `title`, `written`) VALUES
-(1,	11,	'1001 tipu a triku pro PHP',	'2010'),
-(2,	11,	'JUSH',	'2007'),
-(3,	12,	'Nette',	'2004'),
-(4,	12,	'Dibi',	'2005');
+INSERT INTO `book` (`id`, `author_id`, `book_title`, `written`, `available`) VALUES
+(1,	11,	'1001 tipu a triku pro PHP',	'2010',	1),
+(2,	11,	'JUSH',	'2007',	1),
+(3,	12,	'Nette',	'2004',	1),
+(4,	12,	'Dibi',	'2005',	1);
 
 DROP TABLE IF EXISTS `book_tag`;
 CREATE TABLE `book_tag` (
@@ -72,4 +73,4 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (23,	'JavaScript'),
 (24,	'Neon');
 
--- 2013-02-08 21:45:59
+-- 2013-02-12 11:13:51

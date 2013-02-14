@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/db/connection.php';
+require_once __DIR__ . '/model/ServiceLocator.php';
 
 
 class BookRepositoryTest extends PHPUnit_Framework_TestCase
@@ -8,14 +8,15 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testEntity()
 	{
-		$book = static::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->findById(1);
 
 		$this->assertTrue($book instanceof Book);
 
 		$expected = array(
 			'id' => 1,
-			'title' => '1001 tipu a triku pro PHP',
+			'book_title' => '1001 tipu a triku pro PHP',
 			'written' => '2010',
+			'available' => TRUE,
 		);
 
 		$this->assertEquals($expected, $book->toArray());
@@ -25,7 +26,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testOneToOne()
 	{
-		$book = static::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->findById(1);
 		$author = $book->getAuthor();
 		$this->assertEquals('Jakub Vrana', $author->getName());
 	}
@@ -34,7 +35,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testOneToMany()
 	{
-		$book = static::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->findById(1);
 		$tags = array();
 		foreach ($book->getTags() as $tag) {
 			$tags[] = $tag->getName();
@@ -48,8 +49,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testSearch()
 	{
 		$books = array();
-		foreach (static::getBookRepository()->findByTag('PHP') as $book) {
-			$books[] = $book->getTitle();
+		foreach (ServiceLocator::getBookRepository()->findByTag('PHP') as $book) {
+			$books[] = $book->getBookTitle();
 		}
 
 		$this->assertEquals(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
@@ -59,8 +60,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCount()
 	{
-		$allBooks = static::getBookRepository()->findAll();
-		$bookTags = static::getBookRepository()->findById(3)->getTags();
+		$allBooks = ServiceLocator::getBookRepository()->findAll();
+		$bookTags = ServiceLocator::getBookRepository()->findById(3)->getTags();
 
 		$this->assertEquals(4, count($allBooks->limit(2))); // data not received yet -> count as non-limited
 		$this->assertEquals(2, count($allBooks->limit(2)->getData())); // data received
@@ -73,7 +74,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testPresenterFlow()
 	{
 		// load data
-		$books = static::getBookRepository()->findAll();
+		$books = ServiceLocator::getBookRepository()->findAll();
 
 		// paginate result
 		$paginator = new Nette\Utils\Paginator;
@@ -85,8 +86,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		// render them ordered in template
 		$array = array();
-		foreach ($books->orderBy('title') as $book) {
-			$array[] = $book->getTitle();
+		foreach ($books->orderBy('book_title') as $book) {
+			$array[] = $book->getBookTitle();
 		}
 
 		$this->assertEquals(array('JUSH', 'Nette'), $array);
@@ -115,7 +116,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		ob_start();
 
-			foreach (static::getBookRepository()->findAll() as $book) {
+			foreach (ServiceLocator::getBookRepository()->findAll() as $book) {
 				foreach ($book->getTags()->orderBy('tag.name', TRUE) as $tag) {
 					echo $tag->getName(), ', ';
 				}
@@ -133,13 +134,14 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCreate()
 	{
-		$book = $this->createTestingBook();
+		$book = ServiceLocator::createTestingBook();
 
 		$this->assertTrue($book instanceof Book);
 		$this->assertEquals(array(
 			'id' => 5,
-			'title' => 'Texy 2',
+			'book_title' => 'Texy 2',
 			'written' => '2008',
+			'available' => TRUE,
 
 		), $book->toArray());
 
@@ -150,18 +152,20 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testEdit()
 	{
-		$repo = static::getBookRepository();
+		$repo = ServiceLocator::getBookRepository();
 
+		// change title
 		$book = $repo->findById(5);
-		$book->setTitle('New title');
-		$this->assertEquals('New title', $book->getTitle());
+		$book->setBookTitle('New title');
+		$this->assertEquals('New title', $book->getBookTitle());
 
 		$rows = $repo->persist($book);
 		$this->assertEquals(1, $rows);
-		$this->assertEquals('New title', $book->getTitle());
+		$this->assertEquals('New title', $book->getBookTitle());
 
 
-		$author = static::getAuthorRepository()->findById(13);
+		// change author
+		$author = ServiceLocator::getAuthorRepository()->findById(13);
 		$this->assertEquals('Geek', $author->getName());
 
 		$this->assertEquals('David Grudl', $book->getAuthor()->getName());
@@ -170,58 +174,33 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(1, $rows);
 		$this->assertEquals('Geek', $book->getAuthor()->getName());
+
+
+		// change availability
+		$book->setAvailable(FALSE);
+		$repo->persist($book);
+		$this->assertFalse($book->getAvailable());
+
+		$this->assertEquals(array(
+			'id' => 5,
+			'book_title' => 'New title',
+			'written' => '2008',
+			'available' => FALSE,
+
+		), $book->toArray());
 	}
 
 
 
 	function testDelete()
 	{
-		$repo = static::getBookRepository();
+		$repo = ServiceLocator::getBookRepository();
 		$this->assertEquals(5, count($repo->findAll()));
 
 		$rows = $repo->delete($repo->findById(5));
 		$this->assertEquals(1, $rows);
 
 		$this->assertEquals(4, count($repo->findAll()));
-	}
-
-
-
-	// =========================================
-
-	protected static function getBookRepository()
-	{
-		static $repo;
-
-		if ($repo === NULL) {
-			$repo = new BookRepository(getConnection());
-		}
-
-		return $repo;
-	}
-
-
-
-	protected static function getAuthorRepository()
-	{
-		static $repo;
-
-		if ($repo === NULL) {
-			$repo = new AuthorRepository(getConnection());
-		}
-
-		return $repo;
-	}
-
-
-
-	protected function createTestingBook()
-	{
-		return static::getBookRepository()->create(array(
-			'author_id' => 12,
-			'title' => 'Texy 2',
-			'written' => '2008',
-		));
 	}
 
 }
