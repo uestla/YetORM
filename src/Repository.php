@@ -95,7 +95,10 @@ abstract class Repository extends Nette\Object
 	{
 		if ($table === NULL) {
 			if ($this->table === NULL) {
-				if (!$this->parseName($name)) {
+				if (($name = static::getReflection()->getAnnotation('table')) !== NULL) {
+					$this->table = $name;
+
+				} elseif (!$this->parseName($name)) {
 					throw new Nette\InvalidStateException("Table name not set.");
 				}
 
@@ -118,7 +121,10 @@ abstract class Repository extends Nette\Object
 	{
 		if ($entity === NULL) {
 			if ($this->entity === NULL) {
-				if (!$this->parseName($name)) {
+				if (($name = static::getReflection()->getAnnotation('entity')) !== NULL) {
+					$this->entity = $name;
+
+				} elseif (!$this->parseName($name)) {
 					throw new Nette\InvalidStateException("Entity class not set.");
 				}
 
