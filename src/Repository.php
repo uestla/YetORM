@@ -15,7 +15,6 @@ use Nette;
 use Nette\Utils\Strings as NStrings;
 use Nette\Database\Connection as NConnection;
 use Nette\Database\Table\Selection as NSelection;
-use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
 abstract class Repository extends Nette\Object
