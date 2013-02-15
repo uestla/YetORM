@@ -5,13 +5,21 @@ class BookRepository extends YetORM\Repository
 {
 
 	/**
-	 * @param  mixed
+	 * @param  string
+	 * @param  int
+	 * @param  string
+	 * @param  bool
 	 * @return Book
 	 */
-	function create($values)
+	function create($title, $author, $written, $available = TRUE)
 	{
 		$this->begin();
-			$row = $this->getTable()->insert($values);
+			$row = $this->getTable()->insert(array(
+				'author_id' => $author,
+				'book_title' => $title,
+				'written' => $written,
+				'available' => $available,
+			));
 		$this->commit();
 
 		return new Book($row);

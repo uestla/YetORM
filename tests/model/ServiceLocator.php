@@ -52,12 +52,7 @@ class ServiceLocator
 
 	static function createTestingBook()
 	{
-		return static::getBookRepository()->create(array(
-			'author_id' => 12,
-			'book_title' => 'Texy 2',
-			'written' => '2008',
-			'available' => TRUE,
-		));
+		return static::getBookRepository()->create('Texy 2', 12, '2008');
 	}
 
 }
