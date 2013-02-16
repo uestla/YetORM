@@ -1,10 +1,11 @@
 <?php
 
-require_once __DIR__ . '/db/connection.php';
-
 
 class ServiceLocator
 {
+
+	/** @var Nette\Database\Connection */
+	protected static $connection = NULL;
 
 	/** @var BookRepository */
 	protected static $bookRepository = NULL;
@@ -17,10 +18,22 @@ class ServiceLocator
 
 
 
+	static function getConnection()
+	{
+		if (static::$connection === NULL) {
+			static::$connection = new Nette\Database\Connection('mysql:host=localhost;dbname=repository_test', 'root', '');
+			Nette\Database\Helpers::loadFromFile(static::$connection, __DIR__ . '/db/db.sql');
+		}
+
+		return static::$connection;
+	}
+
+
+
 	static function getBookRepository()
 	{
 		if (static::$bookRepository === NULL) {
-			static::$bookRepository = new BookRepository(getConnection());
+			static::$bookRepository = new BookRepository(static::getConnection());
 		}
 
 		return static::$bookRepository;
@@ -31,7 +44,7 @@ class ServiceLocator
 	static function getAuthorRepository()
 	{
 		if (static::$authorRepository === NULL) {
-			static::$authorRepository = new AuthorRepository(getConnection());
+			static::$authorRepository = new AuthorRepository(static::getConnection());
 		}
 
 		return static::$authorRepository;

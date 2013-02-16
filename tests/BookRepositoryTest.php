@@ -99,7 +99,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testQueries()
 	{
-		$connection = getConnection();
+		$connection = ServiceLocator::getConnection();
 		$connection->onQuery['queryDump'] = function (Nette\Database\Statement $st) {
 			echo $st->queryString . "\n";
 		};
