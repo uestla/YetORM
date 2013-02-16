@@ -23,10 +23,11 @@ class BookRepository extends YetORM\Repository
 				'available' => $available,
 			));
 
+			$tagMap = $this->getTable('tag')->fetchPairs('name', 'id');
 			foreach ($tags as $name) {
 				$this->getTable('book_tag')->insert(array(
 					'book_id' => $row->id,
-					'tag_id' => $this->getTable('tag')->where('name', $name)->fetch()->id,
+					'tag_id' => $tagMap[$name],
 				));
 			}
 
