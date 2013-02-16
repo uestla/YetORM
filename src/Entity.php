@@ -32,14 +32,6 @@ abstract class Entity extends Nette\Object
 
 
 
-	/** @return NActiveRow */
-	final function toActiveRow()
-	{
-		return $this->row;
-	}
-
-
-
 	/**
 	 * @param  string
 	 * @param  string
@@ -50,6 +42,14 @@ abstract class Entity extends Nette\Object
 	protected function getMany($entity, $relTable, $entityTable, $throughColumn = NULL)
 	{
 		return new EntityCollection($this->row->related($relTable), $entity, $entityTable, $throughColumn);
+	}
+
+
+
+	/** @return NActiveRow */
+	final function toActiveRow()
+	{
+		return $this->row;
 	}
 
 
