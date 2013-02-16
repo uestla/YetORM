@@ -148,7 +148,7 @@ abstract class Repository extends Nette\Object
 	function persist(Entity $entity)
 	{
 		$this->begin();
-			$rows = $entity->getActiveRow()->update();
+			$rows = $entity->toActiveRow()->update();
 		$this->commit();
 
 		return $rows;
@@ -163,7 +163,7 @@ abstract class Repository extends Nette\Object
 	function delete(Entity $entity)
 	{
 		$this->begin();
-			$rows = $entity->getActiveRow()->delete();
+			$rows = $entity->toActiveRow()->delete();
 		$this->commit();
 
 		return $rows;

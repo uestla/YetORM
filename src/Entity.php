@@ -33,7 +33,7 @@ abstract class Entity extends Nette\Object
 
 
 	/** @return NActiveRow */
-	final function getActiveRow()
+	final function toActiveRow()
 	{
 		return $this->row;
 	}
