@@ -36,4 +36,20 @@ class Book extends YetORM\Entity
 		return $this->getMany('Tag', 'book_tag', 'tag');
 	}
 
+
+
+	/** @return array */
+	function toArray()
+	{
+		$return = parent::toArray();
+		$return['author'] = $this->getAuthor()->getName();
+
+		$return['tags'] = array();
+		foreach ($this->getTags() as $tag) {
+			$return['tags'][] = $tag->getName();
+		}
+
+		return $return;
+	}
+
 }

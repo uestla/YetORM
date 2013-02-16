@@ -64,13 +64,14 @@ DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) COLLATE utf8_czech_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `tag` (`id`, `name`) VALUES
-(21,	'PHP'),
-(22,	'MySQL'),
 (23,	'JavaScript'),
-(24,	'Neon');
+(22,	'MySQL'),
+(24,	'Neon'),
+(21,	'PHP');
 
--- 2013-02-12 11:13:51
+-- 2013-02-16 15:11:40

@@ -52,7 +52,7 @@ class ServiceLocator
 
 	static function createTestingBook()
 	{
-		return static::getBookRepository()->create('Texy 2', 12, '2008');
+		return static::getBookRepository()->create('Texy 2', 12, '2008', TRUE, array('PHP'));
 	}
 
 }
