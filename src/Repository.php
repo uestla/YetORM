@@ -139,38 +139,6 @@ abstract class Repository extends Nette\Object
 
 
 
-	// === LOW-END CRUD OPERATIONS ====================================================
-
-	/**
-	 * @param  Entity
-	 * @return int
-	 */
-	function persist(Entity $entity)
-	{
-		$this->begin();
-			$rows = $entity->toActiveRow()->update();
-		$this->commit();
-
-		return $rows;
-	}
-
-
-
-	/**
-	 * @param  Entity
-	 * @return int
-	 */
-	function delete(Entity $entity)
-	{
-		$this->begin();
-			$rows = $entity->toActiveRow()->delete();
-		$this->commit();
-
-		return $rows;
-	}
-
-
-
 	// === TRANSACTIONS ====================================================
 
 	/** @return void */
