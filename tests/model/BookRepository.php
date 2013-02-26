@@ -38,6 +38,36 @@ class BookRepository extends YetORM\Repository
 
 
 
+	/**
+	 * @param  Book
+	 * @return int
+	 */
+	function persist(Book $book)
+	{
+		$this->begin();
+			$rows = $book->toActiveRow()->update();
+		$this->commit();
+
+		return $rows;
+	}
+
+
+
+	/**
+	 * @param  Book
+	 * @return int
+	 */
+	function delete(Book $book)
+	{
+		$this->begin();
+			$rows = $book->toActiveRow()->delete();
+		$this->commit();
+
+		return $rows;
+	}
+
+
+
 	/** @return Book */
 	function findById($id)
 	{
