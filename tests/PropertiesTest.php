@@ -93,26 +93,21 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 
 
-	function test()
+	/** Tests default Nette\Object properties behavior */
+	function testNativeGettersSetters()
 	{
 		$book = ServiceLocator::getBookRepository()->findById(1);
-		$book->book_title = 'New title';
-		$this->assertEquals('New title', $book->book_title);
+		$author = $book->author;
 
-		$this->assertEquals('2010', $book->written);
-
-		try {
-			$book->id = 125;
-			$this->fail();
-
-		} catch (Nette\MemberAccessException $e) {}
-
-		$this->assertEquals(1, $book->id);
-
-		$this->assertTrue($book->author instanceof Author);
+		$this->assertTrue($author instanceof Author);
 		$this->assertTrue($book->tags instanceof YetORM\EntityCollection);
+		$this->assertTrue($author->books instanceof YetORM\EntityCollection);
+	}
 
 
+
+	function testToArray()
+	{
 		$author = ServiceLocator::getAuthorRepository()->findById(11);
 		$this->assertEquals(array(
 			'id' => 11,

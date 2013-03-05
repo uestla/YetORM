@@ -26,7 +26,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 
-	function testOneToOne()
+	function testManyToOne()
 	{
 		$book = ServiceLocator::getBookRepository()->findById(1);
 		$author = $book->getAuthor();
@@ -35,7 +35,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 
-	function testOneToMany()
+	function testManyToMany()
 	{
 		$book = ServiceLocator::getBookRepository()->findById(1);
 		$tags = array();
@@ -97,6 +97,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 
+	/** Tests equality of queries using native & YetORM data access */
 	function testQueries()
 	{
 		$connection = ServiceLocator::getConnection();
