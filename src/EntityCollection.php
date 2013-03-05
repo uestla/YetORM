@@ -13,7 +13,6 @@ namespace YetORM;
 
 
 use Nette;
-use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
 
 
@@ -41,10 +40,10 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/**
-	 * @param  NSelection|NActiveRow[]
+	 * @param  NSelection
 	 * @param  string
-	 * @param  string|NULL
-	 * @param  string|NULL
+	 * @param  string
+	 * @param  string
 	 */
 	function __construct(NSelection $selection, $entity, $refTable = NULL, $refColumn = NULL)
 	{
@@ -100,7 +99,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * $this->orderBy('column', TRUE); // ORDER BY [column] DESC
 	 * // or
 	 * $this->orderBy(array(
-	 *	'first' => FALSE,
+	 *	'first'  => FALSE,
 	 *	'second' => TRUE,
 	 * ); // ORDER BY [first], [second] DESC
 	 * </code>
