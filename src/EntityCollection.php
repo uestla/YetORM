@@ -97,9 +97,9 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * API:
 	 *
 	 * <code>
-	 * $this->order('column', TRUE); // ORDER BY [column] DESC
+	 * $this->orderBy('column', TRUE); // ORDER BY [column] DESC
 	 * // or
-	 * $this->order(array(
+	 * $this->orderBy(array(
 	 *	'first' => FALSE,
 	 *	'second' => TRUE,
 	 * ); // ORDER BY [first], [second] DESC
