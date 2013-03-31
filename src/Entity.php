@@ -134,9 +134,9 @@ abstract class Entity extends Nette\Object
 			return parent::__get($name);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, FALSE, $prop, $type)) {
-				$value = $this->row->$prop;
-				if (settype($value, $type) === FALSE) {
+			if ($this->hasProperty($name, FALSE, $property, $type)) {
+				$value = $this->row->$property;
+				if (gettype($value) !== 'object' && settype($value, $type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
 
@@ -160,13 +160,15 @@ abstract class Entity extends Nette\Object
 			return parent::__set($name, $value);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, TRUE, $prop, $type)) {
-				$type = $type === 'bool' ? 'boolean' : $type; // accept 'bool' as well as 'boolean'
-				if (gettype($value) !== $type) {
-					throw new Nette\InvalidArgumentException("Invalid type - $type expected, " . gettype($value) . ' given.');
+			if ($this->hasProperty($name, TRUE, $property, $expected)) {
+				$expected = $expected === 'bool' ? 'boolean' : $expected; // accept 'bool' as well as 'boolean'
+				$actual = gettype($value);
+
+				if ($actual !== $expected) {
+					throw new Nette\InvalidArgumentException("Invalid type - '$expected' expected, '$actual' given.");
 				}
 
-				$this->row->$prop = $value;
+				$this->row->$property = $value;
 				return ;
 			}
 

@@ -35,7 +35,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (Nette\InvalidArgumentException $e) {
-			if ($e->getMessage() !== 'Invalid type - string expected, integer given.') {
+			if ($e->getMessage() !== "Invalid type - 'string' expected, 'integer' given.") {
 				throw $e;
 			}
 		}
@@ -45,7 +45,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (Nette\InvalidArgumentException $e) {
-			if ($e->getMessage() !== 'Invalid type - boolean expected, string given.') {
+			if ($e->getMessage() !== "Invalid type - 'boolean' expected, 'string' given.") {
 				throw $e;
 			}
 		}
