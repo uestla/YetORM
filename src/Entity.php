@@ -136,7 +136,7 @@ abstract class Entity extends Nette\Object
 		} catch (Nette\MemberAccessException $e) {
 			if ($this->hasProperty($name, FALSE, $property, $type)) {
 				$value = $this->row->$property;
-				if (gettype($value) !== 'object' && settype($value, $type) === FALSE) {
+				if (settype($value, $type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
 
