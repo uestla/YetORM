@@ -4,6 +4,7 @@
 	"description": "Lightweight ORM for Nette\\Database",
 	"keywords": ["nette", "orm", "database"],
 	"homepage": "https://github.com/uestla/YetORM",
+	"licence": "MIT",
 	"support": {
 		"issues": "https://github.com/uestla/YetORM/issues"
 	},
