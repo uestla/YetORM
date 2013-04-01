@@ -1,0 +1,22 @@
+{
+	"name": "uestla/YetORM",
+	"type": "library",
+	"description": "Lightweight ORM for Nette\\Database",
+	"keywords": ["nette", "orm", "database"],
+	"homepage": "https://github.com/uestla/YetORM",
+	"support": {
+		"issues": "https://github.com/uestla/YetORM/issues"
+	},
+	"require": {
+		"php": ">=5.3.0",
+		"nette/nette": ">=2.0.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	},
+	"autoload": {
+		"psr-0": {
+			"YetORM": "src/"
+		}
+	}
+}
