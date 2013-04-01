@@ -77,7 +77,7 @@ abstract class Repository extends Nette\Object
 	 */
 	private function parseName(& $name)
 	{
-		if (!($m = NStrings::match($this->reflection->name, '#([a-z0-9]+)repository$#i'))) {
+		if (!($m = NStrings::match(static::getReflection()->name, '#([a-z0-9]+)repository$#i'))) {
 			return FALSE;
 		}
 
