@@ -75,7 +75,7 @@ abstract class Repository extends Nette\Object
 	 * @param  string
 	 * @return bool
 	 */
-	private function parseName(& $name)
+	protected function parseName(& $name)
 	{
 		if (!($m = NStrings::match(static::getReflection()->name, '#([a-z0-9]+)repository$#i'))) {
 			return FALSE;
@@ -117,7 +117,7 @@ abstract class Repository extends Nette\Object
 	 * @param  string|NULL
 	 * @return string
 	 */
-	private function getEntityClass($entity)
+	protected function getEntityClass($entity)
 	{
 		if ($entity === NULL) {
 			if ($this->entity === NULL) {
