@@ -66,23 +66,17 @@ abstract class Entity extends Nette\Object
 	{
 		$ref = static::getReflection();
 		$values = array();
-		$class = $ref->name;
 
 		// get<Property> methods
-		foreach ($ref->methods as $method) {
-			if ($method->declaringClass->name === $class && $method->public
-					&& substr($method->name, 0, 3) === 'get' && strlen($method->name) > 3) {
-
-				$value = $method->invoke($this);
-				if (!($value instanceof EntityCollection || $value instanceof Entity)) {
-					$values[lcfirst(substr($method->name, 3))] = $value;
-				}
-
+		foreach ($ref->getters as $method) {
+			$value = $method->invoke($this);
+			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
+				$values[lcfirst(substr($method->name, 3))] = $value;
 			}
 		}
 
 		// @property and @property-read annotations
-		foreach ($ref->getProperties() as $name => $prop) {
+		foreach ($ref->properties as $name => $prop) {
 			if (!isset($values[$name])) {
 				$value = $this->row->{$prop->column};
 				if (settype($value, $prop->type) === FALSE) {

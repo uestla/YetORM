@@ -12,14 +12,22 @@
 namespace YetORM\Reflection;
 
 use Nette\Utils\Strings as NStrings;
+use Nette\Reflection\Method as NMethod;
 use Nette\Reflection\ClassType as NClassType;
 
 
+/**
+ * @property-read EntityProperty[] $properties
+ * @property-read NMethod[] $getters
+ */
 class EntityType extends NClassType
 {
 
 	/** @var EntityProperty[] */
 	private $properties = NULL;
+
+	/** @var NMethod[] */
+	protected $getters = NULL;
 
 
 
@@ -90,6 +98,32 @@ class EntityType extends NClassType
 	{
 		$this->loadProperties();
 		return isset($this->properties[$name]);
+	}
+
+
+
+	/** @return NMethod[] */
+	function getGetters()
+	{
+		$this->loadGetters();
+		return $this->getters;
+	}
+
+
+
+	/** @return void */
+	protected function loadGetters()
+	{
+		if ($this->getters === NULL) {
+			$this->getters = array();
+			foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
+				if ($method->declaringClass->name === $this->name
+						&& substr($method->name, 0, 3) === 'get' && strlen($method->name) > 3) {
+
+					$this->getters[] = $method;
+				}
+			}
+		}
 	}
 
 }
