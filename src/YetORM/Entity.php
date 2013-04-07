@@ -82,7 +82,7 @@ abstract class Entity extends Nette\Object
 		}
 
 		// @property and @property-read annotations
-		foreach (static::getReflection()->getProperties() as $name => $prop) {
+		foreach ($ref->getProperties() as $name => $prop) {
 			if (!isset($values[$name])) {
 				$value = $this->row->{$prop->column};
 				if (settype($value, $prop->type) === FALSE) {
