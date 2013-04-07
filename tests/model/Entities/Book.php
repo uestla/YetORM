@@ -3,7 +3,7 @@
 
 /**
  * @property-read int $id
- * @property string $book_title
+ * @property string $bookTitle -> book_title
  * @property string $written
  * @property bool $available
  */

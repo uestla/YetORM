@@ -12,8 +12,6 @@
 namespace YetORM;
 
 use Nette;
-use Nette\Utils\Strings as NStrings;
-use Nette\Reflection\ClassType as NClassType;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
@@ -24,7 +22,7 @@ abstract class Entity extends Nette\Object
 	protected $row;
 
 	/** @var array */
-	protected static $reflections = array();
+	private static $reflections = array();
 
 
 
@@ -84,10 +82,10 @@ abstract class Entity extends Nette\Object
 		}
 
 		// @property and @property-read annotations
-		foreach ($this->getProperties() as $name => $type) {
+		foreach (static::getReflection()->getProperties() as $name => $prop) {
 			if (!isset($values[$name])) {
-				$value = $this->row->$name;
-				if (settype($value, $type) === FALSE) {
+				$value = $this->row->{$prop->column};
+				if (settype($value, $prop->type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
 
@@ -138,9 +136,9 @@ abstract class Entity extends Nette\Object
 			return parent::__get($name);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, FALSE, $property, $type)) {
-				$value = $this->row->$property;
-				if (settype($value, $type) === FALSE) {
+			if ($prop = static::getReflection()->getProperty($name)) {
+				$value = $this->row->{$prop->column};
+				if (settype($value, $prop->type) === FALSE) {
 					throw new Nette\InvalidArgumentException("Invalid property type.");
 				}
 
@@ -164,15 +162,14 @@ abstract class Entity extends Nette\Object
 			return parent::__set($name, $value);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($this->hasProperty($name, TRUE, $property, $expected)) {
-				$expected = $expected === 'bool' ? 'boolean' : $expected; // accept 'bool' as well as 'boolean'
-				$actual = gettype($value);
-
-				if ($actual !== $expected) {
-					throw new Nette\InvalidArgumentException("Invalid type - '$expected' expected, '$actual' given.");
+			$prop = static::getReflection()->getProperty($name);
+			if ($prop && !$prop->readonly) {
+				$type = gettype($value);
+				if ($type !== $prop->type) {
+					throw new Nette\InvalidArgumentException("Invalid type - '{$prop->type}' expected, '$type' given.");
 				}
 
-				$this->row->$property = $value;
+				$this->row->{$prop->column} = $value;
 				return ;
 			}
 
@@ -188,7 +185,7 @@ abstract class Entity extends Nette\Object
 	 */
 	function __isset($name)
 	{
-		return $this->hasProperty($name, FALSE, $prop, $type) || parent::__isset($name);
+		return parent::__isset($name) || static::getReflection()->hasProperty($name);
 	}
 
 
@@ -205,67 +202,15 @@ abstract class Entity extends Nette\Object
 
 
 
-	/** @return NClassType */
+	/** @return Reflection\EntityType */
 	static function getReflection()
 	{
 		$class = get_called_class();
-		if (!isset(static::$reflections[$class])) {
-			static::$reflections[$class] = parent::getReflection();
+		if (!isset(self::$reflections[$class])) {
+			self::$reflections[$class] = new Reflection\EntityType($class);
 		}
 
-		return static::$reflections[$class];
-	}
-
-
-
-	/**
-	 * @param  string
-	 * @param  bool
-	 * @param  string
-	 * @param  string
-	 * @return bool
-	 */
-	private function hasProperty($name, $writeAccess, & $prop, & $type)
-	{
-		$anns = static::getReflection()->annotations;
-		$prop = strtolower(NStrings::replace($name, '#(.)(?=[A-Z])#', '$1_')); // propName => prop_name
-
-		foreach ($anns as $key => $values) {
-			if ($key === 'property' || (!$writeAccess && $key === 'property-read')) {
-				foreach ($values as $tmp) {
-					$split = NStrings::split($tmp, '#\s+#');
-					if (count($split) >= 2) {
-						list($type, $var) = $split;
-						if ($var === '$' . $prop) {
-							return TRUE;
-						}
-					}
-				}
-			}
-		}
-
-		return FALSE;
-	}
-
-
-
-	/** @return array */
-	private function getProperties()
-	{
-		$props = array();
-		foreach (static::getReflection()->annotations as $name => $values) {
-			if ($name === 'property' || $name === 'property-read') {
-				foreach ($values as $tmp) {
-					$split = NStrings::split($tmp, '#\s+#');
-					if (count($split) >= 2) {
-						list($type, $var) = $split;
-						$props[substr($var, 1)] = $type;
-					}
-				}
-			}
-		}
-
-		return $props;
+		return self::$reflections[$class];
 	}
 
 }

@@ -11,7 +11,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$book = ServiceLocator::getBookRepository()->findById(1);
 
 		// set as property
-		$book->book_title = 'New title';
+		$book->bookTitle = 'New title';
 		$this->assertEquals('New title', $book->getBookTitle());
 
 		// use setter
@@ -69,7 +69,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$book = ServiceLocator::getBookRepository()->findById(1);
 
 		// get as property
-		$this->assertEquals('1001 tipu a triku pro PHP', $book->book_title);
+		$this->assertEquals('1001 tipu a triku pro PHP', $book->bookTitle);
 
 		// use getter
 		$this->assertEquals('1001 tipu a triku pro PHP', $book->getBookTitle());
@@ -99,7 +99,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 		// properties
 		$this->assertTrue(isset($book->id));
-		$this->assertTrue(isset($book->book_title));
+		$this->assertTrue(isset($book->bookTitle));
 		$this->assertFalse(isset($book->foo));
 
 		// getters

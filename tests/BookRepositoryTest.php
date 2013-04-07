@@ -14,7 +14,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$expected = array(
 			'id' => 1,
-			'book_title' => '1001 tipu a triku pro PHP',
+			'bookTitle' => '1001 tipu a triku pro PHP',
 			'author' => 'Jakub Vrana',
 			'written' => '2010',
 			'available' => TRUE,
@@ -142,7 +142,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($book instanceof Book);
 		$this->assertEquals(array(
 			'id' => 5,
-			'book_title' => 'Texy 2',
+			'bookTitle' => 'Texy 2',
 			'author' => 'David Grudl',
 			'written' => '2008',
 			'available' => TRUE,
@@ -188,7 +188,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(array(
 			'id' => 5,
-			'book_title' => 'New title',
+			'bookTitle' => 'New title',
 			'author' => 'Geek',
 			'written' => '2008',
 			'available' => FALSE,
