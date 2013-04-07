@@ -32,6 +32,9 @@ class EntityProperty extends Nette\Object
 	protected $type;
 
 	/** @var bool */
+	protected $nullable;
+
+	/** @var bool */
 	protected $readonly;
 
 
@@ -41,12 +44,14 @@ class EntityProperty extends Nette\Object
 	 * @param  string
 	 * @param  string
 	 * @param  bool
+	 * @param  bool
 	 */
-	function __construct($name, $column, $type, $readonly)
+	function __construct($name, $column, $type, $nullable, $readonly)
 	{
 		$this->name = (string) $name;
 		$this->column = $column === NULL ? $this->name : (string) $column;
 		$this->type = (string) $type;
+		$this->nullable = (bool) $nullable;
 		$this->readonly = (bool) $readonly;
 	}
 
@@ -83,7 +88,12 @@ class EntityProperty extends Nette\Object
 	function fixType($value)
 	{
 		$type = gettype($value);
-		if ($type === 'object') {
+		if ($type === 'NULL') {
+			if (!$this->nullable) {
+				throw new Nette\InvalidArgumentException("Property '{$this->name}' cannot be NULL.");
+			}
+
+		} elseif ($type === 'object') {
 			if (!($value instanceof $this->type)) {
 				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '$type' given.");
 			}
@@ -104,7 +114,12 @@ class EntityProperty extends Nette\Object
 	function setType($value)
 	{
 		$type = gettype($value);
-		if ($type === 'object') {
+		if ($type === 'NULL') {
+			if (!$this->nullable) {
+				throw new Nette\InvalidArgumentException("Property '{$this->name}' cannot be NULL.");
+			}
+
+		} elseif ($type === 'object') {
 			if (!($value instanceof $this->type)) {
 				throw new Nette\InvalidArgumentException("Invalid instance - '{$this->type}' expected, '$type' gotten.");
 			}

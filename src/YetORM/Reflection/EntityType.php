@@ -77,6 +77,20 @@ class EntityType extends NClassType
 						if (count($split) >= 2) {
 							list($type, $var) = $split;
 
+							// support NULL type
+							$nullable = FALSE;
+							$types = explode('|', $type, 2);
+							if (count($types) === 2) {
+								if (strcasecmp($types[0], 'null') === 0) {
+									$type = $types[1];
+									$nullable = TRUE;
+
+								} elseif (strcasecmp($types[1], 'null') === 0) {
+									$type = $types[0];
+									$nullable = TRUE;
+								}
+							}
+
 							// unify type name
 							if ($type === 'bool') {
 								$type = 'boolean';
@@ -92,7 +106,8 @@ class EntityType extends NClassType
 							}
 
 							$name = substr($var, 1);
-							$this->properties[$name] = new EntityProperty($name, $column, $type, $ann === 'property-read');
+							$readonly = $ann === 'property-read';
+							$this->properties[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
 						}
 					}
 				}

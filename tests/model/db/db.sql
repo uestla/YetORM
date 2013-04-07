@@ -28,7 +28,7 @@ CREATE TABLE `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
   `book_title` varchar(50) COLLATE utf8_czech_ci NOT NULL,
-  `written` date NOT NULL,
+  `written` date DEFAULT NULL,
   `available` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `book_author` (`author_id`),
@@ -74,4 +74,4 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (24,	'Neon'),
 (21,	'PHP');
 
--- 2013-03-31 13:44:12
+-- 2013-04-07 13:56:07
