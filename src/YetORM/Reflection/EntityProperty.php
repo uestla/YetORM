@@ -16,7 +16,7 @@ use Nette;
 
 /**
  * @property-read string $type
- * @property-read bool   $readonly
+ * @property-read bool $readonly
  * @property-read string $column
  */
 class EntityProperty extends Nette\Object

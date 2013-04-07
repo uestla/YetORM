@@ -27,7 +27,7 @@ class EntityType extends NClassType
 	private $properties = NULL;
 
 	/** @var NMethod[] */
-	protected $getters = NULL;
+	private $getters = NULL;
 
 
 
@@ -40,8 +40,32 @@ class EntityType extends NClassType
 
 
 
+	/**
+	 * @param  string
+	 * @return EntityProperty|NULL
+	 */
+	function getProperty($name)
+	{
+		$this->loadProperties();
+		return isset($this->properties[$name]) ? $this->properties[$name] : NULL;
+	}
+
+
+
+	/**
+	 * @param  string
+	 * @return bool
+	 */
+	function hasProperty($name)
+	{
+		$this->loadProperties();
+		return isset($this->properties[$name]);
+	}
+
+
+
 	/** @return void */
-	protected function loadProperties()
+	private function loadProperties()
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array();
@@ -78,30 +102,6 @@ class EntityType extends NClassType
 
 
 
-	/**
-	 * @param  string
-	 * @return EntityProperty|NULL
-	 */
-	function getProperty($name)
-	{
-		$this->loadProperties();
-		return isset($this->properties[$name]) ? $this->properties[$name] : NULL;
-	}
-
-
-
-	/**
-	 * @param  string
-	 * @return bool
-	 */
-	function hasProperty($name)
-	{
-		$this->loadProperties();
-		return isset($this->properties[$name]);
-	}
-
-
-
 	/** @return NMethod[] */
 	function getGetters()
 	{
@@ -112,7 +112,7 @@ class EntityType extends NClassType
 
 
 	/** @return void */
-	protected function loadGetters()
+	private function loadGetters()
 	{
 		if ($this->getters === NULL) {
 			$this->getters = array();
