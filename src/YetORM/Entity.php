@@ -182,6 +182,29 @@ abstract class Entity extends Nette\Object
 
 
 
+	/**
+	 * @param  string
+	 * @return bool
+	 */
+	function __isset($name)
+	{
+		return $this->hasProperty($name, FALSE, $prop, $type) || parent::__isset($name);
+	}
+
+
+
+	/**
+	 * @param  string
+	 * @return void
+	 * @throws Nette\NotSupportedException
+	 */
+	function __unset($name)
+	{
+		throw new Nette\NotSupportedException;
+	}
+
+
+
 	/** @return NClassType */
 	static function getReflection()
 	{
