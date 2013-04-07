@@ -144,4 +144,12 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		), $author->toArray());
 	}
 
+
+
+	function testClassTypes()
+	{
+		$book = ServiceLocator::getBookRepository()->findById(1);
+		$this->assertInstanceOf('DateTime', $book->written);
+	}
+
 }

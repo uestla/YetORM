@@ -5,9 +5,9 @@ SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP DATABASE IF EXISTS `repository_test`;
-CREATE DATABASE `repository_test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci */;
-USE `repository_test`;
+DROP DATABASE IF EXISTS `yetorm_test`;
+CREATE DATABASE `yetorm_test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci */;
+USE `yetorm_test`;
 
 DROP TABLE IF EXISTS `author`;
 CREATE TABLE `author` (
@@ -28,7 +28,7 @@ CREATE TABLE `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
   `book_title` varchar(50) COLLATE utf8_czech_ci NOT NULL,
-  `written` year(4) NOT NULL,
+  `written` date NOT NULL,
   `available` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `book_author` (`author_id`),
@@ -37,10 +37,10 @@ CREATE TABLE `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `book` (`id`, `author_id`, `book_title`, `written`, `available`) VALUES
-(1,	11,	'1001 tipu a triku pro PHP',	'2010',	1),
-(2,	11,	'JUSH',	'2007',	1),
-(3,	12,	'Nette',	'2004',	1),
-(4,	12,	'Dibi',	'2005',	1);
+(1,	11,	'1001 tipu a triku pro PHP',	'2010-01-01',	1),
+(2,	11,	'JUSH',	'2007-01-01',	1),
+(3,	12,	'Nette',	'2004-01-01',	1),
+(4,	12,	'Dibi',	'2005-01-01',	1);
 
 DROP TABLE IF EXISTS `book_tag`;
 CREATE TABLE `book_tag` (
@@ -74,4 +74,4 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (24,	'Neon'),
 (21,	'PHP');
 
--- 2013-02-16 15:11:40
+-- 2013-03-31 13:44:12

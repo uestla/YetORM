@@ -109,7 +109,7 @@ class EntityProperty extends Nette\Object
 				throw new Nette\InvalidArgumentException("Invalid instance - '{$this->type}' expected, '$type' gotten.");
 			}
 
-		} elseif (settype($value, $this->type) === FALSE) {
+		} elseif (@settype($value, $this->type) === FALSE) { // intentionally @
 			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '$type'.");
 		}
 

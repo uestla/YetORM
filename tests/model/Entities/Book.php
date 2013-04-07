@@ -4,7 +4,7 @@
 /**
  * @property-read int $id
  * @property string $bookTitle -> book_title
- * @property string $written
+ * @property DateTime $written
  * @property bool $available
  */
 class Book extends YetORM\Entity

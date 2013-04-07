@@ -16,7 +16,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 			'id' => 1,
 			'bookTitle' => '1001 tipu a triku pro PHP',
 			'author' => 'Jakub Vrana',
-			'written' => '2010',
+			'written' => new Nette\DateTime('2010-01-01'),
 			'available' => TRUE,
 			'tags' => array('PHP', 'MySQL'),
 		);
@@ -139,12 +139,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	{
 		$book = ServiceLocator::createTestingBook();
 
-		$this->assertTrue($book instanceof Book);
+		$this->assertInstanceOf('Book', $book);
 		$this->assertEquals(array(
 			'id' => 5,
 			'bookTitle' => 'Texy 2',
 			'author' => 'David Grudl',
-			'written' => '2008',
+			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => TRUE,
 			'tags' => array('PHP'),
 
@@ -190,7 +190,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 			'id' => 5,
 			'bookTitle' => 'New title',
 			'author' => 'Geek',
-			'written' => '2008',
+			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => FALSE,
 			'tags' => array('PHP'),
 
