@@ -78,12 +78,7 @@ abstract class Entity extends Nette\Object
 		// @property and @property-read annotations
 		foreach ($ref->properties as $name => $prop) {
 			if (!isset($values[$name])) {
-				$value = $this->row->{$prop->column};
-				if (settype($value, $prop->type) === FALSE) {
-					throw new Nette\InvalidArgumentException("Invalid property type.");
-				}
-
-				$values[$name] = $value;
+				$values[$name] = $prop->setType($this->row->{$prop->column});
 			}
 		}
 
@@ -131,11 +126,7 @@ abstract class Entity extends Nette\Object
 
 		} catch (Nette\MemberAccessException $e) {
 			if ($prop = static::getReflection()->getProperty($name)) {
-				$value = $this->row->{$prop->column};
-				if (settype($value, $prop->type) === FALSE) {
-					throw new Nette\InvalidArgumentException("Invalid property type.");
-				}
-
+				$value = $prop->setType($this->row->{$prop->column});
 				return $value;
 			}
 
@@ -158,12 +149,7 @@ abstract class Entity extends Nette\Object
 		} catch (Nette\MemberAccessException $e) {
 			$prop = static::getReflection()->getProperty($name);
 			if ($prop && !$prop->readonly) {
-				$type = gettype($value);
-				if ($type !== $prop->type) {
-					throw new Nette\InvalidArgumentException("Invalid type - '{$prop->type}' expected, '$type' given.");
-				}
-
-				$this->row->{$prop->column} = $value;
+				$this->row->{$prop->column} = $prop->fixType($value);
 				return ;
 			}
 

@@ -74,4 +74,46 @@ class EntityProperty extends Nette\Object
 		return $this->column;
 	}
 
+
+
+	/**
+	 * @param  mixed
+	 * @return mixed
+	 */
+	function fixType($value)
+	{
+		$type = gettype($value);
+		if ($type === 'object') {
+			if (!($value instanceof $this->type)) {
+				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '$type' given.");
+			}
+
+		} elseif ($type !== $this->type) {
+			throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+		}
+
+		return $value;
+	}
+
+
+
+	/**
+	 * @param  mixed
+	 * @return mixed
+	 */
+	function setType($value)
+	{
+		$type = gettype($value);
+		if ($type === 'object') {
+			if (!($value instanceof $this->type)) {
+				throw new Nette\InvalidArgumentException("Invalid instance - '{$this->type}' expected, '$type' gotten.");
+			}
+
+		} elseif (settype($value, $this->type) === FALSE) {
+			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '$type'.");
+		}
+
+		return $value;
+	}
+
 }
