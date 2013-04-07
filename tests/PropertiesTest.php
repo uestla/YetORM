@@ -93,6 +93,34 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 
 
+	function testIsSet()
+	{
+		$book = ServiceLocator::getBookRepository()->findById(1);
+
+		// properties
+		$this->assertTrue(isset($book->id));
+		$this->assertTrue(isset($book->book_title));
+		$this->assertFalse(isset($book->foo));
+
+		// getters
+		$this->assertTrue(isset($book->author));
+		$this->assertTrue(isset($book->tags));
+	}
+
+
+
+	function testUnset()
+	{
+		try {
+			$book = ServiceLocator::getBookRepository()->findById(1);
+			unset($book->author);
+			$this->fail();
+
+		} catch (Nette\NotSupportedException $e) {}
+	}
+
+
+
 	/** Tests default Nette\Object properties behavior */
 	function testNativeGettersSetters()
 	{
