@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/model/ServiceLocator.php';
-
 
 class PropertiesTest extends PHPUnit_Framework_TestCase
 {

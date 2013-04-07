@@ -4,6 +4,7 @@ use Nette\Diagnostics\Debugger;
 
 require_once 'Nette/loader.php';
 require_once 'PHPUnit/Autoload.php';
+require_once __DIR__ . '/model/ServiceLocator.php';
 
 
 Debugger::enable(Debugger::DEVELOPMENT, FALSE);
@@ -14,6 +15,6 @@ Debugger::$maxLen = FALSE;
 function id($a) { return $a; }
 
 $loader = new Nette\Loaders\RobotLoader;
-$loader->setCacheStorage( new Nette\Caching\Storages\FileStorage(__DIR__ . '/temp') );
+$loader->setCacheStorage(ServiceLocator::getCacheStorage());
 $loader->addDirectory(array(__DIR__ . '/../src', __DIR__ . '/model'));
 $loader->register();

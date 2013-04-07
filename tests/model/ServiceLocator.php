@@ -4,6 +4,9 @@
 class ServiceLocator
 {
 
+	/** @var Nette\Caching\Storages\FileStorage */
+	protected static $cacheStorage = NULL;
+
 	/** @var Nette\Database\Connection */
 	protected static $connection = NULL;
 
@@ -15,6 +18,17 @@ class ServiceLocator
 
 	/** @var BookFacade */
 	protected static $bookFacade = NULL;
+
+
+
+	static function getCacheStorage()
+	{
+		if (static::$cacheStorage === NULL) {
+			static::$cacheStorage = new Nette\Caching\Storages\FileStorage(__DIR__ . '/../temp');
+		}
+
+		return static::$cacheStorage;
+	}
 
 
 
