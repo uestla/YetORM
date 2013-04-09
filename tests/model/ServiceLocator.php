@@ -21,6 +21,7 @@ class ServiceLocator
 
 
 
+	/** @return Nette\Caching\Storages\FileStorage */
 	static function getCacheStorage()
 	{
 		if (static::$cacheStorage === NULL) {
@@ -32,6 +33,7 @@ class ServiceLocator
 
 
 
+	/** @return Nette\Database\Connection */
 	static function getConnection()
 	{
 		if (static::$connection === NULL) {
@@ -44,6 +46,7 @@ class ServiceLocator
 
 
 
+	/** @return BookRepository */
 	static function getBookRepository()
 	{
 		if (static::$bookRepository === NULL) {
@@ -55,6 +58,7 @@ class ServiceLocator
 
 
 
+	/** @return AuthorRepository */
 	static function getAuthorRepository()
 	{
 		if (static::$authorRepository === NULL) {
@@ -66,6 +70,7 @@ class ServiceLocator
 
 
 
+	/** @return BookFacade */
 	static function getBookFacade()
 	{
 		if (static::$bookFacade === NULL) {
@@ -77,6 +82,7 @@ class ServiceLocator
 
 
 
+	/** @return Book */
 	static function createTestingBook()
 	{
 		return static::getBookRepository()->create('Texy 2', 12, new Nette\DateTime('2008-01-01'), TRUE, array('PHP'));
