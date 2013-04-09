@@ -154,7 +154,7 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function commit()
 	{
-		if (!isset(self::$transactionCounter[$dsn = $this->connection->dsn]) || self::$transactionCounter[$dsn] === 0) {
+		if (self::$transactionCounter[$dsn = $this->connection->dsn] === 0) {
 			throw new Nette\InvalidStateException("No transaction started.");
 		}
 
