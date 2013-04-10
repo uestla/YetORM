@@ -163,7 +163,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	function current()
 	{
 		$key = current($this->keys);
-		return $this->data[$key];
+		return $key === FALSE ? FALSE : $this->data[$key];
 	}
 
 
