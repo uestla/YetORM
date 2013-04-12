@@ -111,8 +111,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	function orderBy($column, $desc = FALSE)
 	{
 		if (is_array($column)) {
-			foreach ($column as $col => $desc) {
-				$this->selection->order($col . ($desc ? ' DESC' : ''));
+			foreach ($column as $col => $d) {
+				$this->orderBy($col, $d);
 			}
 
 		} else {
