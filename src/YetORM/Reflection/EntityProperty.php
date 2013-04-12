@@ -49,7 +49,7 @@ class EntityProperty extends Nette\Object
 	function __construct($name, $column, $type, $nullable, $readonly)
 	{
 		$this->name = (string) $name;
-		$this->column = $column === NULL ? $this->name : (string) $column;
+		$this->column = (string) $column;
 		$this->type = (string) $type;
 		$this->nullable = (bool) $nullable;
 		$this->readonly = (bool) $readonly;

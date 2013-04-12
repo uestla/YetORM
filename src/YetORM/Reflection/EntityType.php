@@ -99,14 +99,15 @@ class EntityType extends NClassType
 								$type = 'integer';
 							}
 
+							$name = substr($var, 1);
+							$readonly = $ann === 'property-read';
+
 							// parse column name
-							$column = NULL;
+							$column = $name;
 							if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
 								$column = $split[3];
 							}
 
-							$name = substr($var, 1);
-							$readonly = $ann === 'property-read';
 							$this->properties[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
 						}
 					}
