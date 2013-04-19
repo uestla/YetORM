@@ -4,6 +4,7 @@ use Nette\Diagnostics\Debugger;
 
 require_once 'Nette/loader.php';
 require_once 'PHPUnit/Autoload.php';
+require_once __DIR__ . '/../src/yetorm.php';
 require_once __DIR__ . '/model/ServiceLocator.php';
 
 
@@ -16,5 +17,5 @@ function id($a) { return $a; }
 
 $loader = new Nette\Loaders\RobotLoader;
 $loader->setCacheStorage(ServiceLocator::getCacheStorage());
-$loader->addDirectory(array(__DIR__ . '/../src', __DIR__ . '/model'));
+$loader->addDirectory(__DIR__ . '/model');
 $loader->register();

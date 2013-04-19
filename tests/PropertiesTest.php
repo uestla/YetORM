@@ -125,9 +125,9 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$book = ServiceLocator::getBookRepository()->findById(1);
 		$author = $book->author;
 
-		$this->assertTrue($author instanceof Author);
-		$this->assertTrue($book->tags instanceof YetORM\EntityCollection);
-		$this->assertTrue($author->books instanceof YetORM\EntityCollection);
+		$this->assertInstanceOf('Author', $author);
+		$this->assertInstanceOf('YetORM\EntityCollection', $book->tags);
+		$this->assertInstanceOf('YetORM\EntityCollection', $author->books);
 	}
 
 

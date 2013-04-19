@@ -8,7 +8,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	{
 		$book = ServiceLocator::getBookRepository()->findById(1);
 
-		$this->assertTrue($book instanceof Book);
+		$this->assertInstanceOf('Book', $book);
 
 		$expected = array(
 			'id' => 1,
