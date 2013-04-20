@@ -17,7 +17,7 @@ class BookFacade
 
 
 
-	/** @return Book[] */
+	/** @return YetORM\EntityCollection */
 	function getLatest()
 	{
 		return $this->repository->findAll()
