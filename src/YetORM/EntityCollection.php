@@ -35,7 +35,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	protected $data = NULL;
 
 	/** @var array */
-	protected $keys;
+	private $keys;
 
 
 
