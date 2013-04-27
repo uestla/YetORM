@@ -134,10 +134,29 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testToArray()
 	{
+		$book = ServiceLocator::getBookRepository()->findById(2);
+		$expected = array(
+			'id' => 2,
+			'bookTitle' => 'JUSH',
+			'written' => new Nette\DateTime('2007-01-01'),
+			'available' => TRUE,
+			'author' => 'Jakub Vrana',
+			'tags' => array('JavaScript'),
+		);
+
+		$this->assertEquals($expected, $book->toArray());
+	}
+
+
+
+	function testInheritance()
+	{
 		$author = ServiceLocator::getAuthorRepository()->findById(11);
 		$this->assertEquals(array(
 			'id' => 11,
 			'name' => 'Jakub Vrana',
+			'web' => 'http://www.vrana.cz/',
+			'born' => NULL,
 
 		), $author->toArray());
 	}

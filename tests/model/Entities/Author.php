@@ -1,11 +1,8 @@
 <?php
 
 
-/**
- * @property-read int $id
- * @property-read string $name
- */
-class Author extends YetORM\Entity
+/** @property-read string $web */
+class Author extends Person
 {
 
 	/** @return YetORM\EntityCollection */

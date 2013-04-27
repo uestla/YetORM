@@ -69,47 +69,70 @@ class EntityType extends NClassType
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array();
-			foreach ($this->getAnnotations() as $ann => $values) {
-				if ($ann === 'property' || $ann === 'property-read') {
-					foreach ($values as $tmp) {
-						$split = NStrings::split($tmp, '#\s+#');
+			$classTree = array($current = $this->name);
 
-						if (count($split) >= 2) {
-							list($type, $var) = $split;
+			while (TRUE) {
+				if (($current = get_parent_class($current)) === FALSE || $current === 'YetORM\\Entity') {
+					break;
+				}
 
-							// support NULL type
-							$nullable = FALSE;
-							$types = explode('|', $type, 2);
-							if (count($types) === 2) {
-								if (strcasecmp($types[0], 'null') === 0) {
-									$type = $types[1];
-									$nullable = TRUE;
+				$classTree[] = $current;
+			}
 
-								} elseif (strcasecmp($types[1], 'null') === 0) {
-									$type = $types[0];
-									$nullable = TRUE;
-								}
+			foreach (array_reverse($classTree) as $class) {
+				$this->parseAnnotations(NClassType::from($class));
+			}
+		}
+	}
+
+
+
+	/**
+	 * @param  ClassType
+	 * @return void
+	 */
+	private function parseAnnotations(NClassType $reflection)
+	{
+		foreach ($reflection->getAnnotations() as $ann => $values) {
+			if ($ann === 'property' || $ann === 'property-read') {
+				foreach ($values as $tmp) {
+					$split = NStrings::split($tmp, '#\s+#');
+
+					if (count($split) >= 2) {
+						list($type, $var) = $split;
+
+						// support NULL type
+						$nullable = FALSE;
+						$types = explode('|', $type, 2);
+						if (count($types) === 2) {
+							if (strcasecmp($types[0], 'null') === 0) {
+								$type = $types[1];
+								$nullable = TRUE;
+
+							} elseif (strcasecmp($types[1], 'null') === 0) {
+								$type = $types[0];
+								$nullable = TRUE;
 							}
-
-							// unify type name
-							if ($type === 'bool') {
-								$type = 'boolean';
-
-							} elseif ($type === 'int') {
-								$type = 'integer';
-							}
-
-							$name = substr($var, 1);
-							$readonly = $ann === 'property-read';
-
-							// parse column name
-							$column = $name;
-							if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
-								$column = $split[3];
-							}
-
-							$this->properties[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
 						}
+
+						// unify type name
+						if ($type === 'bool') {
+							$type = 'boolean';
+
+						} elseif ($type === 'int') {
+							$type = 'integer';
+						}
+
+						$name = substr($var, 1);
+						$readonly = $ann === 'property-read';
+
+						// parse column name
+						$column = $name;
+						if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
+							$column = $split[3];
+						}
+
+						$this->properties[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
 					}
 				}
 			}
@@ -133,7 +156,7 @@ class EntityType extends NClassType
 		if ($this->getters === NULL) {
 			$this->getters = array();
 			foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
-				if ($method->declaringClass->name === $this->name
+				if ($method->declaringClass->name !== 'YetORM\\Entity'
 						&& substr($method->name, 0, 3) === 'get' && strlen($method->name) > 3) {
 
 					$this->getters[] = $method;
