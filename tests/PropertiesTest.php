@@ -140,7 +140,12 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			'bookTitle' => 'JUSH',
 			'written' => new Nette\DateTime('2007-01-01'),
 			'available' => TRUE,
-			'author' => 'Jakub Vrana',
+			'author' => array(
+				'id' => 11,
+				'name' => 'Jakub Vrana',
+				'web' => 'http://www.vrana.cz/',
+				'born' => NULL,
+			),
 			'tags' => array('JavaScript'),
 		);
 

@@ -15,7 +15,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$expected = array(
 			'id' => 1,
 			'bookTitle' => '1001 tipu a triku pro PHP',
-			'author' => 'Jakub Vrana',
+			'author' => array(
+				'id' => 11,
+				'name' => 'Jakub Vrana',
+				'web' => 'http://www.vrana.cz/',
+				'born' => NULL,
+			),
 			'written' => new Nette\DateTime('2010-01-01'),
 			'available' => TRUE,
 			'tags' => array('PHP', 'MySQL'),
@@ -143,7 +148,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array(
 			'id' => 5,
 			'bookTitle' => 'Texy 2',
-			'author' => 'David Grudl',
+			'author' => array(
+				'id' => 12,
+				'name' => 'David Grudl',
+				'web' => 'http://davidgrudl.com/',
+				'born' => NULL,
+			),
 			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => TRUE,
 			'tags' => array('PHP'),
@@ -189,7 +199,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array(
 			'id' => 5,
 			'bookTitle' => 'New title',
-			'author' => 'Geek',
+			'author' => array(
+				'id' => 13,
+				'name' => 'Geek',
+				'web' => 'http://example.com',
+				'born' => NULL,
+			),
 			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => FALSE,
 			'tags' => array('PHP'),
