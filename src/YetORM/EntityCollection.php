@@ -68,15 +68,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 				}
 
 				$class = $this->entity;
-				$entity = new $class($row);
-				$primary = $row->getPrimary(FALSE);
-
-				if ($primary !== NULL && is_scalar($primary)) {
-					$this->data[$primary] = $entity;
-
-				} else {
-					$this->data[] = $entity;
-				}
+				$this->data[] = new $class($row);
 			}
 		}
 	}
@@ -84,10 +76,9 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/** @return array */
-	function getData()
+	function toArray()
 	{
-		$this->loadData();
-		return $this->data;
+		return iterator_to_array($this);
 	}
 
 
