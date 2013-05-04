@@ -1,6 +1,9 @@
 <?php
 
 
+use YetORM\EntityCollection as EC;
+
+
 class BookFacade
 {
 
@@ -21,7 +24,7 @@ class BookFacade
 	function getLatest()
 	{
 		return $this->repository->findAll()
-				->orderBy('written', TRUE)
+				->orderBy('written', EC::DESC)
 				->limit(3);
 	}
 

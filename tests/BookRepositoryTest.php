@@ -1,5 +1,7 @@
 <?php
 
+use YetORM\EntityCollection as EC;
+
 
 class BookRepositoryTest extends PHPUnit_Framework_TestCase
 {
@@ -64,7 +66,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$bookTags = ServiceLocator::getBookRepository()->findById(3)->getTags();
 
 		$this->assertEquals(4, count($allBooks->limit(2))); // data not received yet -> count as non-limited
-		$this->assertEquals(2, count($allBooks->limit(2)->getData())); // data received
+		$this->assertEquals(2, count($allBooks->limit(2)->toArray())); // data received
 		$this->assertEquals(1, count($bookTags));
 	}
 
@@ -118,7 +120,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		ob_start();
 
 			foreach (ServiceLocator::getBookRepository()->findAll() as $book) {
-				foreach ($book->getTags()->orderBy('tag.name', TRUE) as $tag) {
+				foreach ($book->getTags()->orderBy('tag.name', EC::DESC) as $tag) {
 					echo $tag->getName(), ', ';
 				}
 			}

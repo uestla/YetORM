@@ -39,6 +39,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 
+	const ASC = FALSE;
+	const DESC = TRUE;
+
+
+
 	/**
 	 * @param  NSelection
 	 * @param  string
@@ -99,7 +104,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * @param  bool
 	 * @return EntityCollection
 	 */
-	function orderBy($column, $desc = FALSE)
+	function orderBy($column, $dir = NULL)
 	{
 		if (is_array($column)) {
 			foreach ($column as $col => $d) {
@@ -107,7 +112,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 			}
 
 		} else {
-			$this->selection->order($column . ($desc ? ' DESC' : ''));
+			$dir === NULL && ($dir = static::ASC);
+			$this->selection->order($column . ($dir === static::DESC ? ' DESC' : ''));
 		}
 
 		$this->invalidate();
