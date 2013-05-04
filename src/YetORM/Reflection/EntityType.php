@@ -29,6 +29,9 @@ class EntityType extends NClassType
 	/** @var NMethod[] */
 	private $getters = NULL;
 
+	/** @var array */
+	private static $annotations = array();
+
 
 
 	/** @return EntityProperty[] */
@@ -80,7 +83,10 @@ class EntityType extends NClassType
 			}
 
 			foreach (array_reverse($classTree) as $class) {
-				$this->parseAnnotations(NClassType::from($class));
+				$this->loadAnnotations($class);
+				foreach (self::$annotations[$class] as $name => $prop) {
+					$this->properties[$name] = $prop;
+				}
 			}
 		}
 	}
@@ -88,11 +94,25 @@ class EntityType extends NClassType
 
 
 	/**
-	 * @param  ClassType
+	 * @param  string
 	 * @return void
 	 */
-	private function parseAnnotations(NClassType $reflection)
+	private function loadAnnotations($class)
 	{
+		if (!isset(self::$annotations[$class])) {
+			self::$annotations[$class] = self::parseAnnotations(NClassType::from($class));
+		}
+	}
+
+
+
+	/**
+	 * @param  ClassType
+	 * @return array
+	 */
+	private static function parseAnnotations(NClassType $reflection)
+	{
+		$annotations = array();
 		foreach ($reflection->getAnnotations() as $ann => $values) {
 			if ($ann === 'property' || $ann === 'property-read') {
 				foreach ($values as $tmp) {
@@ -132,11 +152,13 @@ class EntityType extends NClassType
 							$column = $split[3];
 						}
 
-						$this->properties[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
+						$annotations[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
 					}
 				}
 			}
 		}
+
+		return $annotations;
 	}
 
 
