@@ -1,6 +1,5 @@
 <?php
 
-
 use YetORM\EntityCollection as EC;
 
 
