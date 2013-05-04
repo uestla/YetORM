@@ -96,7 +96,7 @@ abstract class Entity extends Nette\Object
 	 * @param  array
 	 * @return mixed
 	 */
-	function __call($name, $args)
+	final function __call($name, $args)
 	{
 		try {
 			return parent::__call($name, $args);
@@ -123,7 +123,7 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @return mixed
 	 */
-	function & __get($name)
+	final function & __get($name)
 	{
 		try {
 			return parent::__get($name);
@@ -145,7 +145,7 @@ abstract class Entity extends Nette\Object
 	 * @param  mixed
 	 * @return void
 	 */
-	function __set($name, $value)
+	final function __set($name, $value)
 	{
 		try {
 			return parent::__set($name, $value);
@@ -168,7 +168,7 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @return bool
 	 */
-	function __isset($name)
+	final function __isset($name)
 	{
 		return parent::__isset($name) || static::getReflection()->hasProperty($name);
 	}
@@ -180,7 +180,7 @@ abstract class Entity extends Nette\Object
 	 * @return void
 	 * @throws Nette\NotSupportedException
 	 */
-	function __unset($name)
+	final function __unset($name)
 	{
 		throw new Nette\NotSupportedException;
 	}
@@ -188,7 +188,7 @@ abstract class Entity extends Nette\Object
 
 
 	/** @return Reflection\EntityType */
-	static function getReflection()
+	final static function getReflection()
 	{
 		$class = get_called_class();
 		if (!isset(self::$reflections[$class])) {
