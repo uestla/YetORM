@@ -23,6 +23,9 @@ class EntityProperty extends Nette\Object
 {
 
 	/** @var string */
+	protected $entity;
+
+	/** @var string */
 	protected $name;
 
 	/** @var string */
@@ -43,11 +46,13 @@ class EntityProperty extends Nette\Object
 	 * @param  string
 	 * @param  string
 	 * @param  string
+	 * @param  string
 	 * @param  bool
 	 * @param  bool
 	 */
-	function __construct($name, $column, $type, $nullable, $readonly)
+	function __construct($entity, $name, $column, $type, $nullable, $readonly)
 	{
+		$this->entity = (string) $entity;
 		$this->name = (string) $name;
 		$this->column = (string) $column;
 		$this->type = (string) $type;
@@ -83,26 +88,30 @@ class EntityProperty extends Nette\Object
 
 	/**
 	 * @param  mixed
+	 * @param  bool
 	 * @return mixed
 	 */
-	function fixType($value)
+	function checkType($value, $need = TRUE)
 	{
-		$type = gettype($value);
-		if ($type === 'NULL') {
+		if ($value === NULL) {
 			if (!$this->nullable) {
 				throw new Nette\InvalidArgumentException("Property '{$this->name}' cannot be NULL.");
 			}
 
-		} elseif ($type === 'object') {
+		} elseif (is_object($value)) {
 			if (!($value instanceof $this->type)) {
-				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '$type' given.");
+				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '"
+					. get_class($value) . "' given.");
 			}
 
-		} elseif ($type !== $this->type) {
+		} elseif ($need && ($type = gettype($value)) !== $this->type) {
 			throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+
+		} else {
+			return FALSE;
 		}
 
-		return $value;
+		return TRUE;
 	}
 
 
@@ -113,19 +122,9 @@ class EntityProperty extends Nette\Object
 	 */
 	function setType($value)
 	{
-		$type = gettype($value);
-		if ($type === 'NULL') {
-			if (!$this->nullable) {
-				throw new Nette\InvalidArgumentException("Property '{$this->name}' cannot be NULL.");
-			}
-
-		} elseif ($type === 'object') {
-			if (!($value instanceof $this->type)) {
-				throw new Nette\InvalidArgumentException("Invalid instance - '{$this->type}' expected, '$type' gotten.");
-			}
-
-		} elseif (@settype($value, $this->type) === FALSE) { // intentionally @
-			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '$type'.");
+		if (!$this->checkType($value, FALSE) && @settype($value, $this->type) === FALSE) { // intentionally @
+			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '"
+				. gettype($value) . "'.");
 		}
 
 		return $value;
