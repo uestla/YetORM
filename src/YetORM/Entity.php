@@ -198,4 +198,12 @@ abstract class Entity extends Nette\Object
 		return self::$reflections[$class];
 	}
 
+
+
+	/** @throws Nette\NotSupportedException */
+	final static function extensionMethod($name, $callback = NULL)
+	{
+		throw new Nette\NotSupportedException;
+	}
+
 }
