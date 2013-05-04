@@ -149,7 +149,8 @@ abstract class Entity extends Nette\Object
 		} catch (Nette\MemberAccessException $e) {
 			$prop = static::getReflection()->getProperty($name);
 			if ($prop && !$prop->readonly) {
-				$this->row->{$prop->column} = $prop->fixType($value);
+				$prop->checkType($value);
+				$this->row->{$prop->column} = $value;
 				return ;
 			}
 

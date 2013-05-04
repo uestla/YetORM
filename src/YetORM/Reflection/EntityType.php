@@ -47,10 +47,9 @@ class EntityType extends NClassType
 	 * @param  string
 	 * @return EntityProperty|NULL
 	 */
-	function getProperty($name)
+	function getProperty($name, $default = NULL)
 	{
-		$this->loadProperties();
-		return isset($this->properties[$name]) ? $this->properties[$name] : NULL;
+		return $this->hasProperty($name) ? $this->properties[$name] : $default;
 	}
 
 
@@ -152,7 +151,14 @@ class EntityType extends NClassType
 							$column = $split[3];
 						}
 
-						$annotations[$name] = new EntityProperty($name, $column, $type, $nullable, $readonly);
+						$annotations[$name] = new EntityProperty(
+							$reflection->name,
+							$name,
+							$column,
+							$type,
+							$nullable,
+							$readonly
+						);
 					}
 				}
 			}
@@ -179,7 +185,7 @@ class EntityType extends NClassType
 			$this->getters = array();
 			foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
 				if ($method->declaringClass->name !== 'YetORM\\Entity'
-						&& substr($method->name, 0, 3) === 'get' && strlen($method->name) > 3) {
+						&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get') {
 
 					$this->getters[lcfirst(substr($method->name, 3))] = $method;
 				}
