@@ -15,7 +15,12 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 			array(
 				'id' => 1,
 				'bookTitle' => '1001 tipu a triku pro PHP',
-				'author' => 'Jakub Vrana',
+				'author' => array(
+					'id' => 11,
+					'name' => 'Jakub Vrana',
+					'web' => 'http://www.vrana.cz/',
+					'born' => NULL,
+				),
 				'written' => new Nette\DateTime('2010-01-01'),
 				'available' => TRUE,
 				'tags' => array('PHP', 'MySQL'),
@@ -23,7 +28,12 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 			array(
 				'id' => 2,
 				'bookTitle' => 'JUSH',
-				'author' => 'Jakub Vrana',
+				'author' => array(
+					'id' => 11,
+					'name' => 'Jakub Vrana',
+					'web' => 'http://www.vrana.cz/',
+					'born' => NULL,
+				),
 				'written' => new Nette\DateTime('2007-01-01'),
 				'available' => TRUE,
 				'tags' => array('JavaScript'),
@@ -31,7 +41,12 @@ class BookFacadeTest extends PHPUnit_Framework_TestCase
 			array(
 				'id' => 4,
 				'bookTitle' => 'Dibi',
-				'author' => 'David Grudl',
+				'author' => array(
+					'id' => 12,
+					'name' => 'David Grudl',
+					'web' => 'http://davidgrudl.com/',
+					'born' => NULL,
+				),
 				'written' => new Nette\DateTime('2005-01-01'),
 				'available' => TRUE,
 				'tags' => array('PHP', 'MySQL'),
