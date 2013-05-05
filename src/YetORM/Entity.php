@@ -70,10 +70,7 @@ abstract class Entity extends Nette\Object
 		// get<Property> methods
 		foreach ($ref->getters as $name => $method) {
 			$value = $method->invoke($this);
-			if ($value instanceof Entity) {
-				$values[$name] = $value->toArray();
-
-			} elseif (!($value instanceof EntityCollection)) {
+			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
 				$values[$name] = $value;
 			}
 		}
