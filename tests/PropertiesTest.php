@@ -186,11 +186,11 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$repo->persist($book);
 		$this->assertNull($book->getWritten());
 
-		$book->setWritten(new DateTime('1990-01-01'));
-		$this->assertEquals(new DateTime('1990-01-01'), $book->getWritten());
+		$book->setWritten(new Nette\DateTime('1990-01-01'));
+		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->getWritten());
 
 		$repo->persist($book);
-		$this->assertEquals(new DateTime('1990-01-01'), $book->written);
+		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->written);
 
 		$book->setWritten(NULL);
 		$this->assertNull($book->getWritten());
