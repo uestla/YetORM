@@ -106,6 +106,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testQueries()
 	{
 		$connection = ServiceLocator::getConnection();
+
 		$connection->onQuery['queryDump'] = function (Nette\Database\Statement $st) {
 			echo $st->queryString . "\n";
 		};
@@ -142,9 +143,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCreate()
 	{
-		$book = ServiceLocator::createTestingBook();
+		$book = new Book;
+		$book->bookTitle = 'Texy 2';
+		$book->author = ServiceLocator::getAuthorRepository()->findById(12);
+		$book->written = new Nette\DateTime('2008-01-01');
+		ServiceLocator::getBookRepository()->persist($book);
 
-		$this->assertInstanceOf('Book', $book);
 		$this->assertEquals(array(
 			'id' => 5,
 			'bookTitle' => 'Texy 2',
@@ -156,7 +160,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 			),
 			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => TRUE,
-			'tags' => array('PHP'),
+			'tags' => array(),
 
 		), $book->toArray());
 
@@ -207,7 +211,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 			),
 			'written' => new Nette\DateTime('2008-01-01'),
 			'available' => FALSE,
-			'tags' => array('PHP'),
+			'tags' => array(),
 
 		), $book->toArray());
 	}

@@ -18,8 +18,10 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 abstract class Entity extends Nette\Object
 {
 
-	/** @var NActiveRow */
+	/** @var Row */
 	protected $row;
+
+
 
 	/** @var array */
 	private static $reflections = array();
@@ -27,9 +29,9 @@ abstract class Entity extends Nette\Object
 
 
 	/** @param  NActiveRow */
-	function __construct(NActiveRow $row)
+	function __construct(NActiveRow $row = NULL)
 	{
-		$this->row = $row;
+		$this->row = new Row($row);
 	}
 
 
@@ -48,10 +50,21 @@ abstract class Entity extends Nette\Object
 
 
 
-	/** @return NActiveRow */
-	final function toActiveRow()
+	/** @return Row */
+	final function toRow()
 	{
 		return $this->row;
+	}
+
+
+
+	/**
+	 * @param  NActiveRow
+	 * @return void
+	 */
+	final function refresh(NActiveRow $row)
+	{
+		$this->row->setNative($row);
 	}
 
 
