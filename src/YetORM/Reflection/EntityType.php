@@ -187,7 +187,7 @@ class EntityType extends NClassType
 				if ($method->declaringClass->name !== 'YetORM\\Entity'
 						&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get') {
 
-					$this->getters[] = $method;
+					$this->getters[lcfirst(substr($method->name, 3))] = $method;
 				}
 			}
 		}

@@ -68,14 +68,13 @@ abstract class Entity extends Nette\Object
 		$values = array();
 
 		// get<Property> methods
-		foreach ($ref->getters as $method) {
-			$key = lcfirst(substr($method->name, 3));
+		foreach ($ref->getters as $name => $method) {
 			$value = $method->invoke($this);
 			if ($value instanceof Entity) {
-				$values[$key] = $value->toArray();
+				$values[$name] = $value->toArray();
 
 			} elseif (!($value instanceof EntityCollection)) {
-				$values[$key] = $value;
+				$values[$name] = $value;
 			}
 		}
 
