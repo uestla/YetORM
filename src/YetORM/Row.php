@@ -38,6 +38,14 @@ class Row
 
 
 
+	/** @return bool */
+	function hasNative()
+	{
+		return $this->row !== NULL;
+	}
+
+
+
 	/** @return NActiveRow|NULL */
 	function getNative()
 	{

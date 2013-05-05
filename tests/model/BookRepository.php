@@ -13,15 +13,15 @@ class BookRepository extends YetORM\Repository
 		$this->begin();
 
 			$row = $book->toRow();
-			if ($row->getNative() === NULL) {
+			if ($row->hasNative()) {
+				$rows = $book->toRow()->update();
+
+			} else {
 				$inserted = $this->getTable()->insert($row->getModified());
 				$refreshed = $this->getTable()->select('*')->get($inserted->getPrimary());
 
 				$book->refresh($refreshed);
 				$rows = 1;
-
-			} else {
-				$rows = $book->toRow()->update();
 			}
 
 		$this->commit();
@@ -38,7 +38,11 @@ class BookRepository extends YetORM\Repository
 	function delete(Book $book)
 	{
 		$this->begin();
-			$rows = $book->toRow()->getNative()->delete();
+
+			$row = $book->toRow();
+			$rows = 1;
+			$row->hasNative() && ($rows = $row->getNative()->delete());
+
 		$this->commit();
 
 		return $rows;
