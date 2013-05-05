@@ -3,7 +3,7 @@
 
 /**
  * @property-read int $id
- * @property-read DateTime|NULL $born
+ * @property-read Nette\DateTime|NULL $born
  */
 abstract class Person extends YetORM\Entity
 {
