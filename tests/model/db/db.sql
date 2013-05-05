@@ -5,10 +5,6 @@ SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP DATABASE IF EXISTS `yetorm_test`;
-CREATE DATABASE `yetorm_test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci */;
-USE `yetorm_test`;
-
 DROP TABLE IF EXISTS `author`;
 CREATE TABLE `author` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -48,7 +44,7 @@ CREATE TABLE `book_tag` (
   `tag_id` int(11) NOT NULL,
   PRIMARY KEY (`book_id`,`tag_id`),
   KEY `book_tag_tag` (`tag_id`),
-  CONSTRAINT `book_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`),
+  CONSTRAINT `book_tag_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE,
   CONSTRAINT `book_tag_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
@@ -74,4 +70,4 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (24,	'Neon'),
 (21,	'PHP');
 
--- 2013-04-07 13:56:07
+-- 2013-05-05 10:30:34
