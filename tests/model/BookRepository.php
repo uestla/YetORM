@@ -5,40 +5,6 @@ class BookRepository extends YetORM\Repository
 {
 
 	/**
-	 * @param  string
-	 * @param  int
-	 * @param  string
-	 * @param  bool
-	 * @param  array
-	 * @return Book
-	 */
-	function create($title, $author, $written, $available = TRUE, array $tags = array())
-	{
-		$this->begin();
-
-			$row = $this->getTable()->insert(array(
-				'author_id' => $author,
-				'book_title' => $title,
-				'written' => $written,
-				'available' => $available,
-			));
-
-			$tagMap = $this->getTable('tag')->fetchPairs('name', 'id');
-			foreach ($tags as $name) {
-				$this->getTable('book_tag')->insert(array(
-					'book_id' => $row->id,
-					'tag_id' => $tagMap[$name],
-				));
-			}
-
-		$this->commit();
-
-		return new Book($row);
-	}
-
-
-
-	/**
 	 * @param  Book
 	 * @return int
 	 */
