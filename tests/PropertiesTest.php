@@ -203,7 +203,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (Nette\InvalidArgumentException $e) {
-			if ($e->getMessage() !== "Property 'bookTitle' cannot be NULL.") {
+			if ($e->getMessage() !== "Property 'Book::\$bookTitle' cannot be NULL.") {
 				throw $e;
 			}
 		}
