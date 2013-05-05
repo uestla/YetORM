@@ -90,7 +90,7 @@ class EntityProperty extends Nette\Object
 		$type = gettype($value);
 		if ($type === 'NULL') {
 			if (!$this->nullable) {
-				throw new Nette\InvalidArgumentException("Property '{$this->name}' cannot be NULL.");
+				throw new Nette\InvalidArgumentException("Property '{$this->entity}::\${$this->name}' cannot be NULL.");
 			}
 
 		} elseif ($type === 'object') {
