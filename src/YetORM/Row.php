@@ -111,21 +111,16 @@ class Row
 		$cnt = 0;
 		$data === NULL && ($data = $this->modified);
 		if (count($data)) {
-			if (NETTE_VERSION_ID < 20100) { // Nette 2.0.x
-				foreach ($data as $key => $val) {
-					$this->row->$key = $val;
-				}
+			foreach ($data as $key => $val) {
+				$this->row->$key = $val;
+			}
 
-				$cnt = $this->row->update($data);
+			$cnt = $this->row->update($data);
 
-				$table = clone $this->row->getTable();
-				$refreshed = $table->select('*')->find($this->row->getPrimary())->fetch();
-				foreach ($refreshed->toArray() as $key => $val) {
-					$this->$key = $val;
-				}
-
-			} else {
-				$cnt = $this->row->update($data);
+			$table = clone $this->row->getTable();
+			$refreshed = $table->select('*')->find($this->row->getPrimary())->fetch();
+			foreach ($refreshed->toArray() as $key => $val) {
+				$this->$key = $val;
 			}
 		}
 
@@ -172,7 +167,7 @@ class Row
 	{
 		$this->modified[$name] = $value;
 
-		if ($this->row !== NULL && NETTE_VERSION_ID < 20100) { // Nette 2.0.x
+		if ($this->row !== NULL) {
 			$this->row->$name = $value;
 		}
 	}
