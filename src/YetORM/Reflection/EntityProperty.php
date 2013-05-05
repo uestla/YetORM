@@ -104,10 +104,11 @@ class EntityProperty extends Nette\Object
 					. get_class($value) . "' given.");
 			}
 
-		} elseif ($need && ($type = gettype($value)) !== $this->type) {
-			throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+		} elseif (($type = gettype($value)) !== $this->type) {
+			if ($need) {
+				throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+			}
 
-		} else {
 			return FALSE;
 		}
 
