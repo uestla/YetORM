@@ -89,7 +89,7 @@ class EntityProperty extends Nette\Object
 	/**
 	 * @param  mixed
 	 * @param  bool
-	 * @return mixed
+	 * @return bool
 	 */
 	function checkType($value, $need = TRUE)
 	{
