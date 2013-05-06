@@ -146,13 +146,7 @@ class Row
 			return $this->values[$name];
 		}
 
-		if ($this->row === NULL) {
-			$value = NULL;
-
-		} else {
-			$value = $this->values[$name] = $this->row->$name;
-		}
-
+		$value = $this->row === NULL ? NULL : ($this->values[$name] = $this->row->$name);
 		return $value;
 	}
 
