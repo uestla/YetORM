@@ -100,32 +100,29 @@ class Row
 
 
 
-	/**
-	 * @param  array
-	 * @return int
-	 */
-	function update(array $data = NULL)
+	/** @return int */
+	function update()
 	{
 		$this->checkPersistence();
 
 		$cnt = 0;
-		$data === NULL && ($data = $this->modified);
-		if (count($data)) {
-			foreach ($data as $key => $val) {
+		if (count($this->modified)) {
+			foreach ($this->modified as $key => $val) {
 				$this->row->$key = $val;
 			}
 
-			$cnt = $this->row->update($data);
+			$cnt = $this->row->update();
 
 			$table = clone $this->row->getTable();
-			$refreshed = $table->select('*')->find($this->row->getPrimary())->fetch();
+			$refreshed = $table->select('*')
+					->find($this->row->getPrimary())
+					->fetch();
+
+			$this->modified = $this->values = array();
 			foreach ($refreshed->toArray() as $key => $val) {
-				$this->$key = $val;
+				$this->values[$key] = $val;
 			}
 		}
-
-		$this->values = $data;
-		$this->modified = array();
 
 		return $cnt;
 	}
