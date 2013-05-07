@@ -60,7 +60,7 @@ class Row
 	 */
 	function setNative(NActiveRow $row)
 	{
-		$this->row = $row;
+		$this->reload($row);
 		return $this;
 	}
 
@@ -107,21 +107,9 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			foreach ($this->modified as $key => $val) {
-				$this->row->$key = $val;
-			}
-
 			$cnt = $this->row->update();
-
-			$table = clone $this->row->getTable();
-			$refreshed = $table->select('*')
-					->find($this->row->getPrimary())
-					->fetch();
-
+			$this->reload($this->row);
 			$this->modified = $this->values = array();
-			foreach ($refreshed->toArray() as $key => $val) {
-				$this->values[$key] = $val;
-			}
 		}
 
 		return $cnt;
@@ -184,6 +172,20 @@ class Row
 		if ($this->row === NULL) {
 			throw new Nette\InvalidStateException("Row not set yet.");
 		}
+	}
+
+
+
+	/**
+	 * @param  NActiveRow
+	 * @return void
+	 */
+	private function reload(NActiveRow $row)
+	{
+		// intentionally ugly as hell (looking forward to having stable Nette 2.1)
+		$this->row = $row->getTable()->getConnection()->table($row->getTable()->getName())
+				->select('*')
+				->get($row->getPrimary());
 	}
 
 }

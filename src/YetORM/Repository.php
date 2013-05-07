@@ -139,6 +139,67 @@ abstract class Repository extends Nette\Object
 
 
 
+	/**
+	 * @param  Entity
+	 * @return int
+	 */
+	function persist(Entity $entity)
+	{
+		$this->checkEntity($entity);
+
+		$this->begin();
+
+			$row = $entity->toRow();
+			if ($row->hasNative()) {
+				$rows = $entity->toRow()->update();
+
+			} else {
+				$inserted = $this->getTable()->insert($row->getModified());
+				$entity->refresh($inserted);
+				$rows = 1;
+			}
+
+		$this->commit();
+
+		return $rows;
+	}
+
+
+
+	/**
+	 * @param  Entity
+	 * @return int
+	 */
+	function delete(Entity $entity)
+	{
+		$this->checkEntity($entity);
+		$row = $entity->toRow();
+
+		if ($row->hasNative()) {
+			$this->begin();
+				$rows = $row->getNative()->delete();
+			$this->commit();
+
+		} else {
+			$rows = 1;
+		}
+
+		return $rows;
+	}
+
+
+
+	/** @return void */
+	private function checkEntity(Entity $entity)
+	{
+		$class = $this->getEntityClass(NULL);
+		if (!($entity instanceof $class)) {
+			throw new Nette\InvalidArgumentException("Instance of '$class' expected, '" . get_class($entity) . "' given.");
+		}
+	}
+
+
+
 	// === TRANSACTIONS ====================================================
 
 	/** @return void */

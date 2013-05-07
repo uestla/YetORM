@@ -16,6 +16,18 @@ class CreationTest extends PHPUnit_Framework_TestCase
 		// default values
 		$this->assertEquals($book->available, TRUE);
 		$this->assertEquals($book->written, NULL);
+
+
+		// multiple refreshing
+		try {
+			$book->refresh($book->toRow()->getNative());
+			$this->fail();
+
+		} catch (Nette\InvalidStateException $e) {
+			if ($e->getMessage() !== 'Cannot refresh already refreshed entity.') {
+				throw $e;
+			}
+		}
 	}
 
 }

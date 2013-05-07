@@ -38,6 +38,7 @@ class ServiceLocator
 	{
 		if (static::$connection === NULL) {
 			static::$connection = new Nette\Database\Connection('mysql:host=localhost;dbname=yetorm_test', 'root', '');
+			static::$connection->setCacheStorage(static::getCacheStorage());
 			Nette\Database\Helpers::loadFromFile(static::$connection, __DIR__ . '/db/db.sql');
 		}
 
