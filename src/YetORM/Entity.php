@@ -64,6 +64,10 @@ abstract class Entity extends Nette\Object
 	 */
 	final function refresh(NActiveRow $row)
 	{
+		if ($this->row->hasNative()) {
+			throw new Nette\InvalidStateException('Cannot refresh already refreshed entity.');
+		}
+
 		$this->row->setNative($row);
 	}
 
