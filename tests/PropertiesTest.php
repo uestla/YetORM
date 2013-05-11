@@ -209,4 +209,20 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
+
+
+	function testAnnotationFail()
+	{
+		try {
+			$bad = new BadEntity;
+			$bad->toArray();
+			$this->fail();
+
+		} catch (Nette\InvalidStateException $e) {
+			if ($e->getMessage() !== 'Invalid property type (double NULL).') {
+				throw $e;
+			}
+		}
+	}
+
 }
