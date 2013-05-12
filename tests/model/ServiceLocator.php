@@ -38,6 +38,7 @@ class ServiceLocator
 	{
 		if (static::$connection === NULL) {
 			static::$connection = new Nette\Database\Connection('mysql:host=localhost;dbname=yetorm_test', 'root', '');
+			static::$connection->setCacheStorage(static::getCacheStorage());
 			Nette\Database\Helpers::loadFromFile(static::$connection, __DIR__ . '/db/db.sql');
 		}
 
@@ -78,14 +79,6 @@ class ServiceLocator
 		}
 
 		return static::$bookFacade;
-	}
-
-
-
-	/** @return Book */
-	static function createTestingBook()
-	{
-		return static::getBookRepository()->create('Texy 2', 12, new Nette\DateTime('2008-01-01'), TRUE, array('PHP'));
 	}
 
 }

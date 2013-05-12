@@ -18,8 +18,10 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 abstract class Entity extends Nette\Object
 {
 
-	/** @var NActiveRow */
+	/** @var Row */
 	protected $row;
+
+
 
 	/** @var array */
 	private static $reflections = array();
@@ -27,9 +29,9 @@ abstract class Entity extends Nette\Object
 
 
 	/** @param  NActiveRow */
-	function __construct(NActiveRow $row)
+	function __construct(NActiveRow $row = NULL)
 	{
-		$this->row = $row;
+		$this->row = new Row($row);
 	}
 
 
@@ -48,10 +50,25 @@ abstract class Entity extends Nette\Object
 
 
 
-	/** @return NActiveRow */
-	final function toActiveRow()
+	/** @return Row */
+	final function toRow()
 	{
 		return $this->row;
+	}
+
+
+
+	/**
+	 * @param  NActiveRow
+	 * @return void
+	 */
+	final function refresh(NActiveRow $row)
+	{
+		if ($this->row->hasNative()) {
+			throw new E\InvalidStateException('Cannot refresh already refreshed entity.');
+		}
+
+		$this->row->setNative($row);
 	}
 
 
@@ -67,18 +84,10 @@ abstract class Entity extends Nette\Object
 		$ref = static::getReflection();
 		$values = array();
 
-		// get<Property> methods
-		foreach ($ref->getters as $name => $method) {
-			$value = $method->invoke($this);
+		foreach ($ref->properties as $name => $property) {
+			$value = $this->$name;
 			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
 				$values[$name] = $value;
-			}
-		}
-
-		// @property and @property-read annotations
-		foreach ($ref->properties as $name => $prop) {
-			if (!isset($values[$name])) {
-				$values[$name] = $prop->setType($this->row->{$prop->column});
 			}
 		}
 
@@ -92,7 +101,7 @@ abstract class Entity extends Nette\Object
 	 * @param  array
 	 * @return mixed
 	 */
-	function __call($name, $args)
+	final function __call($name, $args)
 	{
 		try {
 			return parent::__call($name, $args);
@@ -109,7 +118,7 @@ abstract class Entity extends Nette\Object
 				}
 			}
 
-			throw $e;
+			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -119,7 +128,7 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @return mixed
 	 */
-	function & __get($name)
+	final function & __get($name)
 	{
 		try {
 			return parent::__get($name);
@@ -130,7 +139,7 @@ abstract class Entity extends Nette\Object
 				return $value;
 			}
 
-			throw $e;
+			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -141,7 +150,7 @@ abstract class Entity extends Nette\Object
 	 * @param  mixed
 	 * @return void
 	 */
-	function __set($name, $value)
+	final function __set($name, $value)
 	{
 		try {
 			return parent::__set($name, $value);
@@ -154,7 +163,7 @@ abstract class Entity extends Nette\Object
 				return ;
 			}
 
-			throw $e;
+			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -164,7 +173,7 @@ abstract class Entity extends Nette\Object
 	 * @param  string
 	 * @return bool
 	 */
-	function __isset($name)
+	final function __isset($name)
 	{
 		return parent::__isset($name) || static::getReflection()->hasProperty($name);
 	}
@@ -174,17 +183,17 @@ abstract class Entity extends Nette\Object
 	/**
 	 * @param  string
 	 * @return void
-	 * @throws Nette\NotSupportedException
+	 * @throws E\NotSupportedException
 	 */
-	function __unset($name)
+	final function __unset($name)
 	{
-		throw new Nette\NotSupportedException;
+		throw new E\NotSupportedException;
 	}
 
 
 
 	/** @return Reflection\EntityType */
-	static function getReflection()
+	final static function getReflection()
 	{
 		$class = get_called_class();
 		if (!isset(self::$reflections[$class])) {
@@ -192,6 +201,14 @@ abstract class Entity extends Nette\Object
 		}
 
 		return self::$reflections[$class];
+	}
+
+
+
+	/** @throws E\NotSupportedException */
+	final static function extensionMethod($name, $callback = NULL)
+	{
+		throw new E\NotSupportedException;
 	}
 
 }

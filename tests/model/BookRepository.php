@@ -5,65 +5,50 @@ class BookRepository extends YetORM\Repository
 {
 
 	/**
-	 * @param  string
-	 * @param  int
-	 * @param  string
-	 * @param  bool
-	 * @param  array
-	 * @return Book
+	 * @param  Book
+	 * @return int
 	 */
-	function create($title, $author, $written, $available = TRUE, array $tags = array())
+	function persist(YetORM\Entity $book)
 	{
 		$this->begin();
 
-			$row = $this->getTable()->insert(array(
-				'author_id' => $author,
-				'book_title' => $title,
-				'written' => $written,
-				'available' => $available,
-			));
+			$cnt = parent::persist($book);
 
-			$tagMap = $this->getTable('tag')->fetchPairs('name', 'id');
-			foreach ($tags as $name) {
-				$this->getTable('book_tag')->insert(array(
-					'book_id' => $row->id,
-					'tag_id' => $tagMap[$name],
-				));
+			// persist tags
+			if (count($book->getAddedTags()) || count($book->getRemovedTags())) {
+
+				$tags = $this->getTable('tag')->fetchPairs('name', 'id');
+				foreach ($book->getAddedTags(TRUE) as $tag) {
+					if (!isset($tags[$tag->name])) {
+						$tags[$tag->name] = $tagID = $this->getTable('tag')->insert(array(
+							'name' => $tag->name,
+						))->id;
+					}
+
+					$this->getTable('book_tag')->insert(array(
+						'book_id' => $book->id,
+						'tag_id' => $tags[$tag->name],
+					));
+				}
+
+				$toDelete = array();
+				foreach ($book->getRemovedTags(TRUE) as $tag) {
+					if (isset($tags[$tag->name])) {
+						$toDelete[] = $tags[$tag->name];
+					}
+				}
+
+				if (count($toDelete)) {
+					$this->getTable('book_tag')
+							->where('book_id', $book->id)
+							->where('tag_id', $toDelete)
+							->delete();
+				}
 			}
 
 		$this->commit();
 
-		return new Book($row);
-	}
-
-
-
-	/**
-	 * @param  Book
-	 * @return int
-	 */
-	function persist(Book $book)
-	{
-		$this->begin();
-			$rows = $book->toActiveRow()->update();
-		$this->commit();
-
-		return $rows;
-	}
-
-
-
-	/**
-	 * @param  Book
-	 * @return int
-	 */
-	function delete(Book $book)
-	{
-		$this->begin();
-			$rows = $book->toActiveRow()->delete();
-		$this->commit();
-
-		return $rows;
+		return $cnt;
 	}
 
 

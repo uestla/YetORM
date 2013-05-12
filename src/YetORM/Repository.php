@@ -99,7 +99,7 @@ abstract class Repository extends Nette\Object
 					$this->table = $name;
 
 				} elseif (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Table name not set.");
+					throw new E\InvalidStateException("Table name not set.");
 				}
 
 				$this->table = strtolower($name);
@@ -125,7 +125,7 @@ abstract class Repository extends Nette\Object
 					$this->entity = $name;
 
 				} elseif (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Entity class not set.");
+					throw new E\InvalidStateException("Entity class not set.");
 				}
 
 				$this->entity = ucfirst($name);
@@ -135,6 +135,67 @@ abstract class Repository extends Nette\Object
 		}
 
 		return $entity;
+	}
+
+
+
+	/**
+	 * @param  Entity
+	 * @return int
+	 */
+	function persist(Entity $entity)
+	{
+		$this->checkEntity($entity);
+
+		$this->begin();
+
+			$row = $entity->toRow();
+			if ($row->hasNative()) {
+				$rows = $entity->toRow()->update();
+
+			} else {
+				$inserted = $this->getTable()->insert($row->getModified());
+				$entity->refresh($inserted);
+				$rows = 1;
+			}
+
+		$this->commit();
+
+		return $rows;
+	}
+
+
+
+	/**
+	 * @param  Entity
+	 * @return int
+	 */
+	function delete(Entity $entity)
+	{
+		$this->checkEntity($entity);
+		$row = $entity->toRow();
+
+		if ($row->hasNative()) {
+			$this->begin();
+				$rows = $row->getNative()->delete();
+			$this->commit();
+
+		} else {
+			$rows = 1;
+		}
+
+		return $rows;
+	}
+
+
+
+	/** @return void */
+	private function checkEntity(Entity $entity)
+	{
+		$class = $this->getEntityClass(NULL);
+		if (!($entity instanceof $class)) {
+			throw new E\InvalidArgumentException("Instance of '$class' expected, '" . get_class($entity) . "' given.");
+		}
 	}
 
 
@@ -155,7 +216,7 @@ abstract class Repository extends Nette\Object
 	final protected function commit()
 	{
 		if (self::$transactionCounter[$dsn = $this->connection->dsn] === 0) {
-			throw new Nette\InvalidStateException("No transaction started.");
+			throw new E\InvalidStateException("No transaction started.");
 		}
 
 		if (--self::$transactionCounter[$dsn] === 0) {

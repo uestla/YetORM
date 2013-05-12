@@ -14,12 +14,8 @@ namespace YetORM\Reflection;
 use Nette;
 
 
-/**
- * @property-read string $type
- * @property-read bool $readonly
- * @property-read string $column
- */
-class EntityProperty extends Nette\Object
+/** @property-read bool $readonly */
+abstract class EntityProperty extends Nette\Object
 {
 
 	/** @var string */
@@ -27,15 +23,6 @@ class EntityProperty extends Nette\Object
 
 	/** @var string */
 	protected $name;
-
-	/** @var string */
-	protected $column;
-
-	/** @var string */
-	protected $type;
-
-	/** @var bool */
-	protected $nullable;
 
 	/** @var bool */
 	protected $readonly;
@@ -45,27 +32,13 @@ class EntityProperty extends Nette\Object
 	/**
 	 * @param  string
 	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @param  bool
 	 * @param  bool
 	 */
-	function __construct($entity, $name, $column, $type, $nullable, $readonly)
+	function __construct($entity, $name, $readonly)
 	{
 		$this->entity = (string) $entity;
 		$this->name = (string) $name;
-		$this->column = (string) $column;
-		$this->type = (string) $type;
-		$this->nullable = (bool) $nullable;
 		$this->readonly = (bool) $readonly;
-	}
-
-
-
-	/** @return string */
-	function getType()
-	{
-		return $this->type;
 	}
 
 
@@ -74,61 +47,6 @@ class EntityProperty extends Nette\Object
 	function isReadonly()
 	{
 		return $this->readonly;
-	}
-
-
-
-	/** @return string */
-	function getColumn()
-	{
-		return $this->column;
-	}
-
-
-
-	/**
-	 * @param  mixed
-	 * @param  bool
-	 * @return bool
-	 */
-	function checkType($value, $need = TRUE)
-	{
-		if ($value === NULL) {
-			if (!$this->nullable) {
-				throw new Nette\InvalidArgumentException("Property '{$this->entity}::\${$this->name}' cannot be NULL.");
-			}
-
-		} elseif (is_object($value)) {
-			if (!($value instanceof $this->type)) {
-				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '"
-					. get_class($value) . "' given.");
-			}
-
-		} elseif (($type = gettype($value)) !== $this->type) {
-			if ($need) {
-				throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
-			}
-
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-
-
-
-	/**
-	 * @param  mixed
-	 * @return mixed
-	 */
-	function setType($value)
-	{
-		if (!$this->checkType($value, FALSE) && @settype($value, $this->type) === FALSE) { // intentionally @
-			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '"
-				. gettype($value) . "'.");
-		}
-
-		return $value;
 	}
 
 }

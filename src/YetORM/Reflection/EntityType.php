@@ -11,26 +11,24 @@
 
 namespace YetORM\Reflection;
 
+use YetORM;
 use Nette\Utils\Strings as NStrings;
 use Nette\Reflection\Method as NMethod;
 use Nette\Reflection\ClassType as NClassType;
 
 
-/**
- * @property-read EntityProperty[] $properties
- * @property-read NMethod[] $getters
- */
+/** @property-read EntityProperty[] $properties */
 class EntityType extends NClassType
 {
 
 	/** @var EntityProperty[] */
 	private $properties = NULL;
 
-	/** @var NMethod[] */
-	private $getters = NULL;
+	/** @var MethodProperty[] */
+	private static $methodProps = array();
 
-	/** @var array */
-	private static $annotations = array();
+	/** @var AnnotationProperty[] */
+	private static $annProps = array();
 
 
 
@@ -71,20 +69,29 @@ class EntityType extends NClassType
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array();
-			$classTree = array($current = $this->name);
 
-			while (TRUE) {
-				if (($current = get_parent_class($current)) === FALSE || $current === 'YetORM\\Entity') {
-					break;
+			$tree = array();
+			$current = $this->name;
+
+			do {
+				$tree[] = $current;
+				$current = get_parent_class($current);
+
+			} while ($current !== FALSE && $current !== 'YetORM\\Entity');
+
+
+			foreach (array_reverse($tree) as $class) {
+				self::loadMethodProperties($class);
+				self::loadAnnotationProperties($class);
+
+				foreach (self::$methodProps[$class] as $name => $property) {
+					$this->properties[$name] = $property;
 				}
 
-				$classTree[] = $current;
-			}
-
-			foreach (array_reverse($classTree) as $class) {
-				$this->loadAnnotations($class);
-				foreach (self::$annotations[$class] as $name => $prop) {
-					$this->properties[$name] = $prop;
+				foreach (self::$annProps[$class] as $name => $property) {
+					if (!isset($this->properties[$name])) {
+						$this->properties[$name] = $property;
+					}
 				}
 			}
 		}
@@ -96,98 +103,94 @@ class EntityType extends NClassType
 	 * @param  string
 	 * @return void
 	 */
-	private function loadAnnotations($class)
+	private static function loadMethodProperties($class)
 	{
-		if (!isset(self::$annotations[$class])) {
-			self::$annotations[$class] = self::parseAnnotations(NClassType::from($class));
+		if (!isset(self::$methodProps[$class])) {
+			$ref = NClassType::from($class);
+			self::$methodProps[$class] = array();
+
+			foreach ($ref->getMethods(NMethod::IS_PUBLIC) as $method) {
+				if ($method->declaringClass->name !== 'YetORM\\Entity'
+						&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get'
+						&& !$method->hasAnnotation('internal')) {
+
+					$name = lcfirst(substr($method->name, 3));
+					self::$methodProps[$class][$name] = new MethodProperty(
+						$ref->name,
+						$name,
+						!$ref->hasMethod('set' . ucfirst($name))
+					);
+				}
+			}
 		}
 	}
 
 
 
 	/**
-	 * @param  ClassType
-	 * @return array
+	 * @param  string
+	 * @return void
 	 */
-	private static function parseAnnotations(NClassType $reflection)
+	private static function loadAnnotationProperties($class)
 	{
-		$annotations = array();
-		foreach ($reflection->getAnnotations() as $ann => $values) {
-			if ($ann === 'property' || $ann === 'property-read') {
-				foreach ($values as $tmp) {
-					$split = NStrings::split($tmp, '#\s+#');
+		if (!isset(self::$annProps[$class])) {
+			$ref = NClassType::from($class);
+			self::$annProps[$class] = array();
 
-					if (count($split) >= 2) {
-						list($type, $var) = $split;
+			foreach ($ref->getAnnotations() as $ann => $values) {
+				if ($ann === 'property' || $ann === 'property-read') {
+					foreach ($values as $tmp) {
+						$split = NStrings::split($tmp, '#\s#');
 
-						// support NULL type
-						$nullable = FALSE;
-						$types = explode('|', $type, 2);
-						if (count($types) === 2) {
-							if (strcasecmp($types[0], 'null') === 0) {
-								$type = $types[1];
-								$nullable = TRUE;
+						if (count($split) >= 2) {
+							list($type, $var) = $split;
 
-							} elseif (strcasecmp($types[1], 'null') === 0) {
-								$type = $types[0];
-								$nullable = TRUE;
+							// support NULL type
+							$nullable = FALSE;
+							$types = explode('|', $type, 2);
+							if (count($types) === 2) {
+								if (strcasecmp($types[0], 'null') === 0) {
+									$type = $types[1];
+									$nullable = TRUE;
+								}
+
+								if (strcasecmp($types[1], 'null') === 0) {
+									if ($nullable) {
+										throw new YetORM\E\InvalidStateException('Invalid property type (double NULL).');
+									}
+
+									$type = $types[0];
+									$nullable = TRUE;
+								}
 							}
+
+							// unify type name
+							if ($type === 'bool') {
+								$type = 'boolean';
+
+							} elseif ($type === 'int') {
+								$type = 'integer';
+							}
+
+							$name = substr($var, 1);
+							$readonly = $ann === 'property-read';
+
+							// parse column name
+							$column = $name;
+							if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
+								$column = $split[3];
+							}
+
+							self::$annProps[$class][$name] = new AnnotationProperty(
+								$ref->name,
+								$name,
+								$readonly,
+								$column,
+								$type,
+								$nullable
+							);
 						}
-
-						// unify type name
-						if ($type === 'bool') {
-							$type = 'boolean';
-
-						} elseif ($type === 'int') {
-							$type = 'integer';
-						}
-
-						$name = substr($var, 1);
-						$readonly = $ann === 'property-read';
-
-						// parse column name
-						$column = $name;
-						if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
-							$column = $split[3];
-						}
-
-						$annotations[$name] = new EntityProperty(
-							$reflection->name,
-							$name,
-							$column,
-							$type,
-							$nullable,
-							$readonly
-						);
 					}
-				}
-			}
-		}
-
-		return $annotations;
-	}
-
-
-
-	/** @return NMethod[] */
-	function getGetters()
-	{
-		$this->loadGetters();
-		return $this->getters;
-	}
-
-
-
-	/** @return void */
-	private function loadGetters()
-	{
-		if ($this->getters === NULL) {
-			$this->getters = array();
-			foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
-				if ($method->declaringClass->name !== 'YetORM\\Entity'
-						&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get') {
-
-					$this->getters[lcfirst(substr($method->name, 3))] = $method;
 				}
 			}
 		}
