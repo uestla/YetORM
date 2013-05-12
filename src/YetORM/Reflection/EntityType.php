@@ -82,23 +82,6 @@ class EntityType extends NClassType
 
 
 
-	/** @return array */
-	private function getClassTree()
-	{
-		$tree = array();
-		$current = $this->name;
-
-		do {
-			$tree[] = $current;
-			$current = get_parent_class($current);
-
-		} while ($current !== FALSE && $current !== 'YetORM\\Entity');
-
-		return array_reverse($tree);
-	}
-
-
-
 	/** @return void */
 	private function loadMethodProperties()
 	{
@@ -115,6 +98,23 @@ class EntityType extends NClassType
 				);
 			}
 		}
+	}
+
+
+
+	/** @return array */
+	private function getClassTree()
+	{
+		$tree = array();
+		$current = $this->name;
+
+		do {
+			$tree[] = $current;
+			$current = get_parent_class($current);
+
+		} while ($current !== FALSE && $current !== 'YetORM\\Entity');
+
+		return array_reverse($tree);
 	}
 
 
