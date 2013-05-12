@@ -24,9 +24,6 @@ class EntityType extends NClassType
 	/** @var EntityProperty[] */
 	private $properties = NULL;
 
-	/** @var MethodProperty[] */
-	private static $methodProps = array();
-
 	/** @var AnnotationProperty[] */
 	private static $annProps = array();
 
@@ -69,24 +66,10 @@ class EntityType extends NClassType
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array();
+			$this->loadMethodProperties();
 
-			$tree = array();
-			$current = $this->name;
-
-			do {
-				$tree[] = $current;
-				$current = get_parent_class($current);
-
-			} while ($current !== FALSE && $current !== 'YetORM\\Entity');
-
-
-			foreach (array_reverse($tree) as $class) {
-				self::loadMethodProperties($class);
+			foreach ($this->getClassTree() as $class) {
 				self::loadAnnotationProperties($class);
-
-				foreach (self::$methodProps[$class] as $name => $property) {
-					$this->properties[$name] = $property;
-				}
 
 				foreach (self::$annProps[$class] as $name => $property) {
 					if (!isset($this->properties[$name])) {
@@ -99,28 +82,37 @@ class EntityType extends NClassType
 
 
 
-	/**
-	 * @param  string
-	 * @return void
-	 */
-	private static function loadMethodProperties($class)
+	/** @return array */
+	private function getClassTree()
 	{
-		if (!isset(self::$methodProps[$class])) {
-			$ref = NClassType::from($class);
-			self::$methodProps[$class] = array();
+		$tree = array();
+		$current = $this->name;
 
-			foreach ($ref->getMethods(NMethod::IS_PUBLIC) as $method) {
-				if ($method->declaringClass->name !== 'YetORM\\Entity'
-						&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get'
-						&& !$method->hasAnnotation('internal')) {
+		do {
+			$tree[] = $current;
+			$current = get_parent_class($current);
 
-					$name = lcfirst(substr($method->name, 3));
-					self::$methodProps[$class][$name] = new MethodProperty(
-						$ref->name,
-						$name,
-						!$ref->hasMethod('set' . ucfirst($name))
-					);
-				}
+		} while ($current !== FALSE && $current !== 'YetORM\\Entity');
+
+		return array_reverse($tree);
+	}
+
+
+
+	/** @return void */
+	private function loadMethodProperties()
+	{
+		foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
+			if ($method->declaringClass->name !== 'YetORM\\Entity'
+					&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get'
+					&& !$method->hasAnnotation('internal')) {
+
+				$name = lcfirst(substr($method->name, 3));
+				$this->properties[$name] = new MethodProperty(
+					$this->name,
+					$name,
+					!$this->hasMethod('set' . ucfirst($name))
+				);
 			}
 		}
 	}
