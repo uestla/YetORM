@@ -126,7 +126,7 @@ class EntityType extends NClassType
 	private static function loadAnnotationProperties($class)
 	{
 		if (!isset(self::$annProps[$class])) {
-			$ref = NClassType::from($class);
+			$ref = $class::getReflection();
 			self::$annProps[$class] = array();
 
 			foreach ($ref->getAnnotations() as $ann => $values) {
