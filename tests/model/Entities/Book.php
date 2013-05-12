@@ -10,6 +10,70 @@
 class Book extends YetORM\Entity
 {
 
+	/** @var Tag[] */
+	protected $addedTags = array();
+
+	/** @var Tag[] */
+	protected $removedTags = array();
+
+
+
+	/**
+	 * @param  string
+	 * @return Book
+	 */
+	function addTag($name)
+	{
+		$tag = new Tag;
+		$tag->name = $name;
+		$this->addedTags[] = $tag;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param  bool
+	 * @return Tag[]
+	 * @internal
+	 */
+	function getAddedTags($reset = FALSE)
+	{
+		$tmp = $this->addedTags;
+		$reset && ($this->addedTags = array());
+		return $tmp;
+	}
+
+
+
+	/**
+	 * @param  string
+	 * @return Book
+	 */
+	function removeTag($name)
+	{
+		$tag = new Tag;
+		$tag->name = $name;
+		$this->removedTags[] = $tag;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param  bool
+	 * @return Tag[]
+	 * @internal
+	 */
+	function getRemovedTags($reset = FALSE)
+	{
+		$tmp = $this->removedTags;
+		$reset && ($this->removedTags = array());
+		return $tmp;
+	}
+
+
+
 	/** @return Author */
 	function getAuthor()
 	{
