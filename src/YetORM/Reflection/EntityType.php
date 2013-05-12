@@ -126,10 +126,9 @@ class EntityType extends NClassType
 	private static function loadAnnotationProperties($class)
 	{
 		if (!isset(self::$annProps[$class])) {
-			$ref = $class::getReflection();
 			self::$annProps[$class] = array();
 
-			foreach ($ref->getAnnotations() as $ann => $values) {
+			foreach ($class::getReflection()->getAnnotations() as $ann => $values) {
 				if ($ann === 'property' || $ann === 'property-read') {
 					foreach ($values as $tmp) {
 						$split = NStrings::split($tmp, '#\s#');
@@ -174,7 +173,7 @@ class EntityType extends NClassType
 							}
 
 							self::$annProps[$class][$name] = new AnnotationProperty(
-								$ref->name,
+								$class,
 								$name,
 								$readonly,
 								$column,
