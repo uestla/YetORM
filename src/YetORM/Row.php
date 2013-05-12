@@ -109,7 +109,6 @@ class Row
 		if (count($this->modified)) {
 			$cnt = $this->row->update();
 			$this->reload($this->row);
-			$this->modified = $this->values = array();
 		}
 
 		return $cnt;
@@ -131,7 +130,7 @@ class Row
 			return $this->values[$name];
 		}
 
-		$value = $this->row === NULL ? NULL : ($this->values[$name] = $this->row->$name);
+		$value = $this->values[$name] = $this->row === NULL ? NULL : $this->row->$name;
 		return $value;
 	}
 
@@ -186,6 +185,8 @@ class Row
 		$this->row = $row->getTable()->getConnection()->table($row->getTable()->getName())
 				->select('*')
 				->get($row->getPrimary());
+
+		$this->modified = $this->values = array();
 	}
 
 }
