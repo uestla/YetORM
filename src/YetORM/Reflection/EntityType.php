@@ -118,7 +118,7 @@ class EntityType extends NClassType
 					self::$methodProps[$class][$name] = new MethodProperty(
 						$ref->name,
 						$name,
-						!$ref->hasMethod('set' . $name)
+						!$ref->hasMethod('set' . ucfirst($name))
 					);
 				}
 			}
