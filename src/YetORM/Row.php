@@ -170,7 +170,7 @@ class Row
 	private function checkPersistence()
 	{
 		if ($this->row === NULL) {
-			throw new Nette\InvalidStateException("Row not set yet.");
+			throw new E\InvalidStateException("Row not set yet.");
 		}
 	}
 

@@ -12,6 +12,7 @@
 namespace YetORM\Reflection;
 
 use Nette;
+use YetORM;
 
 
 /**
@@ -76,17 +77,17 @@ class AnnotationProperty extends EntityProperty
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {
-				throw new Nette\InvalidArgumentException("Property '{$this->entity}::\${$this->name}' cannot be NULL.");
+				throw new YetORM\E\InvalidArgumentException("Property '{$this->entity}::\${$this->name}' cannot be NULL.");
 			}
 
 		} elseif (is_object($value)) {
 			if (!($value instanceof $this->type)) {
-				throw new Nette\InvalidArgumentException("Instance of '{$this->type}' expected, '"
+				throw new YetORM\E\InvalidArgumentException("Instance of '{$this->type}' expected, '"
 					. get_class($value) . "' given.");
 			}
 
 		} elseif ($need && ($type = gettype($value)) !== $this->type) {
-			throw new Nette\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+			throw new YetORM\E\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
 
 		} else {
 			return FALSE;
@@ -104,7 +105,7 @@ class AnnotationProperty extends EntityProperty
 	function setType($value)
 	{
 		if (!$this->checkType($value, FALSE) && @settype($value, $this->type) === FALSE) { // intentionally @
-			throw new Nette\InvalidArgumentException("Unable to set type '{$this->type}' from '"
+			throw new YetORM\E\InvalidArgumentException("Unable to set type '{$this->type}' from '"
 				. gettype($value) . "'.");
 		}
 

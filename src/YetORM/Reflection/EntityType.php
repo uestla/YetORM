@@ -11,7 +11,7 @@
 
 namespace YetORM\Reflection;
 
-use Nette;
+use YetORM;
 use Nette\Utils\Strings as NStrings;
 use Nette\Reflection\Method as NMethod;
 use Nette\Reflection\ClassType as NClassType;
@@ -156,7 +156,7 @@ class EntityType extends NClassType
 
 								if (strcasecmp($types[1], 'null') === 0) {
 									if ($nullable) {
-										throw new Nette\InvalidStateException('Invalid property type (double NULL).');
+										throw new YetORM\E\InvalidStateException('Invalid property type (double NULL).');
 									}
 
 									$type = $types[0];

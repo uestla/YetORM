@@ -99,7 +99,7 @@ abstract class Repository extends Nette\Object
 					$this->table = $name;
 
 				} elseif (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Table name not set.");
+					throw new E\InvalidStateException("Table name not set.");
 				}
 
 				$this->table = strtolower($name);
@@ -125,7 +125,7 @@ abstract class Repository extends Nette\Object
 					$this->entity = $name;
 
 				} elseif (!$this->parseName($name)) {
-					throw new Nette\InvalidStateException("Entity class not set.");
+					throw new E\InvalidStateException("Entity class not set.");
 				}
 
 				$this->entity = ucfirst($name);
@@ -194,7 +194,7 @@ abstract class Repository extends Nette\Object
 	{
 		$class = $this->getEntityClass(NULL);
 		if (!($entity instanceof $class)) {
-			throw new Nette\InvalidArgumentException("Instance of '$class' expected, '" . get_class($entity) . "' given.");
+			throw new E\InvalidArgumentException("Instance of '$class' expected, '" . get_class($entity) . "' given.");
 		}
 	}
 
@@ -216,7 +216,7 @@ abstract class Repository extends Nette\Object
 	final protected function commit()
 	{
 		if (self::$transactionCounter[$dsn = $this->connection->dsn] === 0) {
-			throw new Nette\InvalidStateException("No transaction started.");
+			throw new E\InvalidStateException("No transaction started.");
 		}
 
 		if (--self::$transactionCounter[$dsn] === 0) {
