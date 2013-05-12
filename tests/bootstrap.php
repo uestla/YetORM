@@ -15,6 +15,10 @@ Debugger::$maxLen = FALSE;
 
 function id($a) { return $a; }
 
+ServiceLocator::getCacheStorage()->clean(array(
+	Nette\Caching\Cache::ALL => TRUE,
+));
+
 $loader = new Nette\Loaders\RobotLoader;
 $loader->setCacheStorage(ServiceLocator::getCacheStorage());
 $loader->addDirectory(__DIR__ . '/model');
