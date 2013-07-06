@@ -108,7 +108,7 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			$cnt = $this->row->update();
+			$cnt = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
 
@@ -147,7 +147,7 @@ class Row
 		$this->modified[$name] = $value;
 
 		if ($this->row !== NULL) {
-			$this->row->update(array($name => $value));
+			$this->row->update(array());
 		}
 	}
 
