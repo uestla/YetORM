@@ -23,7 +23,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 			$book->refresh($book->toRow()->getNative());
 			$this->fail();
 
-		} catch (YetORM\E\InvalidStateException $e) {
+		} catch (YetORM\Exception\InvalidStateException $e) {
 			if ($e->getMessage() !== 'Cannot refresh already refreshed entity.') {
 				throw $e;
 			}

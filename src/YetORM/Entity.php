@@ -63,7 +63,7 @@ abstract class Entity extends Nette\Object
 	final function refresh(NActiveRow $row)
 	{
 		if ($this->row->hasNative()) {
-			throw new E\InvalidStateException('Cannot refresh already refreshed entity.');
+			throw new Exception\InvalidStateException('Cannot refresh already refreshed entity.');
 		}
 
 		$this->row->setNative($row);
@@ -116,7 +116,7 @@ abstract class Entity extends Nette\Object
 				}
 			}
 
-			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
+			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -137,7 +137,7 @@ abstract class Entity extends Nette\Object
 				return $value;
 			}
 
-			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
+			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -161,7 +161,7 @@ abstract class Entity extends Nette\Object
 				return ;
 			}
 
-			throw new E\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
+			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
@@ -185,7 +185,7 @@ abstract class Entity extends Nette\Object
 	 */
 	final function __unset($name)
 	{
-		throw new E\NotSupportedException;
+		throw new Exception\NotSupportedException;
 	}
 
 
@@ -206,7 +206,7 @@ abstract class Entity extends Nette\Object
 	/** @throws E\NotSupportedException */
 	final static function extensionMethod($name, $callback = NULL)
 	{
-		throw new E\NotSupportedException;
+		throw new Exception\NotSupportedException;
 	}
 
 }

@@ -147,7 +147,7 @@ class EntityType extends NClassType
 
 								if (strcasecmp($types[1], 'null') === 0) {
 									if ($nullable) {
-										throw new YetORM\E\InvalidStateException('Invalid property type (double NULL).');
+										throw new YetORM\Exception\InvalidStateException('Invalid property type (double NULL).');
 									}
 
 									$type = $types[0];

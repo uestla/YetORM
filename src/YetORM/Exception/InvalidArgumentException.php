@@ -9,8 +9,8 @@
  * @link     https://github.com/uestla/YetORM
  */
 
-namespace YetORM\E;
+namespace YetORM\Exception;
 
 
-class InvalidStateException extends \RuntimeException
+class InvalidArgumentException extends \InvalidArgumentException
 {}

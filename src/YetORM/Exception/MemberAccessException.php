@@ -9,8 +9,8 @@
  * @link     https://github.com/uestla/YetORM
  */
 
-namespace YetORM\E;
+namespace YetORM\Exception;
 
 
-class NotSupportedException extends \LogicException
+class MemberAccessException extends \LogicException
 {}

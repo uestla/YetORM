@@ -21,7 +21,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->setId(123);
 			$this->fail();
 
-		} catch (YetORM\E\MemberAccessException $e) {
+		} catch (YetORM\Exception\MemberAccessException $e) {
 			if ($e->getMessage() !== 'Cannot write to an undeclared property Book::$id.') {
 				throw $e;
 			}
@@ -32,7 +32,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->setBookTitle(123);
 			$this->fail();
 
-		} catch (YetORM\E\InvalidArgumentException $e) {
+		} catch (YetORM\Exception\InvalidArgumentException $e) {
 			if ($e->getMessage() !== "Invalid type - 'string' expected, 'integer' given.") {
 				throw $e;
 			}
@@ -42,7 +42,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->setAvailable('TRUE');
 			$this->fail();
 
-		} catch (YetORM\E\InvalidArgumentException $e) {
+		} catch (YetORM\Exception\InvalidArgumentException $e) {
 			if ($e->getMessage() !== "Invalid type - 'boolean' expected, 'string' given.") {
 				throw $e;
 			}
@@ -53,7 +53,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->setAsdf('Book title');
 			$this->fail();
 
-		} catch (YetORM\E\MemberAccessException $e) {
+		} catch (YetORM\Exception\MemberAccessException $e) {
 			if ($e->getMessage() !== 'Cannot write to an undeclared property Book::$asdf.') {
 				throw $e;
 			}
@@ -82,7 +82,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->getAsdf();
 			$this->fail();
 
-		} catch (YetORM\E\MemberAccessException $e) {
+		} catch (YetORM\Exception\MemberAccessException $e) {
 			if ($e->getMessage() !== 'Cannot read an undeclared property Book::$asdf.') {
 				throw $e;
 			}
@@ -114,7 +114,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			unset($book->author);
 			$this->fail();
 
-		} catch (YetORM\E\NotSupportedException $e) {}
+		} catch (YetORM\Exception\NotSupportedException $e) {}
 	}
 
 
@@ -202,7 +202,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$book->bookTitle = NULL;
 			$this->fail();
 
-		} catch (YetORM\E\InvalidArgumentException $e) {
+		} catch (YetORM\Exception\InvalidArgumentException $e) {
 			if ($e->getMessage() !== "Property 'Book::\$bookTitle' cannot be NULL.") {
 				throw $e;
 			}
@@ -218,7 +218,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$bad->toArray();
 			$this->fail();
 
-		} catch (YetORM\E\InvalidStateException $e) {
+		} catch (YetORM\Exception\InvalidStateException $e) {
 			if ($e->getMessage() !== 'Invalid property type (double NULL).') {
 				throw $e;
 			}

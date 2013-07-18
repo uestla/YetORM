@@ -78,18 +78,18 @@ class AnnotationProperty extends EntityProperty
 		if ($value === NULL) {
 			if (!$this->nullable) {
 				$entity = $this->reflection->name;
-				throw new YetORM\E\InvalidArgumentException("Property '$entity::\${$this->name}' cannot be NULL.");
+				throw new YetORM\Exception\InvalidArgumentException("Property '$entity::\${$this->name}' cannot be NULL.");
 			}
 
 		} elseif (is_object($value)) {
 			$class = Aliaser::getClass($this->type, $this->reflection);
 			if (!($value instanceof $class)) {
-				throw new YetORM\E\InvalidArgumentException("Instance of '{$class}' expected, '"
+				throw new YetORM\Exception\InvalidArgumentException("Instance of '{$class}' expected, '"
 					. get_class($value) . "' given.");
 			}
 
 		} elseif ($need && ($type = gettype($value)) !== $this->type) {
-			throw new YetORM\E\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+			throw new YetORM\Exception\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
 
 		} else {
 			return FALSE;
@@ -107,7 +107,7 @@ class AnnotationProperty extends EntityProperty
 	function setType($value)
 	{
 		if (!$this->checkType($value, FALSE) && @settype($value, $this->type) === FALSE) { // intentionally @
-			throw new YetORM\E\InvalidArgumentException("Unable to set type '{$this->type}' from '"
+			throw new YetORM\Exception\InvalidArgumentException("Unable to set type '{$this->type}' from '"
 				. gettype($value) . "'.");
 		}
 
