@@ -21,8 +21,6 @@ abstract class Entity extends Nette\Object
 	/** @var Row */
 	protected $row;
 
-
-
 	/** @var array */
 	private static $reflections = array();
 

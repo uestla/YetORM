@@ -11,8 +11,8 @@
 
 namespace YetORM\Reflection;
 
-use Nette;
 use YetORM;
+use Aliaser\Container as Aliaser;
 
 
 /**
@@ -77,12 +77,14 @@ class AnnotationProperty extends EntityProperty
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {
-				throw new YetORM\E\InvalidArgumentException("Property '{$this->entity}::\${$this->name}' cannot be NULL.");
+				$entity = $this->reflection->name;
+				throw new YetORM\E\InvalidArgumentException("Property '$entity::\${$this->name}' cannot be NULL.");
 			}
 
 		} elseif (is_object($value)) {
-			if (!($value instanceof $this->type)) {
-				throw new YetORM\E\InvalidArgumentException("Instance of '{$this->type}' expected, '"
+			$class = Aliaser::getClass($this->type, $this->reflection);
+			if (!($value instanceof $class)) {
+				throw new YetORM\E\InvalidArgumentException("Instance of '{$class}' expected, '"
 					. get_class($value) . "' given.");
 			}
 

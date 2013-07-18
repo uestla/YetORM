@@ -92,7 +92,7 @@ class EntityType extends NClassType
 
 				$name = lcfirst(substr($method->name, 3));
 				$this->properties[$name] = new MethodProperty(
-					$this->name,
+					$this,
 					$name,
 					!$this->hasMethod('set' . ucfirst($name))
 				);
@@ -127,8 +127,9 @@ class EntityType extends NClassType
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = array();
+			$ref = $class::getReflection();
 
-			foreach ($class::getReflection()->getAnnotations() as $ann => $values) {
+			foreach ($ref->getAnnotations() as $ann => $values) {
 				if ($ann === 'property' || $ann === 'property-read') {
 					foreach ($values as $tmp) {
 						$split = NStrings::split($tmp, '#\s#');
@@ -173,7 +174,7 @@ class EntityType extends NClassType
 							}
 
 							self::$annProps[$class][$name] = new AnnotationProperty(
-								$class,
+								$ref,
 								$name,
 								$readonly,
 								$column,

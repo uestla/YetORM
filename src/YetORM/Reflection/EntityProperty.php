@@ -18,8 +18,8 @@ use Nette;
 abstract class EntityProperty extends Nette\Object
 {
 
-	/** @var string */
-	protected $entity;
+	/** @var EntityType */
+	protected $reflection;
 
 	/** @var string */
 	protected $name;
@@ -30,13 +30,13 @@ abstract class EntityProperty extends Nette\Object
 
 
 	/**
-	 * @param  string
+	 * @param  EntityType
 	 * @param  string
 	 * @param  bool
 	 */
-	function __construct($entity, $name, $readonly)
+	function __construct(EntityType $reflection, $name, $readonly)
 	{
-		$this->entity = (string) $entity;
+		$this->reflection = $reflection;
 		$this->name = (string) $name;
 		$this->readonly = (bool) $readonly;
 	}
