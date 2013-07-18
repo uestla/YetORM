@@ -82,7 +82,7 @@ abstract class Entity extends Nette\Object
 		$ref = static::getReflection();
 		$values = array();
 
-		foreach ($ref->properties as $name => $property) {
+		foreach ($ref->getEntityProperties() as $name => $property) {
 			$value = $this->$name;
 			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
 				$values[$name] = $value;
@@ -132,7 +132,7 @@ abstract class Entity extends Nette\Object
 			return parent::__get($name);
 
 		} catch (Nette\MemberAccessException $e) {
-			if ($prop = static::getReflection()->getProperty($name)) {
+			if ($prop = static::getReflection()->getEntityProperty($name)) {
 				$value = $prop->setType($this->row->{$prop->column});
 				return $value;
 			}
@@ -154,7 +154,7 @@ abstract class Entity extends Nette\Object
 			return parent::__set($name, $value);
 
 		} catch (Nette\MemberAccessException $e) {
-			$prop = static::getReflection()->getProperty($name);
+			$prop = static::getReflection()->getEntityProperty($name);
 			if ($prop && !$prop->readonly) {
 				$prop->checkType($value);
 				$this->row->{$prop->column} = $value;
@@ -173,7 +173,7 @@ abstract class Entity extends Nette\Object
 	 */
 	final function __isset($name)
 	{
-		return parent::__isset($name) || static::getReflection()->hasProperty($name);
+		return parent::__isset($name) || static::getReflection()->hasEntityProperty($name);
 	}
 
 

@@ -17,7 +17,6 @@ use Nette\Reflection\Method as NMethod;
 use Nette\Reflection\ClassType as NClassType;
 
 
-/** @property-read EntityProperty[] $properties */
 class EntityType extends NClassType
 {
 
@@ -30,9 +29,9 @@ class EntityType extends NClassType
 
 
 	/** @return EntityProperty[] */
-	function getProperties($filter = NULL)
+	function getEntityProperties($filter = NULL)
 	{
-		$this->loadProperties();
+		$this->loadEntityProperties();
 		return $this->properties;
 	}
 
@@ -42,9 +41,9 @@ class EntityType extends NClassType
 	 * @param  string
 	 * @return EntityProperty|NULL
 	 */
-	function getProperty($name, $default = NULL)
+	function getEntityProperty($name, $default = NULL)
 	{
-		return $this->hasProperty($name) ? $this->properties[$name] : $default;
+		return $this->hasEntityProperty($name) ? $this->properties[$name] : $default;
 	}
 
 
@@ -53,16 +52,16 @@ class EntityType extends NClassType
 	 * @param  string
 	 * @return bool
 	 */
-	function hasProperty($name)
+	function hasEntityProperty($name)
 	{
-		$this->loadProperties();
+		$this->loadEntityProperties();
 		return isset($this->properties[$name]);
 	}
 
 
 
 	/** @return void */
-	private function loadProperties()
+	private function loadEntityProperties()
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array();
