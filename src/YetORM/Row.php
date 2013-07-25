@@ -130,7 +130,7 @@ class Row
 			return $this->values[$name];
 		}
 
-		$value = $this->values[$name] = $this->row === NULL ? NULL : $this->row->$name;
+		$value = $this->values[$name] = $this->row === NULL ? new static : $this->row->$name;
 		return $value;
 	}
 
