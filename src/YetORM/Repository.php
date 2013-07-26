@@ -12,6 +12,7 @@
 namespace YetORM;
 
 use Nette;
+use Aliaser\Container as Aliaser;
 use Nette\Utils\Strings as NStrings;
 use Nette\Database\Connection as NConnection;
 use Nette\Database\Table\Selection as NSelection;
@@ -81,7 +82,7 @@ abstract class Repository extends Nette\Object
 			return FALSE;
 		}
 
-		$name = $m[1];
+		$name = ucfirst($m[1]);
 		return TRUE;
 	}
 
@@ -117,18 +118,20 @@ abstract class Repository extends Nette\Object
 	 * @param  string|NULL
 	 * @return string
 	 */
-	private function getEntityClass($entity)
+	private function getEntityClass($entity = NULL)
 	{
 		if ($entity === NULL) {
 			if ($this->entity === NULL) {
-				if (($name = static::getReflection()->getAnnotation('entity')) !== NULL) {
+				$ref = static::getReflection();
+				if (($name = $ref->getAnnotation('entity')) !== NULL) {
+					$this->entity = Aliaser::getClass($name, $ref);
+
+				} elseif ($this->parseName($name)) {
 					$this->entity = $name;
 
-				} elseif (!$this->parseName($name)) {
+				} else {
 					throw new Exception\InvalidStateException("Entity class not set.");
 				}
-
-				$this->entity = ucfirst($name);
 			}
 
 			$entity = $this->entity;
