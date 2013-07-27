@@ -1,18 +1,21 @@
 <?php
 
+namespace Model\Services;
+
+use Model;
 use YetORM\EntityCollection as EC;
 
 
-class BookFacade
+class BookService
 {
 
-	/** @var BookRepository */
+	/** @var Model\Repositories\BookRepository */
 	protected $repository;
 
 
 
-	/** @param  BookRepository */
-	function __construct(BookRepository $repository)
+	/** @param  Model\Repositories\BookRepository */
+	function __construct(Model\Repositories\BookRepository $repository)
 	{
 		$this->repository = $repository;
 	}

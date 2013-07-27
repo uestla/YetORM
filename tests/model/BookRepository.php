@@ -1,6 +1,12 @@
 <?php
 
+namespace Model\Repositories;
 
+use YetORM;
+use Model\Entities\Book;
+
+
+/** @entity Book */
 class BookRepository extends YetORM\Repository
 {
 

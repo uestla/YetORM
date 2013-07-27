@@ -1,5 +1,10 @@
 <?php
 
+namespace Model\Entities;
+
+use Nette;
+use YetORM;
+
 
 /**
  * @property-read int $id

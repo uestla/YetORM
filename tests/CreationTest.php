@@ -6,7 +6,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 
 	function testCreation()
 	{
-		$book = new Book;
+		$book = new Model\Entities\Book;
 		$book->author = ServiceLocator::getAuthorRepository()->findById(11);
 		$book->bookTitle = 'Brand new book';
 
@@ -34,7 +34,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 
 	function testAddTags()
 	{
-		$book = new Book;
+		$book = new Model\Entities\Book;
 		$book->bookTitle = 'Testing book';
 		$book->author = ServiceLocator::getAuthorRepository()->findById(11);
 		$book->addTag('PHP');

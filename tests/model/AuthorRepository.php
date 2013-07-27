@@ -1,16 +1,22 @@
 <?php
 
+namespace Model\Repositories;
 
+use Model;
+use YetORM;
+
+
+/** @entity Model\Entities\Author */
 class AuthorRepository extends YetORM\Repository
 {
 
 	/**
 	 * @param  int
-	 * @return Author
+	 * @return Model\Entities\Author
 	 */
 	function findById($id)
 	{
-		return new Author($this->getTable()->get($id));
+		return new Model\Entities\Author($this->getTable()->get($id));
 	}
 
 }

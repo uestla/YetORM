@@ -1,5 +1,9 @@
 <?php
 
+namespace Model\Entities;
+
+use YetORM;
+
 
 /**
  * @property-read int $id

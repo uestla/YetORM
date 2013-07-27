@@ -22,7 +22,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
-			if ($e->getMessage() !== 'Cannot write to an undeclared property Book::$id.') {
+			if ($e->getMessage() !== 'Cannot write to an undeclared property Model\Entities\Book::$id.') {
 				throw $e;
 			}
 		}
@@ -54,7 +54,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
-			if ($e->getMessage() !== 'Cannot write to an undeclared property Book::$asdf.') {
+			if ($e->getMessage() !== 'Cannot write to an undeclared property Model\Entities\Book::$asdf.') {
 				throw $e;
 			}
 		}
@@ -83,7 +83,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
-			if ($e->getMessage() !== 'Cannot read an undeclared property Book::$asdf.') {
+			if ($e->getMessage() !== 'Cannot read an undeclared property Model\Entities\Book::$asdf.') {
 				throw $e;
 			}
 		}
@@ -125,7 +125,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$book = ServiceLocator::getBookRepository()->findById(1);
 		$author = $book->author;
 
-		$this->assertInstanceOf('Author', $author);
+		$this->assertInstanceOf('Model\Entities\Author', $author);
 		$this->assertInstanceOf('YetORM\EntityCollection', $book->tags);
 		$this->assertInstanceOf('YetORM\EntityCollection', $author->books);
 	}
@@ -203,7 +203,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (YetORM\Exception\InvalidArgumentException $e) {
-			if ($e->getMessage() !== "Property 'Book::\$bookTitle' cannot be NULL.") {
+			if ($e->getMessage() !== "Property 'Model\Entities\Book::\$bookTitle' cannot be NULL.") {
 				throw $e;
 			}
 		}
@@ -214,7 +214,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	function testAnnotationFail()
 	{
 		try {
-			$bad = new BadEntity;
+			$bad = new Model\Entities\BadEntity;
 			$bad->toArray();
 			$this->fail();
 

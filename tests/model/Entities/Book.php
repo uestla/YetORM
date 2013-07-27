@@ -1,10 +1,15 @@
 <?php
 
+namespace Model\Entities;
+
+use YetORM;
+use Nette\DateTime;
+
 
 /**
  * @property-read int $id
  * @property string $bookTitle -> book_title
- * @property Nette\DateTime|NULL $written
+ * @property DateTime|NULL $written
  * @property bool $available
  */
 class Book extends YetORM\Entity
@@ -97,7 +102,7 @@ class Book extends YetORM\Entity
 	/** @return YetORM\EntityCollection */
 	function getTags()
 	{
-		return $this->getMany('Tag', 'book_tag', 'tag');
+		return $this->getMany('Model\Entities\Tag', 'book_tag', 'tag');
 	}
 
 

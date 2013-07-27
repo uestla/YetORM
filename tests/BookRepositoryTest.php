@@ -10,7 +10,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	{
 		$book = ServiceLocator::getBookRepository()->findById(1);
 
-		$this->assertInstanceOf('Book', $book);
+		$this->assertInstanceOf('Model\Entities\Book', $book);
 
 		$expected = array(
 			'id' => 1,
@@ -143,7 +143,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCreate()
 	{
-		$book = new Book;
+		$book = new Model\Entities\Book;
 		$book->bookTitle = 'Texy 2';
 		$book->author = ServiceLocator::getAuthorRepository()->findById(12);
 		$book->written = new Nette\DateTime('2008-01-01');

@@ -5,19 +5,19 @@ class ServiceLocator
 {
 
 	/** @var Nette\Caching\Storages\FileStorage */
-	protected static $cacheStorage = NULL;
+	private static $cacheStorage = NULL;
 
 	/** @var Nette\Database\Connection */
-	protected static $connection = NULL;
+	private static $connection = NULL;
 
-	/** @var BookRepository */
-	protected static $bookRepository = NULL;
+	/** @var Model\Repositories\BookRepository */
+	private static $bookRepository = NULL;
 
-	/** @var AuthorRepository */
-	protected static $authorRepository = NULL;
+	/** @var Model\Repositories\AuthorRepository */
+	private static $authorRepository = NULL;
 
-	/** @var BookFacade */
-	protected static $bookFacade = NULL;
+	/** @var Model\Services\BookService */
+	private static $bookService = NULL;
 
 
 
@@ -47,11 +47,11 @@ class ServiceLocator
 
 
 
-	/** @return BookRepository */
+	/** @return Model\Repositories\BookRepository */
 	static function getBookRepository()
 	{
 		if (static::$bookRepository === NULL) {
-			static::$bookRepository = new BookRepository(static::getConnection());
+			static::$bookRepository = new Model\Repositories\BookRepository(static::getConnection());
 		}
 
 		return static::$bookRepository;
@@ -59,11 +59,11 @@ class ServiceLocator
 
 
 
-	/** @return AuthorRepository */
+	/** @return Model\Repositories\AuthorRepository */
 	static function getAuthorRepository()
 	{
 		if (static::$authorRepository === NULL) {
-			static::$authorRepository = new AuthorRepository(static::getConnection());
+			static::$authorRepository = new Model\Repositories\AuthorRepository(static::getConnection());
 		}
 
 		return static::$authorRepository;
@@ -71,14 +71,14 @@ class ServiceLocator
 
 
 
-	/** @return BookFacade */
+	/** @return Model\Services\BookService */
 	static function getBookFacade()
 	{
-		if (static::$bookFacade === NULL) {
-			static::$bookFacade = new BookFacade(static::getBookRepository());
+		if (static::$bookService === NULL) {
+			static::$bookService = new Model\Services\BookService(static::getBookRepository());
 		}
 
-		return static::$bookFacade;
+		return static::$bookService;
 	}
 
 }

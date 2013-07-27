@@ -1,7 +1,7 @@
 <?php
 
 
-class BookFacadeTest extends PHPUnit_Framework_TestCase
+class BookServiceTest extends PHPUnit_Framework_TestCase
 {
 
 	function testLatest()
