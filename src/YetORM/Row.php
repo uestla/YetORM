@@ -14,6 +14,7 @@ namespace YetORM;
 use Nette;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\GroupedSelection as NGroupedSelection;
+use Nette\Database\SelectionFactory;
 
 
 class Row
@@ -107,7 +108,7 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			$cnt = $this->row->update();
+			$cnt = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
 
@@ -146,7 +147,7 @@ class Row
 		$this->modified[$name] = $value;
 
 		if ($this->row !== NULL) {
-			$this->row->$name = $value;
+			$this->row->update(array());
 		}
 	}
 
@@ -182,7 +183,8 @@ class Row
 	private function reload(NActiveRow $row)
 	{
 		// intentionally ugly as hell (looking forward to having stable Nette 2.1)
-		$this->row = $row->getTable()->getConnection()->table($row->getTable()->getName())
+		$sf = new SelectionFactory($row->getTable()->getConnection());
+		$this->row = $sf->table($row->getTable()->getName())
 				->select('*')
 				->get($row->getPrimary());
 

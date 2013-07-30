@@ -16,7 +16,7 @@ use Aliaser\Container as Aliaser;
 use Nette\Utils\Strings as NStrings;
 use Nette\Database\Connection as NConnection;
 use Nette\Database\Table\Selection as NSelection;
-
+use Nette\Database\SelectionFactory;
 
 abstract class Repository extends Nette\Object
 {
@@ -67,7 +67,9 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function getTable($table = NULL)
 	{
-		return $this->connection->table($this->getTableName($table));
+		#return $this->connection->table($this->getTableName($table));
+		$sf = new SelectionFactory($this->connection);
+		return $sf->table($this->getTableName($table));
 	}
 
 
