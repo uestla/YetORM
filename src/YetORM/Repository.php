@@ -159,7 +159,7 @@ abstract class Repository extends Nette\Object
 
 				} else {
 					$inserted = $this->getTable()->insert($row->getModified());
-					$entity->refresh($inserted);
+					$row->setNative($inserted);
 					$rows = 1;
 				}
 

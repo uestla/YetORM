@@ -57,21 +57,6 @@ abstract class Entity extends Nette\Object
 
 
 	/**
-	 * @param  NActiveRow
-	 * @return void
-	 */
-	final function refresh(NActiveRow $row)
-	{
-		if ($this->row->hasNative()) {
-			throw new Exception\InvalidStateException('Cannot refresh already refreshed entity.');
-		}
-
-		$this->row->setNative($row);
-	}
-
-
-
-	/**
 	 * Looks for all public get* methods and @property[-read] annotations
 	 * and returns associative array with corresponding values
 	 *
