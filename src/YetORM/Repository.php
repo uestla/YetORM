@@ -155,7 +155,7 @@ abstract class Repository extends Nette\Object
 
 				$row = $entity->toRow();
 				if ($row->hasNative()) {
-					$rows = $entity->toRow()->update();
+					$rows = $row->update();
 
 				} else {
 					$inserted = $this->getTable()->insert($row->getModified());
