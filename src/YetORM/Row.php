@@ -146,7 +146,7 @@ class Row
 		$this->modified[$name] = $value;
 
 		if ($this->row !== NULL) {
-			$this->row->$name = $value;
+			$this->row->update($this->modified);
 		}
 	}
 
