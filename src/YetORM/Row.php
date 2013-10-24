@@ -107,7 +107,7 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			$cnt = $this->row->update($this->row->toArray());
+			$cnt = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
 
