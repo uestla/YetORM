@@ -107,7 +107,7 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			$cnt = $this->row->update();
+			$cnt = $this->row->update($this->row->toArray());
 			$this->reload($this->row);
 		}
 
@@ -182,7 +182,7 @@ class Row
 	private function reload(NActiveRow $row)
 	{
 		// intentionally ugly as hell (looking forward to having stable Nette 2.1)
-		$this->row = $row->getTable()->getConnection()->table($row->getTable()->getName())
+		$this->row = $row->getTable()->createSelectionInstance($row->getTable()->getName())
 				->select('*')
 				->get($row->getPrimary());
 
