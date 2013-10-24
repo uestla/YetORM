@@ -1,5 +1,5 @@
 {
-	"name": "uestla/yetorm",
+	"name": "ondrs/yetorm",
 	"type": "library",
 	"description": "Lightweight ORM for Nette\\Database",
 	"keywords": ["nette", "orm", "database"],
