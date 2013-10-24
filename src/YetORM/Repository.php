@@ -14,8 +14,7 @@ namespace YetORM;
 use Nette;
 use Aliaser\Container as Aliaser;
 use Nette\Utils\Strings as NStrings;
-use Nette\Database\Connection as NConnection;
-use Nette\Database\Table\Selection as NSelection;
+use Nette\Database\SelectionFactory;
 
 
 abstract class Repository extends Nette\Object
@@ -24,8 +23,8 @@ abstract class Repository extends Nette\Object
 	/** @var array */
 	private static $transactionCounter = array();
 
-	/** @var NConnection */
-	protected $connection;
+	/** @var SelectionFactory */
+	protected $selectionFactory;
 
 	/** @var string */
 	protected $table = NULL;
@@ -35,12 +34,12 @@ abstract class Repository extends Nette\Object
 
 
 
-	/** @param  NConnection */
-	function __construct(NConnection $connection)
+	/** @param SelectionFactory $selectionFactory */
+	function __construct(SelectionFactory $selectionFactory)
 	{
-		$this->connection = $connection;
+		$this->selectionFactory = $selectionFactory;
 
-		if (!isset(self::$transactionCounter[$dsn = $connection->dsn])) {
+		if (!isset(self::$transactionCounter[$dsn = $selectionFactory->getConnection()->dsn])) {
 			self::$transactionCounter[$dsn] = 0;
 		}
 	}
@@ -67,7 +66,7 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function getTable($table = NULL)
 	{
-		return $this->connection->table($this->getTableName($table));
+		return $this->selectionFactory->table($this->getTableName($table));
 	}
 
 
@@ -220,8 +219,8 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function begin()
 	{
-		if (self::$transactionCounter[$this->connection->dsn]++ === 0) {
-			$this->connection->beginTransaction();
+		if (self::$transactionCounter[$this->selectionFactory->getConnection()->dsn]++ === 0) {
+			$this->selectionFactory->getConnection()->beginTransaction();
 		}
 	}
 
@@ -230,12 +229,12 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function commit()
 	{
-		if (self::$transactionCounter[$dsn = $this->connection->dsn] === 0) {
+		if (self::$transactionCounter[$dsn = $this->selectionFactory->getConnection()->dsn] === 0) {
 			throw new Exception\InvalidStateException("No transaction started.");
 		}
 
 		if (--self::$transactionCounter[$dsn] === 0) {
-			$this->connection->commit();
+			$this->selectionFactory->getConnection()->commit();
 		}
 	}
 
@@ -244,8 +243,8 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function rollback()
 	{
-		$this->connection->rollBack();
-		self::$transactionCounter[$this->connection->dsn] = 0;
+		$this->selectionFactory->getConnection()->rollBack();
+		self::$transactionCounter[$this->selectionFactory->getConnection()->dsn] = 0;
 	}
 
 }
