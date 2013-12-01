@@ -13,6 +13,7 @@ namespace YetORM;
 
 
 use Nette;
+use Nette\Callback as NCallback;
 use Nette\Database\Table\Selection as NSelection;
 
 
@@ -22,7 +23,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	/** @var NSelection */
 	protected $selection;
 
-	/** @var string */
+	/** @var string|NCallback */
 	protected $entity;
 
 	/** @var string|NULL */
@@ -46,13 +47,13 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 	/**
 	 * @param  NSelection
-	 * @param  string
+	 * @param  string|callable
 	 * @param  string
 	 * @param  string
 	 */
 	function __construct(NSelection $selection, $entity, $refTable = NULL, $refColumn = NULL)
 	{
-		$this->entity = $entity;
+		$this->entity = is_string($entity) ? $entity : NCallback::create($entity);
 		$this->selection = $selection;
 		$this->refTable = $refTable;
 		$this->refColumn = $refColumn;
@@ -66,10 +67,15 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 		if ($this->data === NULL) {
 			$this->data = array();
 			foreach ($this->selection as $row) {
-				$class = $this->entity;
-				$this->data[] = new $class(
-					$this->refTable === NULL ? $row : $row->ref($this->refTable, $this->refColumn)
-				);
+				$record = $this->refTable === NULL ? $row : $row->ref($this->refTable, $this->refColumn);
+
+				if ($this->entity instanceof NCallback) {
+					$this->data[] = $this->entity->invokeArgs(array($record));
+
+				} else {
+					$class = $this->entity;
+					$this->data[] = new $class($record);
+				}
 			}
 		}
 	}

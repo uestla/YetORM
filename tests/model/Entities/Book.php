@@ -4,6 +4,7 @@ namespace Model\Entities;
 
 use YetORM;
 use Nette\DateTime;
+use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
 /**
@@ -20,6 +21,26 @@ class Book extends YetORM\Entity
 
 	/** @var Tag[] */
 	protected $removedTags = array();
+
+	/** @var string */
+	private $imageDir;
+
+
+
+	/**
+	 * @param  NActiveRow $row
+	 * @param  string $imageDir
+	 */
+	function __construct(NActiveRow $row = NULL, $imageDir = NULL)
+	{
+		parent::__construct($row);
+
+		$this->imageDir = realpath($imageDir);
+
+		if ($this->imageDir === FALSE || $imageDir === NULL) {
+			throw new \InvalidArgumentException;
+		}
+	}
 
 
 
@@ -103,6 +124,14 @@ class Book extends YetORM\Entity
 	function getTags()
 	{
 		return $this->getMany('Model\Entities\Tag', 'book_tag', 'tag');
+	}
+
+
+
+	/** @return string @internal */
+	function getImagePath()
+	{
+		return $this->imageDir . '/' . $this->id . '.jpg';
 	}
 
 

@@ -51,7 +51,7 @@ class ServiceLocator
 	static function getBookRepository()
 	{
 		if (static::$bookRepository === NULL) {
-			static::$bookRepository = new Model\Repositories\BookRepository(static::getConnection());
+			static::$bookRepository = new Model\Repositories\BookRepository(static::getConnection(), __DIR__ . '/books');
 		}
 
 		return static::$bookRepository;

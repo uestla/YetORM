@@ -4,11 +4,37 @@ namespace Model\Repositories;
 
 use YetORM;
 use Model\Entities\Book;
+use Nette\Database\Connection as NConnection;
+use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
 /** @entity Book */
 class BookRepository extends YetORM\Repository
 {
+
+	/** @var string */
+	private $imageDir;
+
+
+
+	/**
+	 * @param  NConnection $connection
+	 * @param  string $imageDir
+	 */
+	function __construct(NConnection $connection, $imageDir)
+	{
+		parent::__construct($connection);
+
+		$realpath = realpath($imageDir);
+
+		if ($realpath === FALSE || !is_dir($realpath)) {
+			throw new \InvalidArgumentException;
+		}
+
+		$this->imageDir = $realpath;
+	}
+
+
 
 	/**
 	 * @param  Book
@@ -59,10 +85,11 @@ class BookRepository extends YetORM\Repository
 
 
 
-	/** @return Book */
+	/** @return Book|NULL */
 	function findById($id)
 	{
-		return new Book($this->getTable()->get($id));
+		$row = $this->getTable()->get($id);
+		return $row === FALSE ? NULL : $this->createBook($this->getTable()->get($id));
 	}
 
 
@@ -70,7 +97,7 @@ class BookRepository extends YetORM\Repository
 	/** @return YetORM\EntityCollection */
 	function findByTag($name)
 	{
-		return $this->createCollection($this->getTable()->where('book_tag:tag.name', $name));
+		return $this->createCollection($this->getTable()->where('book_tag:tag.name', $name), $this->createBook);
 	}
 
 
@@ -78,7 +105,26 @@ class BookRepository extends YetORM\Repository
 	/** @return YetORM\EntityCollection */
 	function findAll()
 	{
-		return $this->createCollection($this->getTable());
+		return $this->createCollection($this->getTable(), $this->createBook);
+	}
+
+
+
+	/**
+	 * @param  NActiveRow $row
+	 * @return Book
+	 */
+	function createBook(NActiveRow $row = NULL)
+	{
+		return new Book($row, $this->imageDir);
+	}
+
+
+
+	/** @return string */
+	function getImageDir()
+	{
+		return $this->imageDir;
 	}
 
 }

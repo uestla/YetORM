@@ -143,7 +143,9 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCreate()
 	{
-		$book = new Model\Entities\Book;
+		$repo = ServiceLocator::getBookRepository();
+
+		$book = $repo->createBook();
 		$book->bookTitle = 'Texy 2';
 		$book->author = ServiceLocator::getAuthorRepository()->findById(12);
 		$book->written = new Nette\DateTime('2008-01-01');
