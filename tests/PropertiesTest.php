@@ -208,4 +208,20 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
+
+
+	function testUninitializedColumnValue()
+	{
+		try {
+			$book = ServiceLocator::getBookRepository()->createBook();
+			$book->toRow()->book_title;
+			$this->fail();
+
+		} catch (\YetORM\Exception\MemberAccessException $e) {
+			if ($e->getMessage() !== "The value of column 'book_title' not set.") {
+				throw $e;
+			}
+		}
+	}
+
 }

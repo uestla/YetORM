@@ -20,7 +20,7 @@ class Row
 {
 
 	/** @var NActiveRow */
-	protected $row;
+	private $row;
 
 	/** @var array */
 	private $values = array();
@@ -130,7 +130,11 @@ class Row
 			return $this->values[$name];
 		}
 
-		$value = $this->values[$name] = $this->row === NULL ? new static : $this->row->$name;
+		if ($this->row === NULL) {
+			throw new Exception\MemberAccessException("The value of column '$name' not set.");
+		}
+
+		$value = $this->values[$name] = $this->row->$name;
 		return $value;
 	}
 
