@@ -6,19 +6,15 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testSetters()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 
 		// set as property
 		$book->bookTitle = 'New title';
-		$this->assertEquals('New title', $book->getBookTitle());
-
-		// use setter
-		$book->setBookTitle('Another title');
-		$this->assertEquals('Another title', $book->getBookTitle());
+		$this->assertEquals('New title', $book->bookTitle);
 
 		// setting read-only property
 		try {
-			$book->setId(123);
+			$book->id = 123;
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
@@ -29,7 +25,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 		// setting invalid type
 		try {
-			$book->setBookTitle(123);
+			$book->bookTitle = 123;
 			$this->fail();
 
 		} catch (YetORM\Exception\InvalidArgumentException $e) {
@@ -39,7 +35,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		}
 
 		try {
-			$book->setAvailable('TRUE');
+			$book->available = 'TRUE';
 			$this->fail();
 
 		} catch (YetORM\Exception\InvalidArgumentException $e) {
@@ -50,7 +46,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 		// setting undeclared property
 		try {
-			$book->setAsdf('Book title');
+			$book->asdf = 'Book title';
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
@@ -64,22 +60,19 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testGetters()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 
 		// get as property
 		$this->assertEquals('1001 tipu a triku pro PHP', $book->bookTitle);
 
-		// use getter
-		$this->assertEquals('1001 tipu a triku pro PHP', $book->getBookTitle());
-
 		// test type
-		$this->assertTrue(is_int($book->getId()));
-		$this->assertTrue(is_string($book->getBookTitle()));
-		$this->assertTrue(is_bool($book->getAvailable()));
+		$this->assertTrue(is_int($book->id));
+		$this->assertTrue(is_string($book->bookTitle));
+		$this->assertTrue(is_bool($book->available));
 
 		// getting undeclared property
 		try {
-			$book->getAsdf();
+			$book->asdf;
 			$this->fail();
 
 		} catch (YetORM\Exception\MemberAccessException $e) {
@@ -93,7 +86,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testIsSet()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 
 		// properties
 		$this->assertTrue(isset($book->id));
@@ -110,7 +103,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	function testUnset()
 	{
 		try {
-			$book = ServiceLocator::getBookRepository()->findById(1);
+			$book = ServiceLocator::getBookRepository()->getByID(1);
 			unset($book->author);
 			$this->fail();
 
@@ -119,22 +112,10 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 
 
-	/** Tests default Nette\Object properties behavior */
-	function testNativeGettersSetters()
-	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
-		$author = $book->author;
-
-		$this->assertInstanceOf('Model\Entities\Author', $author);
-		$this->assertInstanceOf('YetORM\EntityCollection', $book->tags);
-		$this->assertInstanceOf('YetORM\EntityCollection', $author->books);
-	}
-
-
-
 	function testToArray()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(2);
+		$book = ServiceLocator::getBookRepository()->getByID(2);
+
 		$expected = array(
 			'id' => 2,
 			'bookTitle' => 'JUSH',
@@ -156,7 +137,8 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testInheritance()
 	{
-		$author = ServiceLocator::getAuthorRepository()->findById(11);
+		$author = ServiceLocator::getAuthorRepository()->getByID(11);
+
 		$this->assertEquals(array(
 			'id' => 11,
 			'name' => 'Jakub Vrana',
@@ -170,7 +152,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 	function testClassTypes()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 		$this->assertInstanceOf('DateTime', $book->written);
 	}
 
@@ -179,21 +161,22 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	function testNullable()
 	{
 		$repo = ServiceLocator::getBookRepository();
-		$book = $repo->findById(1);
+
+		$book = $repo->getByID(1);
 		$book->written = NULL;
 		$this->assertNull($book->written);
 
 		$repo->persist($book);
-		$this->assertNull($book->getWritten());
+		$this->assertNull($book->written);
 
-		$book->setWritten(new Nette\DateTime('1990-01-01'));
-		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->getWritten());
+		$book->written = new Nette\DateTime('1990-01-01');
+		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->written);
 
 		$repo->persist($book);
 		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->written);
 
-		$book->setWritten(NULL);
-		$this->assertNull($book->getWritten());
+		$book->written = NULL;
+		$this->assertNull($book->written);
 
 		$repo->persist($book);
 		$this->assertNull($book->written);

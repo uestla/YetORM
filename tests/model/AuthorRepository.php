@@ -14,7 +14,7 @@ class AuthorRepository extends YetORM\Repository
 	 * @param  int
 	 * @return Model\Entities\Author
 	 */
-	function findById($id)
+	function getByID($id)
 	{
 		return new Model\Entities\Author($this->getTable()->get($id));
 	}

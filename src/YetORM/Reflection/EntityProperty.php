@@ -30,9 +30,9 @@ abstract class EntityProperty extends Nette\Object
 
 
 	/**
-	 * @param  EntityType
-	 * @param  string
-	 * @param  bool
+	 * @param  EntityType $reflection
+	 * @param  string $name
+	 * @param  bool $readonly
 	 */
 	function __construct(EntityType $reflection, $name, $readonly)
 	{

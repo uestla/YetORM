@@ -13,7 +13,7 @@ namespace YetORM;
 
 
 use Nette;
-use Nette\Callback as NCallback;
+use Nette\Utils\Callback as NCallback;
 use Nette\Database\Table\Selection as NSelection;
 
 
@@ -46,17 +46,24 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/**
-	 * @param  NSelection
-	 * @param  string|callable
-	 * @param  string
-	 * @param  string
+	 * @param  NSelection $selection
+	 * @param  string|callable $entity
+	 * @param  string $refTable
+	 * @param  string $refColumn
 	 */
 	function __construct(NSelection $selection, $entity, $refTable = NULL, $refColumn = NULL)
 	{
-		$this->entity = is_string($entity) ? $entity : NCallback::create($entity);
 		$this->selection = $selection;
 		$this->refTable = $refTable;
 		$this->refColumn = $refColumn;
+
+		try {
+			NCallback::check($entity);
+			$this->entity = NCallback::closure($entity);
+
+		} catch (\Exception $e) {
+			$this->entity = $entity;
+		}
 	}
 
 
@@ -69,8 +76,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 			foreach ($this->selection as $row) {
 				$record = $this->refTable === NULL ? $row : $row->ref($this->refTable, $this->refColumn);
 
-				if ($this->entity instanceof NCallback) {
-					$this->data[] = $this->entity->invokeArgs(array($record));
+				if ($this->entity instanceof \Closure) {
+					$this->data[] = call_user_func($this->entity, $record);
 
 				} else {
 					$class = $this->entity;
@@ -102,8 +109,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * ); // ORDER BY [first], [second] DESC
 	 * </code>
 	 *
-	 * @param  string|array
-	 * @param  bool
+	 * @param  string|array $column
+	 * @param  bool $dir
 	 * @return EntityCollection
 	 */
 	function orderBy($column, $dir = NULL)
@@ -125,8 +132,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/**
-	 * @param  int
-	 * @param  int|NULL
+	 * @param  int $limit
+	 * @param  int $offset
 	 * @return EntityCollection
 	 */
 	function limit($limit, $offset = NULL)

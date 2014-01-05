@@ -4,7 +4,7 @@ namespace Model\Repositories;
 
 use YetORM;
 use Model\Entities\Book;
-use Nette\Database\Connection as NConnection;
+use Nette\Database\Context as NdbContext;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
@@ -18,12 +18,12 @@ class BookRepository extends YetORM\Repository
 
 
 	/**
-	 * @param  NConnection $connection
+	 * @param  NdbContext $context
 	 * @param  string $imageDir
 	 */
-	function __construct(NConnection $connection, $imageDir)
+	function __construct(NdbContext $context, $imageDir)
 	{
-		parent::__construct($connection);
+		parent::__construct($context);
 
 		$realpath = realpath($imageDir);
 
@@ -37,7 +37,7 @@ class BookRepository extends YetORM\Repository
 
 
 	/**
-	 * @param  Book
+	 * @param  Book $book
 	 * @return int
 	 */
 	function persist(YetORM\Entity $book)
@@ -48,9 +48,8 @@ class BookRepository extends YetORM\Repository
 
 			// persist tags
 			if (count($book->getAddedTags()) || count($book->getRemovedTags())) {
-
 				$tags = $this->getTable('tag')->fetchPairs('name', 'id');
-				foreach ($book->getAddedTags(TRUE) as $tag) {
+				foreach ($book->getAddedTags() as $tag) {
 					if (!isset($tags[$tag->name])) {
 						$tags[$tag->name] = $tagID = $this->getTable('tag')->insert(array(
 							'name' => $tag->name,
@@ -64,7 +63,7 @@ class BookRepository extends YetORM\Repository
 				}
 
 				$toDelete = array();
-				foreach ($book->getRemovedTags(TRUE) as $tag) {
+				foreach ($book->getRemovedTags() as $tag) {
 					if (isset($tags[$tag->name])) {
 						$toDelete[] = $tags[$tag->name];
 					}
@@ -86,24 +85,24 @@ class BookRepository extends YetORM\Repository
 
 
 	/** @return Book|NULL */
-	function findById($id)
+	function getByID($id)
 	{
 		$row = $this->getTable()->get($id);
-		return $row === FALSE ? NULL : $this->createBook($this->getTable()->get($id));
+		return $row === FALSE ? NULL : $this->createBook($row);
 	}
 
 
 
 	/** @return YetORM\EntityCollection */
-	function findByTag($name)
+	function getByTag($name)
 	{
-		return $this->createCollection($this->getTable()->where('book_tag:tag.name', $name), $this->createBook);
+		return $this->createCollection($this->getTable()->where(':book_tag.tag.name', $name), $this->createBook);
 	}
 
 
 
 	/** @return YetORM\EntityCollection */
-	function findAll()
+	function getAll()
 	{
 		return $this->createCollection($this->getTable(), $this->createBook);
 	}

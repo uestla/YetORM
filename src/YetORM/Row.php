@@ -30,7 +30,7 @@ class Row
 
 
 
-	/** @param  NActiveRow|NULL */
+	/** @param  NActiveRow $row */
 	function __construct(NActiveRow $row = NULL)
 	{
 		$this->row = $row;
@@ -55,7 +55,7 @@ class Row
 
 
 	/**
-	 * @param  NActiveRow
+	 * @param  NActiveRow $row
 	 * @return Row
 	 */
 	function setNative(NActiveRow $row)
@@ -67,8 +67,8 @@ class Row
 
 
 	/**
-	 * @param  string
-	 * @param  string
+	 * @param  string $key
+	 * @param  string $throughColumn
 	 * @return NActiveRow|NULL
 	 */
 	function ref($key, $throughColumn = NULL)
@@ -80,8 +80,8 @@ class Row
 
 
 	/**
-	 * @param  string
-	 * @param  string
+	 * @param  string $key
+	 * @param  string $throughColumn
 	 * @return NGroupedSelection
 	 */
 	function related($key, $throughColumn = NULL)
@@ -107,7 +107,7 @@ class Row
 
 		$cnt = 0;
 		if (count($this->modified)) {
-			$cnt = $this->row->update();
+			$cnt = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
 
@@ -117,7 +117,7 @@ class Row
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return mixed
 	 */
 	function & __get($name)
@@ -137,23 +137,19 @@ class Row
 
 
 	/**
-	 * @param  string
-	 * @param  mixed
+	 * @param  string $name
+	 * @param  mixed $value
 	 * @return void
 	 */
 	function __set($name, $value)
 	{
 		$this->modified[$name] = $value;
-
-		if ($this->row !== NULL) {
-			$this->row->$name = $value;
-		}
 	}
 
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return bool
 	 */
 	function __isset($name)
@@ -169,23 +165,19 @@ class Row
 	private function checkPersistence()
 	{
 		if ($this->row === NULL) {
-			throw new Exception\InvalidStateException("Row not set yet.");
+			throw new Exception\InvalidStateException('Row not set yet.');
 		}
 	}
 
 
 
 	/**
-	 * @param  NActiveRow
+	 * @param  NActiveRow $row
 	 * @return void
 	 */
 	private function reload(NActiveRow $row)
 	{
-		// intentionally ugly as hell (looking forward to having stable Nette 2.1)
-		$this->row = $row->getTable()->getConnection()->table($row->getTable()->getName())
-				->select('*')
-				->get($row->getPrimary());
-
+		$this->row = $row;
 		$this->modified = $this->values = array();
 	}
 

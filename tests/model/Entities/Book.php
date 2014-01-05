@@ -45,7 +45,7 @@ class Book extends YetORM\Entity
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return Book
 	 */
 	function addTag($name)
@@ -58,22 +58,17 @@ class Book extends YetORM\Entity
 
 
 
-	/**
-	 * @param  bool
-	 * @return Tag[]
-	 * @internal
-	 */
-	function getAddedTags($reset = FALSE)
+	/** @return Tag[] @internal */
+	function getAddedTags()
 	{
 		$tmp = $this->addedTags;
-		$reset && ($this->addedTags = array());
 		return $tmp;
 	}
 
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return Book
 	 */
 	function removeTag($name)
@@ -86,15 +81,10 @@ class Book extends YetORM\Entity
 
 
 
-	/**
-	 * @param  bool
-	 * @return Tag[]
-	 * @internal
-	 */
-	function getRemovedTags($reset = FALSE)
+	/** @return Tag[] @internal */
+	function getRemovedTags()
 	{
 		$tmp = $this->removedTags;
-		$reset && ($this->removedTags = array());
 		return $tmp;
 	}
 
@@ -114,7 +104,7 @@ class Book extends YetORM\Entity
 	 */
 	function setAuthor(Author $author)
 	{
-		$this->row->author_id = $author->getId();
+		$this->row->author_id = $author->id;
 		return $this;
 	}
 
@@ -144,7 +134,7 @@ class Book extends YetORM\Entity
 
 		$return['tags'] = array();
 		foreach ($this->getTags() as $tag) {
-			$return['tags'][] = $tag->getName();
+			$return['tags'][] = $tag->name;
 		}
 
 		return $return;

@@ -15,7 +15,7 @@ use Nette;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
-abstract class Entity extends Nette\Object
+abstract class Entity
 {
 
 	/** @var Row */
@@ -26,7 +26,7 @@ abstract class Entity extends Nette\Object
 
 
 
-	/** @param  NActiveRow */
+	/** @param  NActiveRow $row */
 	function __construct(NActiveRow $row = NULL)
 	{
 		$this->row = new Row($row);
@@ -35,10 +35,10 @@ abstract class Entity extends Nette\Object
 
 
 	/**
-	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @param  string
+	 * @param  string $entity
+	 * @param  string $relTable
+	 * @param  string $entityTable
+	 * @param  string $throughColumn
 	 * @return EntityCollection
 	 */
 	protected function getMany($entity, $relTable, $entityTable, $throughColumn = NULL)
@@ -68,7 +68,13 @@ abstract class Entity extends Nette\Object
 		$values = array();
 
 		foreach ($ref->getEntityProperties() as $name => $property) {
-			$value = $this->$name;
+			if ($property instanceof Reflection\MethodProperty) {
+				$value = $this->{'get' . $name}();
+
+			} else {
+				$value = $this->$name;
+			}
+
 			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
 				$values[$name] = $value;
 			}
@@ -80,91 +86,68 @@ abstract class Entity extends Nette\Object
 
 
 	/**
-	 * @param  string
-	 * @param  array
+	 * @param  string $name
+	 * @param  array $args
 	 * @return mixed
 	 */
 	final function __call($name, $args)
 	{
-		try {
-			return parent::__call($name, $args);
-
-		} catch (Nette\MemberAccessException $e) {
-			if (strlen($name) > 3) {
-				$prefix = substr($name, 0, 3);
-				if ($prefix === 'set') { // set<Property>
-					$this->__set(lcfirst(substr($name, 3)), reset($args));
-					return $this;
-
-				} elseif ($prefix === 'get') { // get<Property>
-					return $this->__get(lcfirst(substr($name, 3)));
-				}
-			}
-
-			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
-		}
+		$class = get_class($this);
+		throw new Exception\MemberAccessException("Call to undefined method $class::$name().");
 	}
 
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return mixed
 	 */
 	final function & __get($name)
 	{
-		try {
-			return parent::__get($name);
-
-		} catch (Nette\MemberAccessException $e) {
-			if ($prop = static::getReflection()->getEntityProperty($name)) {
-				$value = $prop->setType($this->row->{$prop->column});
-				return $value;
-			}
-
-			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
+		if (($prop = static::getReflection()->getEntityProperty($name))) {
+			$value = $prop->setType($this->row->{$prop->column});
+			return $value;
 		}
+
+		$class = get_class($this);
+		throw new Exception\MemberAccessException("Cannot read an undeclared property $class::\$$name.");
 	}
 
 
 
 	/**
-	 * @param  string
-	 * @param  mixed
+	 * @param  string $name
+	 * @param  mixed $value
 	 * @return void
 	 */
 	final function __set($name, $value)
 	{
-		try {
-			return parent::__set($name, $value);
-
-		} catch (Nette\MemberAccessException $e) {
-			$prop = static::getReflection()->getEntityProperty($name);
-			if ($prop && !$prop->readonly) {
-				$prop->checkType($value);
-				$this->row->{$prop->column} = $value;
-				return ;
-			}
-
-			throw new Exception\MemberAccessException($e->getMessage(), $e->getCode(), $e->getPrevious());
+		$prop = static::getReflection()->getEntityProperty($name);
+		if ($prop instanceof Reflection\AnnotationProperty && !$prop->readonly) {
+			$prop->checkType($value);
+			$this->row->{$prop->column} = $value;
+			return ;
 		}
+
+		$class = get_class($this);
+		throw new Exception\MemberAccessException("Cannot write to an undeclared property $class::\$$name.");
 	}
 
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return bool
 	 */
 	final function __isset($name)
 	{
-		return parent::__isset($name) || static::getReflection()->hasEntityProperty($name);
+		return static::getReflection()->hasEntityProperty($name);
 	}
 
 
 
 	/**
-	 * @param  string
+	 * @param  string $name
 	 * @return void
 	 * @throws E\NotSupportedException
 	 */
@@ -184,14 +167,6 @@ abstract class Entity extends Nette\Object
 		}
 
 		return self::$reflections[$class];
-	}
-
-
-
-	/** @throws E\NotSupportedException */
-	final static function extensionMethod($name, $callback = NULL)
-	{
-		throw new Exception\NotSupportedException;
 	}
 
 }

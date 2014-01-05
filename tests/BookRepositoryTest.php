@@ -1,6 +1,8 @@
 <?php
 
 use YetORM\EntityCollection as EC;
+use Nette\Database\ResultSet as NResultSet;
+use Nette\Database\Connection as NConnection;
 
 
 class BookRepositoryTest extends PHPUnit_Framework_TestCase
@@ -8,7 +10,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testEntity()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 
 		$this->assertInstanceOf('Model\Entities\Book', $book);
 
@@ -33,7 +35,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testManyToOne()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 		$author = $book->getAuthor();
 		$this->assertEquals('Jakub Vrana', $author->getName());
 	}
@@ -42,10 +44,10 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testManyToMany()
 	{
-		$book = ServiceLocator::getBookRepository()->findById(1);
+		$book = ServiceLocator::getBookRepository()->getByID(1);
 		$tags = array();
 		foreach ($book->getTags() as $tag) {
-			$tags[] = $tag->getName();
+			$tags[] = $tag->name;
 		}
 
 		$this->assertEquals(array('PHP', 'MySQL'), $tags);
@@ -56,8 +58,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testSearch()
 	{
 		$books = array();
-		foreach (ServiceLocator::getBookRepository()->findByTag('PHP') as $book) {
-			$books[] = $book->getBookTitle();
+		foreach (ServiceLocator::getBookRepository()->getByTag('PHP') as $book) {
+			$books[] = $book->bookTitle;
 		}
 
 		$this->assertEquals(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
@@ -67,8 +69,8 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 	function testCount()
 	{
-		$allBooks = ServiceLocator::getBookRepository()->findAll();
-		$bookTags = ServiceLocator::getBookRepository()->findById(3)->getTags();
+		$allBooks = ServiceLocator::getBookRepository()->getAll();
+		$bookTags = ServiceLocator::getBookRepository()->getByID(3)->getTags();
 
 		$this->assertEquals(4, count($allBooks->limit(2))); // data not received yet -> count as non-limited
 		$this->assertEquals(2, count($allBooks->limit(2)->toArray())); // data received
@@ -81,7 +83,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testPresenterFlow()
 	{
 		// load data
-		$books = ServiceLocator::getBookRepository()->findAll();
+		$books = ServiceLocator::getBookRepository()->getAll();
 
 		// paginate result
 		$paginator = new Nette\Utils\Paginator;
@@ -94,7 +96,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		// render them ordered in template
 		$array = array();
 		foreach ($books->orderBy('book_title') as $book) {
-			$array[] = $book->getBookTitle();
+			$array[] = $book->bookTitle;
 		}
 
 		$this->assertEquals(array('JUSH', 'Nette'), $array);
@@ -105,16 +107,16 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	/** Tests equality of queries using native & YetORM data access */
 	function testQueries()
 	{
-		$connection = ServiceLocator::getConnection();
+		$context = ServiceLocator::getDbContext();
 
-		$connection->onQuery['queryDump'] = function (Nette\Database\Statement $st) {
-			echo $st->queryString . "\n";
+		$context->getConnection()->onQuery['queryDump'] = function (NConnection $c, NResultSet $r) {
+			echo $r->getPdoStatement()->queryString . "\n";
 		};
 
 
 		ob_start();
 
-			foreach ($connection->table('book') as $book) {
+			foreach ($context->table('book') as $book) {
 				foreach ($book->related('book_tag')->order('tag.name DESC') as $book_tag) {
 					echo $book_tag->tag->name, ', ';
 				}
@@ -125,31 +127,31 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		ob_start();
 
-			foreach (ServiceLocator::getBookRepository()->findAll() as $book) {
+			foreach (ServiceLocator::getBookRepository()->getAll() as $book) {
 				foreach ($book->getTags()->orderBy('tag.name', EC::DESC) as $tag) {
-					echo $tag->getName(), ', ';
+					echo $tag->name, ', ';
 				}
 			}
 
 		$repository = ob_get_clean();
 
+		unset($context->getConnection()->onQuery['queryDump']);
 		$this->assertEquals($native, $repository);
-
-
-		unset($connection->onQuery['queryDump']);
 	}
 
 
 
-	function testCreate()
+	function testCreateAndUpdate()
 	{
+		// === CREATION
+
 		$repo = ServiceLocator::getBookRepository();
 
 		$book = $repo->createBook();
 		$book->bookTitle = 'Texy 2';
-		$book->author = ServiceLocator::getAuthorRepository()->findById(12);
+		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(12));
 		$book->written = new Nette\DateTime('2008-01-01');
-		ServiceLocator::getBookRepository()->persist($book);
+		$repo->persist($book);
 
 		$this->assertEquals(array(
 			'id' => 5,
@@ -167,26 +169,24 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		), $book->toArray());
 
 		$this->assertEquals('David Grudl', $book->getAuthor()->getName());
-	}
 
 
+		// === UPDATE
 
-	function testEdit()
-	{
 		$repo = ServiceLocator::getBookRepository();
 
 		// change title
-		$book = $repo->findById(5);
-		$book->setBookTitle('New title');
-		$this->assertEquals('New title', $book->getBookTitle());
+		$book = $repo->getByID(5);
+		$book->bookTitle = 'New title';
+		$this->assertEquals('New title', $book->bookTitle);
 
 		$rows = $repo->persist($book);
 		$this->assertEquals(1, $rows);
-		$this->assertEquals('New title', $book->getBookTitle());
+		$this->assertEquals('New title', $book->bookTitle);
 
 
 		// change author
-		$author = ServiceLocator::getAuthorRepository()->findById(13);
+		$author = ServiceLocator::getAuthorRepository()->getByID(13);
 		$this->assertEquals('Geek', $author->getName());
 
 		$this->assertEquals('David Grudl', $book->getAuthor()->getName());
@@ -198,9 +198,9 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 
 		// change availability
-		$book->setAvailable(FALSE);
+		$book->available = FALSE;
 		$repo->persist($book);
-		$this->assertFalse($book->getAvailable());
+		$this->assertFalse($book->available);
 
 		$this->assertEquals(array(
 			'id' => 5,
@@ -223,12 +223,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	function testDelete()
 	{
 		$repo = ServiceLocator::getBookRepository();
-		$this->assertEquals(5, count($repo->findAll()));
+		$this->assertEquals(5, count($repo->getAll()));
 
-		$rows = $repo->delete($repo->findById(5));
+		$rows = $repo->delete($repo->getByID(5));
 		$this->assertEquals(1, $rows);
 
-		$this->assertEquals(4, count($repo->findAll()));
+		$this->assertEquals(4, count($repo->getAll()));
 	}
 
 }

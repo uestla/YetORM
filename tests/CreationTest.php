@@ -9,7 +9,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 		$repo = ServiceLocator::getBookRepository();
 
 		$book = $repo->createBook();
-		$book->author = ServiceLocator::getAuthorRepository()->findById(11);
+		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 		$book->bookTitle = 'Brand new book';
 
 		$rows = ServiceLocator::getBookRepository()->persist($book);
@@ -28,7 +28,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 
 		$book = $repo->createBook();
 		$book->bookTitle = 'Testing book';
-		$book->author = ServiceLocator::getAuthorRepository()->findById(11);
+		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 		$book->addTag('PHP');
 		$book->addTag('Nový tag');
 
@@ -58,7 +58,7 @@ class CreationTest extends PHPUnit_Framework_TestCase
 	function testRemoveTags()
 	{
 		$repo = ServiceLocator::getBookRepository();
-		$book = $repo->findById(7);
+		$book = $repo->getByID(7);
 
 		$book->removeTag('Nový tag');
 		$repo->persist($book);

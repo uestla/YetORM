@@ -34,12 +34,12 @@ class AnnotationProperty extends EntityProperty
 
 
 	/**
-	 * @param  string
-	 * @param  string
-	 * @param  bool
-	 * @param  string
-	 * @param  string
-	 * @param  bool
+	 * @param  string $entity
+	 * @param  string $name
+	 * @param  bool $readonly
+	 * @param  string $column
+	 * @param  string $type
+	 * @param  bool $nullable
 	 */
 	function __construct($entity, $name, $readonly, $column, $type, $nullable)
 	{
@@ -69,8 +69,8 @@ class AnnotationProperty extends EntityProperty
 
 
 	/**
-	 * @param  mixed
-	 * @param  bool
+	 * @param  mixed $value
+	 * @param  bool $need
 	 * @return mixed
 	 */
 	function checkType($value, $need = TRUE)
@@ -101,7 +101,7 @@ class AnnotationProperty extends EntityProperty
 
 
 	/**
-	 * @param  mixed
+	 * @param  mixed $value
 	 * @return mixed
 	 */
 	function setType($value)
