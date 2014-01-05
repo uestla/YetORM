@@ -19,13 +19,16 @@ abstract class EntityProperty extends Nette\Object
 {
 
 	/** @var EntityType */
-	protected $reflection;
+	private $reflection;
 
 	/** @var string */
-	protected $name;
+	private $name;
 
 	/** @var bool */
-	protected $readonly;
+	private $readonly;
+
+	/** @var string */
+	private $type;
 
 
 
@@ -33,12 +36,30 @@ abstract class EntityProperty extends Nette\Object
 	 * @param  EntityType $reflection
 	 * @param  string $name
 	 * @param  bool $readonly
+	 * @param  string $type
 	 */
-	function __construct(EntityType $reflection, $name, $readonly)
+	function __construct(EntityType $reflection, $name, $readonly, $type)
 	{
 		$this->reflection = $reflection;
 		$this->name = (string) $name;
 		$this->readonly = (bool) $readonly;
+		$this->type = (string) $type;
+	}
+
+
+
+	/** @return EntityType */
+	function getEntityReflectioin()
+	{
+		return $this->reflection;
+	}
+
+
+
+	/** @return string */
+	function getName()
+	{
+		return $this->name;
 	}
 
 
@@ -47,6 +68,34 @@ abstract class EntityProperty extends Nette\Object
 	function isReadonly()
 	{
 		return $this->readonly;
+	}
+
+
+
+	/** @return string */
+	function getType()
+	{
+		return $this->type;
+	}
+
+
+
+	/** @return bool */
+	function isOfNativeType()
+	{
+		return self::isNativeType($this->type);
+	}
+
+
+
+	/**
+	 * @param  string $type
+	 * @return bool
+	 */
+	static function isNativeType($type)
+	{
+		return $type !== NULL && ($type === 'integer' || $type === 'float' || $type === 'double'
+				|| $type === 'boolean' ||  $type === 'string' || $type === 'array');
 	}
 
 }

@@ -12,6 +12,7 @@
 namespace YetORM\Reflection;
 
 use YetORM;
+use Aliaser\Container as Aliaser;
 use Nette\Utils\Strings as NStrings;
 use Nette\Reflection\Method as NMethod;
 use Nette\Reflection\ClassType as NClassType;
@@ -90,10 +91,17 @@ class EntityType extends NClassType
 					&& !$method->hasAnnotation('internal')) {
 
 				$name = lcfirst(substr($method->name, 3));
+				$type = $method->getAnnotation('return');
+
+				if (!EntityProperty::isNativeType($type)) {
+					$type = Aliaser::getClass($type, $this);
+				}
+
 				$this->properties[$name] = new MethodProperty(
 					$this,
 					$name,
-					!$this->hasMethod('set' . ucfirst($name))
+					!$this->hasMethod('set' . ucfirst($name)),
+					$type
 				);
 			}
 		}
@@ -163,6 +171,10 @@ class EntityType extends NClassType
 								$type = 'integer';
 							}
 
+							if (!EntityProperty::isNativeType($type)) {
+								$type = Aliaser::getClass($type, $ref);
+							}
+
 							$name = substr($var, 1);
 							$readonly = $ann === 'property-read';
 
@@ -176,8 +188,8 @@ class EntityType extends NClassType
 								$ref,
 								$name,
 								$readonly,
-								$column,
 								$type,
+								$column,
 								$nullable
 							);
 						}

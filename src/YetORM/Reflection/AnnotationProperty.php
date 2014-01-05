@@ -12,41 +12,32 @@
 namespace YetORM\Reflection;
 
 use YetORM;
-use Aliaser\Container as Aliaser;
 
 
-/**
- * @property-read string $type
- * @property-read string $column
- */
 class AnnotationProperty extends EntityProperty
 {
 
 	/** @var string */
-	protected $column;
-
-	/** @var string */
-	protected $type;
+	private $column;
 
 	/** @var bool */
-	protected $nullable;
+	private $nullable;
 
 
 
 	/**
-	 * @param  string $entity
+	 * @param  EntityType $reflection
 	 * @param  string $name
 	 * @param  bool $readonly
-	 * @param  string $column
 	 * @param  string $type
+	 * @param  string $column
 	 * @param  bool $nullable
 	 */
-	function __construct($entity, $name, $readonly, $column, $type, $nullable)
+	function __construct($reflection, $name, $readonly, $type, $column, $nullable)
 	{
-		parent::__construct($entity, $name, $readonly);
+		parent::__construct($reflection, $name, $readonly, $type);
 
 		$this->column = (string) $column;
-		$this->type = (string) $type;
 		$this->nullable = (bool) $nullable;
 	}
 
@@ -60,14 +51,6 @@ class AnnotationProperty extends EntityProperty
 
 
 
-	/** @return string */
-	function getType()
-	{
-		return $this->type;
-	}
-
-
-
 	/**
 	 * @param  mixed $value
 	 * @param  bool $need
@@ -77,19 +60,19 @@ class AnnotationProperty extends EntityProperty
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {
-				$entity = $this->reflection->name;
-				throw new YetORM\Exception\InvalidArgumentException("Property '$entity::\${$this->name}' cannot be NULL.");
+				$entity = $this->getEntityReflectioin()->getName();
+				throw new YetORM\Exception\InvalidArgumentException("Property '{$entity}::\${$this->getName()}' cannot be NULL.");
 			}
 
-		} elseif (is_object($value)) {
-			$class = Aliaser::getClass($this->type, $this->reflection);
+		} elseif (!$this->isOfNativeType()) {
+			$class = $this->getType();
 			if (!($value instanceof $class)) {
 				throw new YetORM\Exception\InvalidArgumentException("Instance of '{$class}' expected, '"
-					. get_class($value) . "' given.");
+						. get_class($value) . "' given.");
 			}
 
-		} elseif ($need && ($type = gettype($value)) !== $this->type) {
-			throw new YetORM\Exception\InvalidArgumentException("Invalid type - '{$this->type}' expected, '$type' given.");
+		} elseif ($need && ($type = gettype($value)) !== $this->getType()) {
+			throw new YetORM\Exception\InvalidArgumentException("Invalid type - '{$this->getType()}' expected, '$type' given.");
 
 		} else {
 			return FALSE;
@@ -106,8 +89,8 @@ class AnnotationProperty extends EntityProperty
 	 */
 	function setType($value)
 	{
-		if (!$this->checkType($value, FALSE) && @settype($value, $this->type) === FALSE) { // intentionally @
-			throw new YetORM\Exception\InvalidArgumentException("Unable to set type '{$this->type}' from '"
+		if (!$this->checkType($value, FALSE) && @settype($value, $this->getType()) === FALSE) { // intentionally @
+			throw new YetORM\Exception\InvalidArgumentException("Unable to set type '{$this->getType()}' from '"
 				. gettype($value) . "'.");
 		}
 
