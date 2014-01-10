@@ -35,7 +35,7 @@ abstract class Entity
 
 
 	/**
-	 * @param  string $entity
+	 * @param  string|callable $entity
 	 * @param  string $relTable
 	 * @param  string $entityTable
 	 * @param  string $throughColumn
