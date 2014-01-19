@@ -93,9 +93,16 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(isset($book->bookTitle));
 		$this->assertFalse(isset($book->foo));
 
-		// getters
-		$this->assertTrue(isset($book->author));
-		$this->assertTrue(isset($book->tags));
+		// methods (should fail)
+		$this->assertFalse(isset($book->author));
+		$this->assertFalse(isset($book->tags));
+
+		// NULL values
+		$book->written = NULL;
+		$this->assertFalse(isset($book->written));
+
+		$book->written = new \Nette\DateTime;
+		$this->assertTrue(isset($book->written));
 	}
 
 

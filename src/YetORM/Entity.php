@@ -104,7 +104,8 @@ abstract class Entity
 	 */
 	final function & __get($name)
 	{
-		if (($prop = static::getReflection()->getEntityProperty($name))) {
+		$prop = static::getReflection()->getEntityProperty($name);
+		if ($prop instanceof Reflection\AnnotationProperty) {
 			$value = $prop->setType($this->row->{$prop->column});
 			return $value;
 		}
@@ -141,7 +142,12 @@ abstract class Entity
 	 */
 	final function __isset($name)
 	{
-		return static::getReflection()->hasEntityProperty($name);
+		$prop = static::getReflection()->getEntityProperty($name);
+		if ($prop instanceof Reflection\AnnotationProperty) {
+			return $this->__get($name) !== NULL;
+		}
+
+		return FALSE;
 	}
 
 

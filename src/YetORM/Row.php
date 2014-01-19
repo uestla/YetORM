@@ -158,8 +158,8 @@ class Row
 	 */
 	function __isset($name)
 	{
-		return array_key_exists($name, $this->modified)
-			|| array_key_exists($name, $this->values)
+		return isset($this->modified[$name])
+			|| isset($this->values[$name])
 			|| isset($this->row->$name);
 	}
 
