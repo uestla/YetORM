@@ -72,17 +72,20 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	private function loadData()
 	{
 		if ($this->data === NULL) {
+			if ($this->entity instanceof \Closure) {
+				$factory = $this->entity;
+
+			} else {
+				$class = $this->entity;
+				$factory = function ($record) use ($class) {
+					return new $class($record);
+				};
+			}
+
 			$this->data = array();
 			foreach ($this->selection as $row) {
 				$record = $this->refTable === NULL ? $row : $row->ref($this->refTable, $this->refColumn);
-
-				if ($this->entity instanceof \Closure) {
-					$this->data[] = call_user_func($this->entity, $record);
-
-				} else {
-					$class = $this->entity;
-					$this->data[] = new $class($record);
-				}
+				$this->data[] = NCallback::invoke($factory, $record);
 			}
 		}
 	}
