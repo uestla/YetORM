@@ -110,7 +110,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$context = ServiceLocator::getDbContext();
 
 		$context->getConnection()->onQuery['queryDump'] = function (NConnection $c, NResultSet $r) {
-			echo $r->getPdoStatement()->queryString . "\n";
+			echo $r->getQueryString() . "\n";
 		};
 
 
