@@ -155,7 +155,7 @@ abstract class Entity
 	/**
 	 * @param  string $name
 	 * @return void
-	 * @throws E\NotSupportedException
+	 * @throws Exception\NotSupportedException
 	 */
 	final function __unset($name)
 	{
