@@ -3,7 +3,7 @@
 namespace Model\Entities;
 
 use YetORM;
-use Nette\DateTime;
+use Nette\Utils\DateTime;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 

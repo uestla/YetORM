@@ -8,7 +8,7 @@ use YetORM;
 
 /**
  * @property-read int $id
- * @property-read Nette\DateTime|NULL $born
+ * @property-read Nette\Utils\DateTime|NULL $born
  */
 abstract class Person extends YetORM\Entity
 {
