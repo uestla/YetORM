@@ -249,4 +249,27 @@ abstract class Repository extends Nette\Object
 		self::$transactionCounter[$this->dbContext->getConnection()->getDsn()] = 0;
 	}
 
+
+
+	/**
+	 * @param  \Closure $callback
+	 * @return mixed
+	 */
+	final protected function transaction(\Closure $callback)
+	{
+		try {
+			$this->begin();
+
+				$return = $callback();
+
+			$this->commit();
+
+			return $return;
+
+		} catch (\Exception $e) {
+			$this->rollback();
+			throw $e;
+		}
+	}
+
 }

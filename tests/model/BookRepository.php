@@ -42,7 +42,9 @@ class BookRepository extends YetORM\Repository
 	 */
 	function persist(YetORM\Entity $book)
 	{
-		$this->begin();
+		$me = $this;
+
+		return $this->transaction(function () use ($me, $book) {
 
 			$cnt = parent::persist($book);
 
@@ -77,9 +79,9 @@ class BookRepository extends YetORM\Repository
 				}
 			}
 
-		$this->commit();
+			return $cnt;
 
-		return $cnt;
+		});
 	}
 
 
