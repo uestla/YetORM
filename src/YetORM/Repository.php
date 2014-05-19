@@ -150,27 +150,19 @@ abstract class Repository extends Nette\Object
 	{
 		$this->checkEntity($entity);
 
-		try {
-			$this->begin();
+		$me = $this;
+		return $this->transaction(function () use ($me, $entity) {
 
-				$row = $entity->toRow();
-				if ($row->hasNative()) {
-					$rows = $row->update();
+			$row = $entity->toRow();
+			if ($row->hasNative()) {
+				return $row->update();
+			}
 
-				} else {
-					$inserted = $this->getTable()->insert($row->getModified());
-					$row->setNative($inserted);
-					$rows = 1;
-				}
+			$inserted = $me->getTable()->insert($row->getModified());
+			$row->setNative($inserted);
+			return 1;
 
-			$this->commit();
-
-		} catch (\Exception $e) {
-			$this->rollback();
-			throw $e;
-		}
-
-		return $rows;
+		});
 	}
 
 
@@ -185,21 +177,12 @@ abstract class Repository extends Nette\Object
 		$row = $entity->toRow();
 
 		if ($row->hasNative()) {
-			try {
-				$this->begin();
-					$rows = $row->getNative()->delete();
-				$this->commit();
-
-			} catch (\Exception $e) {
-				$this->rollback();
-				throw $e;
-			}
-
-		} else {
-			$rows = 1;
+			return $this->transaction(function () use ($row) {
+				return $row->getNative()->delete();
+			});
 		}
 
-		return $rows;
+		return 1;
 	}
 
 
