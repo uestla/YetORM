@@ -39,7 +39,7 @@ class Row
 
 
 	/** @return bool */
-	function hasNative()
+	function isPersisted()
 	{
 		return $this->row !== NULL;
 	}
@@ -168,7 +168,7 @@ class Row
 	/** @return void */
 	private function checkPersistence()
 	{
-		if ($this->row === NULL) {
+		if (!$this->isPersisted()) {
 			throw new Exception\InvalidStateException('Row not set yet.');
 		}
 	}

@@ -117,7 +117,7 @@ abstract class Repository extends Nette\Object
 		return $this->transaction(function () use ($me, $entity) {
 
 			$row = $entity->toRow();
-			if ($row->hasNative()) {
+			if ($row->isPersisted()) {
 				return $row->update();
 			}
 
@@ -139,7 +139,7 @@ abstract class Repository extends Nette\Object
 		$this->checkEntity($entity);
 		$row = $entity->toRow();
 
-		if ($row->hasNative()) {
+		if ($row->isPersisted()) {
 			return $this->transaction(function () use ($row) {
 				return $row->getNative()->delete();
 			});
