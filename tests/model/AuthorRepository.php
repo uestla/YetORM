@@ -6,7 +6,10 @@ use Model;
 use YetORM;
 
 
-/** @entity Model\Entities\Author */
+/**
+ * @table  author
+ * @entity Model\Entities\Author
+ */
 class AuthorRepository extends YetORM\Repository
 {
 

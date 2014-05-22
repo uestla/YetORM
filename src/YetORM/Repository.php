@@ -56,7 +56,7 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
 	{
-		return new EntityCollection($selection, $this->getEntityClass($entity), $refTable, $refColumn);
+		return new EntityCollection($selection, $entity === NULL ? $this->getEntityClass() : $entity, $refTable, $refColumn);
 	}
 
 
@@ -67,77 +67,40 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function getTable($table = NULL)
 	{
-		return $this->dbContext->table($this->getTableName($table));
+		return $this->database->table($table === NULL ? $this->getTableName() : $table);
 	}
 
 
 
-	/**
-	 * @param  string $name
-	 * @return bool
-	 */
-	private function parseName(& $name)
+	/** @return string */
+	final protected function getTableName()
 	{
-		if (!($m = NStrings::match(static::getReflection()->name, '#([a-z0-9]+)repository$#i'))) {
-			return FALSE;
-		}
-
-		$name = ucfirst($m[1]);
-		return TRUE;
-	}
-
-
-
-	/**
-	 * @param  string|NULL $table
-	 * @return string
-	 */
-	private function getTableName($table)
-	{
-		if ($table === NULL) {
-			if ($this->table === NULL) {
-				if (($name = static::getReflection()->getAnnotation('table')) !== NULL) {
-					$this->table = $name;
-
-				} elseif (!$this->parseName($name)) {
-					throw new Exception\InvalidStateException("Table name not set.");
-				}
-
-				$this->table = strtolower($name);
+		if ($this->table === NULL) {
+			if (($annotation = static::getReflection()->getAnnotation('table')) === NULL) {
+				throw new Exception\InvalidStateException("Table name not set.");
 			}
 
-			$table = $this->table;
+			$this->table = $annotation;
 		}
 
-		return $table;
+		return $this->table;
 	}
 
 
 
-	/**
-	 * @param  string $entity
-	 * @return string
-	 */
-	private function getEntityClass($entity = NULL)
+	/** @return string */
+	final protected function getEntityClass()
 	{
-		if ($entity === NULL) {
-			if ($this->entity === NULL) {
-				$ref = static::getReflection();
-				if (($name = $ref->getAnnotation('entity')) !== NULL) {
-					$this->entity = Aliaser::getClass($name, $ref);
-
-				} elseif ($this->parseName($name)) {
-					$this->entity = $name;
-
-				} else {
-					throw new Exception\InvalidStateException('Entity class not set.');
-				}
+		if ($this->entity === NULL) {
+			$ref = static::getReflection();
+			if (($annotation = $ref->getAnnotation('entity')) === NULL) {
+				throw new Exception\InvalidStateException('Entity class not set.');
 			}
 
-			$entity = $this->entity;
+			$this->entity = Aliaser::getClass($annotation, $ref);
 		}
 
-		return $entity;
+		return $this->entity;
 	}
 
 

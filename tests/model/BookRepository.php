@@ -8,7 +8,10 @@ use Nette\Database\Context as NdbContext;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
-/** @entity Book */
+/**
+ * @table  book
+ * @entity Book
+ */
 class BookRepository extends YetORM\Repository
 {
 
