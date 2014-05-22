@@ -25,7 +25,7 @@ abstract class Repository extends Nette\Object
 	private static $transactionCounter = array();
 
 	/** @var NdbContext */
-	protected $dbContext;
+	protected $database;
 
 	/** @var string */
 	protected $table = NULL;
@@ -38,7 +38,7 @@ abstract class Repository extends Nette\Object
 	/** @param  NdbContext $context */
 	function __construct(NdbContext $context)
 	{
-		$this->dbContext = $context;
+		$this->database = $context;
 
 		if (!isset(self::$transactionCounter[$dsn = $context->getConnection()->getDsn()])) {
 			self::$transactionCounter[$dsn] = 0;
@@ -167,8 +167,8 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function begin()
 	{
-		if (self::$transactionCounter[$this->dbContext->getConnection()->getDsn()]++ === 0) {
-			$this->dbContext->beginTransaction();
+		if (self::$transactionCounter[$this->database->getConnection()->getDsn()]++ === 0) {
+			$this->database->beginTransaction();
 		}
 	}
 
@@ -177,12 +177,12 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function commit()
 	{
-		if (self::$transactionCounter[$dsn = $this->dbContext->getConnection()->getDsn()] === 0) {
+		if (self::$transactionCounter[$dsn = $this->database->getConnection()->getDsn()] === 0) {
 			throw new Exception\InvalidStateException('No transaction started.');
 		}
 
 		if (--self::$transactionCounter[$dsn] === 0) {
-			$this->dbContext->commit();
+			$this->database->commit();
 		}
 	}
 
@@ -191,8 +191,8 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function rollback()
 	{
-		$this->dbContext->rollBack();
-		self::$transactionCounter[$this->dbContext->getConnection()->getDsn()] = 0;
+		$this->database->rollBack();
+		self::$transactionCounter[$this->database->getConnection()->getDsn()] = 0;
 	}
 
 
