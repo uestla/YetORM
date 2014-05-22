@@ -13,7 +13,6 @@ namespace YetORM;
 
 use Nette;
 use Aliaser\Container as Aliaser;
-use Nette\Utils\Strings as NStrings;
 use Nette\Database\Context as NdbContext;
 use Nette\Database\Table\Selection as NSelection;
 
@@ -205,9 +204,7 @@ abstract class Repository extends Nette\Object
 	{
 		try {
 			$this->begin();
-
 				$return = $callback();
-
 			$this->commit();
 
 			return $return;
