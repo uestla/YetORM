@@ -3,14 +3,13 @@
 namespace Model\Entities;
 
 use Nette;
-use YetORM;
 
 
 /**
  * @property-read int $id
  * @property-read Nette\Utils\DateTime|NULL $born
  */
-abstract class Person extends YetORM\Entity
+abstract class Person extends BaseEntity
 {
 
 	/** @return string */

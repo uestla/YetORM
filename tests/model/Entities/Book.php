@@ -13,7 +13,7 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
  * @property DateTime|NULL $written
  * @property bool $available
  */
-class Book extends YetORM\Entity
+class Book extends BaseEntity
 {
 
 	/** @var Tag[] */

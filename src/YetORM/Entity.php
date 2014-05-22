@@ -43,35 +43,6 @@ abstract class Entity
 
 
 	/**
-	 * Looks for all public get* methods and @property[-read] annotations
-	 * and returns associative array with corresponding values
-	 *
-	 * @return array
-	 */
-	function toArray()
-	{
-		$ref = static::getReflection();
-		$values = array();
-
-		foreach ($ref->getEntityProperties() as $name => $property) {
-			if ($property instanceof Reflection\MethodProperty) {
-				$value = $this->{'get' . $name}();
-
-			} else {
-				$value = $this->$name;
-			}
-
-			if (!($value instanceof EntityCollection || $value instanceof Entity)) {
-				$values[$name] = $value;
-			}
-		}
-
-		return $values;
-	}
-
-
-
-	/**
 	 * @param  string $name
 	 * @param  array $args
 	 * @return mixed
