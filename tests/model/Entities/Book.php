@@ -113,7 +113,8 @@ class Book extends YetORM\Entity
 	/** @return YetORM\EntityCollection */
 	function getTags()
 	{
-		return $this->getMany('Model\Entities\Tag', 'book_tag', 'tag');
+		$selection = $this->row->related('book_tag');
+		return new YetORM\EntityCollection($selection, 'Model\Entities\Tag', 'tag');
 	}
 
 

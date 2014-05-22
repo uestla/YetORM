@@ -34,20 +34,6 @@ abstract class Entity
 
 
 
-	/**
-	 * @param  string|callable $entity
-	 * @param  string $relTable
-	 * @param  string $entityTable
-	 * @param  string $throughColumn
-	 * @return EntityCollection
-	 */
-	protected function getMany($entity, $relTable, $entityTable, $throughColumn = NULL)
-	{
-		return new EntityCollection($this->row->related($relTable), $entity, $entityTable, $throughColumn);
-	}
-
-
-
 	/** @return Row */
 	final function toRow()
 	{
