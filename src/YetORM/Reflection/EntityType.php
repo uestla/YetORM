@@ -180,8 +180,9 @@ class EntityType extends NClassType
 
 							// parse column name
 							$column = $name;
-							if (isset($split[2]) && $split[2] === '->' && isset($split[3])) {
-								$column = $split[3];
+							if (($pos = strpos($name, ':')) !== FALSE) {
+								$column = substr($name, $pos + 1);
+								$name = substr($name, 0, $pos);
 							}
 
 							self::$annProps[$class][$name] = new AnnotationProperty(
