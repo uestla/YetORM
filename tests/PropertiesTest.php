@@ -101,7 +101,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$book->written = NULL;
 		$this->assertFalse(isset($book->written));
 
-		$book->written = new \Nette\DateTime;
+		$book->written = new Nette\Utils\DateTime;
 		$this->assertTrue(isset($book->written));
 	}
 
@@ -126,7 +126,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$expected = array(
 			'id' => 2,
 			'bookTitle' => 'JUSH',
-			'written' => new Nette\DateTime('2007-01-01'),
+			'written' => new Nette\Utils\DateTime('2007-01-01'),
 			'available' => TRUE,
 			'author' => array(
 				'id' => 11,
@@ -176,11 +176,11 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 		$repo->persist($book);
 		$this->assertNull($book->written);
 
-		$book->written = new Nette\DateTime('1990-01-01');
-		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->written);
+		$book->written = new Nette\Utils\DateTime('1990-01-01');
+		$this->assertEquals(new Nette\Utils\DateTime('1990-01-01'), $book->written);
 
 		$repo->persist($book);
-		$this->assertEquals(new Nette\DateTime('1990-01-01'), $book->written);
+		$this->assertEquals(new Nette\Utils\DateTime('1990-01-01'), $book->written);
 
 		$book->written = NULL;
 		$this->assertNull($book->written);

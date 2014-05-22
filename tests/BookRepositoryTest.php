@@ -23,7 +23,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 				'web' => 'http://www.vrana.cz/',
 				'born' => NULL,
 			),
-			'written' => new Nette\DateTime('2010-01-01'),
+			'written' => new Nette\Utils\DateTime('2010-01-01'),
 			'available' => TRUE,
 			'tags' => array('PHP', 'MySQL'),
 		);
@@ -150,7 +150,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$book = $repo->createBook();
 		$book->bookTitle = 'Texy 2';
 		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(12));
-		$book->written = new Nette\DateTime('2008-01-01');
+		$book->written = new Nette\Utils\DateTime('2008-01-01');
 		$repo->persist($book);
 
 		$this->assertEquals(array(
@@ -162,7 +162,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 				'web' => 'http://davidgrudl.com/',
 				'born' => NULL,
 			),
-			'written' => new Nette\DateTime('2008-01-01'),
+			'written' => new Nette\Utils\DateTime('2008-01-01'),
 			'available' => TRUE,
 			'tags' => array(),
 
@@ -211,7 +211,7 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 				'web' => 'http://example.com',
 				'born' => NULL,
 			),
-			'written' => new Nette\DateTime('2008-01-01'),
+			'written' => new Nette\Utils\DateTime('2008-01-01'),
 			'available' => FALSE,
 			'tags' => array(),
 

@@ -34,12 +34,12 @@ abstract class Repository extends Nette\Object
 
 
 
-	/** @param  NdbContext $context */
-	function __construct(NdbContext $context)
+	/** @param  NdbContext $database */
+	function __construct(NdbContext $database)
 	{
-		$this->database = $context;
+		$this->database = $database;
 
-		if (!isset(self::$transactionCounter[$dsn = $context->getConnection()->getDsn()])) {
+		if (!isset(self::$transactionCounter[$dsn = $database->getConnection()->getDsn()])) {
 			self::$transactionCounter[$dsn] = 0;
 		}
 	}
@@ -152,7 +152,8 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	private function checkEntity(Entity $entity)
 	{
-		$class = $this->getEntityClass(NULL);
+		$class = $this->getEntityClass();
+
 		if (!($entity instanceof $class)) {
 			throw new Exception\InvalidArgumentException("Instance of '$class' expected, '"
 				. get_class($entity) . "' given.");
