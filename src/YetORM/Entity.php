@@ -90,7 +90,7 @@ abstract class Entity
 	 * @param  array $args
 	 * @return mixed
 	 */
-	final function __call($name, $args)
+	function __call($name, $args)
 	{
 		$class = get_class($this);
 		throw new Exception\MemberAccessException("Call to undefined method $class::$name().");
@@ -102,7 +102,7 @@ abstract class Entity
 	 * @param  string $name
 	 * @return mixed
 	 */
-	final function & __get($name)
+	function & __get($name)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
@@ -121,7 +121,7 @@ abstract class Entity
 	 * @param  mixed $value
 	 * @return void
 	 */
-	final function __set($name, $value)
+	function __set($name, $value)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty && !$prop->readonly) {
@@ -140,7 +140,7 @@ abstract class Entity
 	 * @param  string $name
 	 * @return bool
 	 */
-	final function __isset($name)
+	function __isset($name)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
@@ -157,7 +157,7 @@ abstract class Entity
 	 * @return void
 	 * @throws Exception\NotSupportedException
 	 */
-	final function __unset($name)
+	function __unset($name)
 	{
 		throw new Exception\NotSupportedException;
 	}
@@ -165,7 +165,7 @@ abstract class Entity
 
 
 	/** @return Reflection\EntityType */
-	final static function getReflection()
+	static function getReflection()
 	{
 		$class = get_called_class();
 		if (!isset(self::$reflections[$class])) {
