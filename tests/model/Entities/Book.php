@@ -17,14 +17,13 @@ class Book extends BaseEntity
 {
 
 	/** @var Tag[] */
-	protected $addedTags = array();
+	private $addedTags = array();
 
 	/** @var Tag[] */
-	protected $removedTags = array();
+	private $removedTags = array();
 
 	/** @var string */
 	private $imageDir;
-
 
 
 	/**
@@ -35,13 +34,10 @@ class Book extends BaseEntity
 	{
 		parent::__construct($row);
 
-		$this->imageDir = realpath($imageDir);
-
-		if ($this->imageDir === FALSE || $imageDir === NULL) {
+		if ($imageDir === NULL || ($this->imageDir = realpath($imageDir)) === FALSE) {
 			throw new \InvalidArgumentException;
 		}
 	}
-
 
 
 	/**
@@ -97,9 +93,8 @@ class Book extends BaseEntity
 	}
 
 
-
 	/**
-	 * @param  Author
+	 * @param  Author $author
 	 * @return Book
 	 */
 	function setAuthor(Author $author)
