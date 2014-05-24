@@ -14,7 +14,7 @@ class AuthorRepository extends YetORM\Repository
 {
 
 	/**
-	 * @param  int
+	 * @param  int $id
 	 * @return Model\Entities\Author
 	 */
 	function getByID($id)

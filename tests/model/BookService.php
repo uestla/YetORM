@@ -10,11 +10,11 @@ class BookService
 {
 
 	/** @var Model\Repositories\BookRepository */
-	protected $repository;
+	private $repository;
 
 
 
-	/** @param  Model\Repositories\BookRepository */
+	/** @param  Model\Repositories\BookRepository $repository */
 	function __construct(Model\Repositories\BookRepository $repository)
 	{
 		$this->repository = $repository;
