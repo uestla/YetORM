@@ -115,13 +115,13 @@ abstract class Repository extends Nette\Object
 		$me = $this;
 		return $this->transaction(function () use ($me, $entity) {
 
-			$row = $entity->toRow();
-			if ($row->isPersisted()) {
-				return $row->update();
+			$record = $entity->toRecord();
+			if ($record->hasRow()) {
+				return $record->update();
 			}
 
-			$inserted = $me->getTable()->insert($row->getModified());
-			$row->setNative($inserted);
+			$inserted = $me->getTable()->insert($record->getModified());
+			$record->setRow($inserted);
 			return 1;
 
 		});
@@ -136,11 +136,11 @@ abstract class Repository extends Nette\Object
 	function delete(Entity $entity)
 	{
 		$this->checkEntity($entity);
-		$row = $entity->toRow();
+		$record = $entity->toRecord();
 
-		if ($row->isPersisted()) {
-			return $this->transaction(function () use ($row) {
-				return $row->getNative()->delete();
+		if ($record->hasRow()) {
+			return $this->transaction(function () use ($record) {
+				return $record->getRow()->delete();
 			});
 		}
 

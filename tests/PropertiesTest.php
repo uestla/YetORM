@@ -221,7 +221,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	{
 		try {
 			$book = ServiceLocator::getBookRepository()->createBook();
-			$book->toRow()->book_title;
+			$book->toRecord()->book_title;
 			$this->fail();
 
 		} catch (\YetORM\Exception\MemberAccessException $e) {

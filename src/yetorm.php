@@ -10,5 +10,5 @@ require_once __DIR__ . '/YetORM/Exception/MemberAccessException.php';
 require_once __DIR__ . '/YetORM/Exception/NotSupportedException.php';
 require_once __DIR__ . '/YetORM/Repository.php';
 require_once __DIR__ . '/YetORM/EntityCollection.php';
-require_once __DIR__ . '/YetORM/Row.php';
+require_once __DIR__ . '/YetORM/Record.php';
 require_once __DIR__ . '/YetORM/Entity.php';

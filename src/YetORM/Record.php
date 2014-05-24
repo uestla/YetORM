@@ -16,7 +16,7 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\GroupedSelection as NGroupedSelection;
 
 
-class Row
+class Record
 {
 
 	/** @var NActiveRow */
@@ -39,7 +39,7 @@ class Row
 
 
 	/** @return bool */
-	function isPersisted()
+	function hasRow()
 	{
 		return $this->row !== NULL;
 	}
@@ -47,7 +47,7 @@ class Row
 
 
 	/** @return NActiveRow|NULL */
-	function getNative()
+	function getRow()
 	{
 		return $this->row;
 	}
@@ -56,9 +56,9 @@ class Row
 
 	/**
 	 * @param  NActiveRow $row
-	 * @return Row
+	 * @return Record
 	 */
-	function setNative(NActiveRow $row)
+	function setRow(NActiveRow $row)
 	{
 		$this->reload($row);
 		return $this;
@@ -73,7 +73,7 @@ class Row
 	 */
 	function ref($key, $throughColumn = NULL)
 	{
-		$this->checkPersistence();
+		$this->checkRow();
 		return $this->row->ref($key, $throughColumn);
 	}
 
@@ -86,7 +86,7 @@ class Row
 	 */
 	function related($key, $throughColumn = NULL)
 	{
-		$this->checkPersistence();
+		$this->checkRow();
 		return $this->row->related($key, $throughColumn);
 	}
 
@@ -103,10 +103,10 @@ class Row
 	/** @return int */
 	function update()
 	{
-		$this->checkPersistence();
+		$this->checkRow();
 
 		$cnt = 0;
-		if (count($this->modified)) {
+		if (!$this->isPersisted()) {
 			$cnt = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
@@ -165,10 +165,18 @@ class Row
 
 
 
-	/** @return void */
-	private function checkPersistence()
+	/** @return bool */
+	private function isPersisted()
 	{
-		if (!$this->isPersisted()) {
+		return $this->hasRow() && !count($this->modified);
+	}
+
+
+
+	/** @return void */
+	private function checkRow()
+	{
+		if (!$this->hasRow()) {
 			throw new Exception\InvalidStateException('Row not set yet.');
 		}
 	}

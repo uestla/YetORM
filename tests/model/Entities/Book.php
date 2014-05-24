@@ -93,7 +93,7 @@ class Book extends BaseEntity
 	/** @return Author */
 	function getAuthor()
 	{
-		return new Author($this->row->author);
+		return new Author($this->record->author);
 	}
 
 
@@ -104,7 +104,7 @@ class Book extends BaseEntity
 	 */
 	function setAuthor(Author $author)
 	{
-		$this->row->author_id = $author->id;
+		$this->record->author_id = $author->id;
 		return $this;
 	}
 
@@ -113,7 +113,7 @@ class Book extends BaseEntity
 	/** @return YetORM\EntityCollection */
 	function getTags()
 	{
-		$selection = $this->row->related('book_tag');
+		$selection = $this->record->related('book_tag');
 		return new YetORM\EntityCollection($selection, 'Model\Entities\Tag', 'tag');
 	}
 

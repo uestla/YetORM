@@ -18,8 +18,8 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 abstract class Entity
 {
 
-	/** @var Row */
-	protected $row;
+	/** @var Record */
+	protected $record;
 
 	/** @var array */
 	private static $reflections = array();
@@ -29,15 +29,15 @@ abstract class Entity
 	/** @param  NActiveRow $row */
 	function __construct(NActiveRow $row = NULL)
 	{
-		$this->row = new Row($row);
+		$this->record = new Record($row);
 	}
 
 
 
-	/** @return Row */
-	final function toRow()
+	/** @return Record */
+	final function toRecord()
 	{
-		return $this->row;
+		return $this->record;
 	}
 
 
@@ -63,7 +63,7 @@ abstract class Entity
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
-			$value = $prop->setType($this->row->{$prop->column});
+			$value = $prop->setType($this->record->{$prop->column});
 			return $value;
 		}
 
@@ -83,7 +83,7 @@ abstract class Entity
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty && !$prop->readonly) {
 			$prop->checkType($value);
-			$this->row->{$prop->column} = $value;
+			$this->record->{$prop->column} = $value;
 			return ;
 		}
 
