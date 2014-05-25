@@ -28,14 +28,12 @@ class EntityType extends NClassType
 	private static $annProps = array();
 
 
-
 	/** @return EntityProperty[] */
 	function getEntityProperties()
 	{
 		$this->loadEntityProperties();
 		return $this->properties;
 	}
-
 
 
 	/**
@@ -48,7 +46,6 @@ class EntityType extends NClassType
 	}
 
 
-
 	/**
 	 * @param  string $name
 	 * @return bool
@@ -58,7 +55,6 @@ class EntityType extends NClassType
 		$this->loadEntityProperties();
 		return isset($this->properties[$name]);
 	}
-
 
 
 	/** @return void */
@@ -79,7 +75,6 @@ class EntityType extends NClassType
 			}
 		}
 	}
-
 
 
 	/** @return void */
@@ -108,7 +103,6 @@ class EntityType extends NClassType
 	}
 
 
-
 	/** @return array */
 	private function getClassTree()
 	{
@@ -123,7 +117,6 @@ class EntityType extends NClassType
 
 		return array_reverse($tree);
 	}
-
 
 
 	/**

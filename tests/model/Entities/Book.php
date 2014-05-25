@@ -53,14 +53,12 @@ class Book extends BaseEntity
 	}
 
 
-
 	/** @return Tag[] @internal */
 	function getAddedTags()
 	{
 		$tmp = $this->addedTags;
 		return $tmp;
 	}
-
 
 
 	/**
@@ -76,14 +74,12 @@ class Book extends BaseEntity
 	}
 
 
-
 	/** @return Tag[] @internal */
 	function getRemovedTags()
 	{
 		$tmp = $this->removedTags;
 		return $tmp;
 	}
-
 
 
 	/** @return Author */
@@ -104,7 +100,6 @@ class Book extends BaseEntity
 	}
 
 
-
 	/** @return YetORM\EntityCollection */
 	function getTags()
 	{
@@ -113,13 +108,11 @@ class Book extends BaseEntity
 	}
 
 
-
 	/** @return string @internal */
 	function getImagePath()
 	{
 		return $this->imageDir . '/' . $this->id . '.jpg';
 	}
-
 
 
 	/** @return array */

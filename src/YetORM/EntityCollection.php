@@ -39,10 +39,8 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	private $keys;
 
 
-
 	const ASC = FALSE;
 	const DESC = TRUE;
-
 
 
 	/**
@@ -65,7 +63,6 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 			$this->entity = $entity;
 		}
 	}
-
 
 
 	/** @return void */
@@ -91,13 +88,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/** @return array */
 	function toArray()
 	{
 		return iterator_to_array($this);
 	}
-
 
 
 	/**
@@ -133,7 +128,6 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/**
 	 * @param  int $limit
 	 * @param  int $offset
@@ -147,13 +141,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/** @return void */
 	private function invalidate()
 	{
 		$this->data = NULL;
 	}
-
 
 
 	// === interface \Iterator ======================================
@@ -167,14 +159,12 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/** @return Entity */
 	function current()
 	{
 		$key = current($this->keys);
 		return $key === FALSE ? FALSE : $this->data[$key];
 	}
-
 
 
 	/** @return mixed */
@@ -184,7 +174,6 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/** @return void */
 	function next()
 	{
@@ -192,13 +181,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	}
 
 
-
 	/** @return bool */
 	function valid()
 	{
 		return current($this->keys) !== FALSE;
 	}
-
 
 
 	// === interface \Countable ======================================

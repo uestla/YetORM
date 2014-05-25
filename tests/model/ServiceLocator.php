@@ -20,7 +20,6 @@ class ServiceLocator
 	private static $bookService = NULL;
 
 
-
 	/** @return Nette\Caching\Storages\FileStorage */
 	static function getCacheStorage()
 	{
@@ -30,7 +29,6 @@ class ServiceLocator
 
 		return self::$cacheStorage;
 	}
-
 
 
 	/** @return Nette\Database\Context */
@@ -50,7 +48,6 @@ class ServiceLocator
 	}
 
 
-
 	/** @return Model\Repositories\BookRepository */
 	static function getBookRepository()
 	{
@@ -62,7 +59,6 @@ class ServiceLocator
 	}
 
 
-
 	/** @return Model\Repositories\AuthorRepository */
 	static function getAuthorRepository()
 	{
@@ -72,7 +68,6 @@ class ServiceLocator
 
 		return self::$authorRepository;
 	}
-
 
 
 	/** @return Model\Services\BookService */

@@ -19,7 +19,6 @@ class BookRepository extends YetORM\Repository
 	private $imageDir;
 
 
-
 	/**
 	 * @param  NdbContext $context
 	 * @param  string $imageDir
@@ -36,7 +35,6 @@ class BookRepository extends YetORM\Repository
 
 		$this->imageDir = $realpath;
 	}
-
 
 
 	/**
@@ -88,14 +86,12 @@ class BookRepository extends YetORM\Repository
 	}
 
 
-
 	/** @return Book|NULL */
 	function getByID($id)
 	{
 		$row = $this->getTable()->get($id);
 		return $row === FALSE ? NULL : $this->createBook($row);
 	}
-
 
 
 	/** @return YetORM\EntityCollection */
@@ -105,13 +101,11 @@ class BookRepository extends YetORM\Repository
 	}
 
 
-
 	/** @return YetORM\EntityCollection */
 	function getAll()
 	{
 		return $this->createCollection($this->getTable(), $this->createBook);
 	}
-
 
 
 	/**
@@ -122,7 +116,6 @@ class BookRepository extends YetORM\Repository
 	{
 		return new Book($row, $this->imageDir);
 	}
-
 
 
 	/** @return string */

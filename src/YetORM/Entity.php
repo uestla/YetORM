@@ -25,7 +25,6 @@ abstract class Entity
 	private static $reflections = array();
 
 
-
 	/** @param  NActiveRow $row */
 	function __construct(NActiveRow $row = NULL)
 	{
@@ -33,13 +32,11 @@ abstract class Entity
 	}
 
 
-
 	/** @return Record */
 	final function toRecord()
 	{
 		return $this->record;
 	}
-
 
 
 	/**
@@ -52,7 +49,6 @@ abstract class Entity
 		$class = get_class($this);
 		throw new Exception\MemberAccessException("Call to undefined method $class::$name().");
 	}
-
 
 
 	/**
@@ -70,7 +66,6 @@ abstract class Entity
 		$class = get_class($this);
 		throw new Exception\MemberAccessException("Cannot read an undeclared property $class::\$$name.");
 	}
-
 
 
 	/**
@@ -92,7 +87,6 @@ abstract class Entity
 	}
 
 
-
 	/**
 	 * @param  string $name
 	 * @return bool
@@ -108,7 +102,6 @@ abstract class Entity
 	}
 
 
-
 	/**
 	 * @param  string $name
 	 * @return void
@@ -118,7 +111,6 @@ abstract class Entity
 	{
 		throw new Exception\NotSupportedException;
 	}
-
 
 
 	/** @return Reflection\EntityType */

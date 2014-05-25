@@ -21,7 +21,6 @@ class CreationTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testAddTags()
 	{
 		$repo = ServiceLocator::getBookRepository();
@@ -52,7 +51,6 @@ class CreationTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($expected, $actual);
 	}
-
 
 
 	function testRemoveTags()

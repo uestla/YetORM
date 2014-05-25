@@ -57,7 +57,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testGetters()
 	{
 		$book = ServiceLocator::getBookRepository()->getByID(1);
@@ -83,7 +82,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testIsSet()
 	{
 		$book = ServiceLocator::getBookRepository()->getByID(1);
@@ -106,7 +104,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testUnset()
 	{
 		try {
@@ -116,7 +113,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 
 		} catch (YetORM\Exception\NotSupportedException $e) {}
 	}
-
 
 
 	function testToArray()
@@ -141,7 +137,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testInheritance()
 	{
 		$author = ServiceLocator::getAuthorRepository()->getByID(11);
@@ -156,13 +151,11 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testClassTypes()
 	{
 		$book = ServiceLocator::getBookRepository()->getByID(1);
 		$this->assertInstanceOf('DateTime', $book->written);
 	}
-
 
 
 	function testNullable()
@@ -200,7 +193,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testAnnotationFail()
 	{
 		try {
@@ -214,7 +206,6 @@ class PropertiesTest extends PHPUnit_Framework_TestCase
 			}
 		}
 	}
-
 
 
 	function testUninitializedColumnValue()

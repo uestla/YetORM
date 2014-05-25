@@ -24,7 +24,6 @@ class AnnotationProperty extends EntityProperty
 	private $nullable;
 
 
-
 	/**
 	 * @param  EntityType $reflection
 	 * @param  string $name
@@ -42,13 +41,11 @@ class AnnotationProperty extends EntityProperty
 	}
 
 
-
 	/** @return string */
 	function getColumn()
 	{
 		return $this->column;
 	}
-
 
 
 	/**
@@ -80,7 +77,6 @@ class AnnotationProperty extends EntityProperty
 
 		return TRUE;
 	}
-
 
 
 	/**

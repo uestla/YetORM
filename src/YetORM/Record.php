@@ -29,13 +29,11 @@ class Record
 	private $modified = array();
 
 
-
 	/** @param  NActiveRow $row */
 	function __construct(NActiveRow $row = NULL)
 	{
 		$this->row = $row;
 	}
-
 
 
 	/** @return bool */
@@ -45,13 +43,11 @@ class Record
 	}
 
 
-
 	/** @return NActiveRow|NULL */
 	function getRow()
 	{
 		return $this->row;
 	}
-
 
 
 	/**
@@ -63,7 +59,6 @@ class Record
 		$this->reload($row);
 		return $this;
 	}
-
 
 
 	/**
@@ -78,7 +73,6 @@ class Record
 	}
 
 
-
 	/**
 	 * @param  string $key
 	 * @param  string $throughColumn
@@ -91,13 +85,11 @@ class Record
 	}
 
 
-
 	/** @return array */
 	function getModified()
 	{
 		return $this->modified;
 	}
-
 
 
 	/** @return int */
@@ -113,7 +105,6 @@ class Record
 
 		return $cnt;
 	}
-
 
 
 	/**
@@ -139,7 +130,6 @@ class Record
 	}
 
 
-
 	/**
 	 * @param  string $name
 	 * @param  mixed $value
@@ -149,7 +139,6 @@ class Record
 	{
 		$this->modified[$name] = $value;
 	}
-
 
 
 	/**
@@ -164,13 +153,11 @@ class Record
 	}
 
 
-
 	/** @return bool */
 	private function isPersisted()
 	{
 		return $this->hasRow() && !count($this->modified);
 	}
-
 
 
 	/** @return void */
@@ -180,7 +167,6 @@ class Record
 			throw new Exception\InvalidStateException('Row not set yet.');
 		}
 	}
-
 
 
 	/**

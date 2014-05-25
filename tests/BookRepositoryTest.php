@@ -32,14 +32,12 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testManyToOne()
 	{
 		$book = ServiceLocator::getBookRepository()->getByID(1);
 		$author = $book->getAuthor();
 		$this->assertEquals('Jakub Vrana', $author->getName());
 	}
-
 
 
 	function testManyToMany()
@@ -54,7 +52,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testSearch()
 	{
 		$books = array();
@@ -66,7 +63,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	function testCount()
 	{
 		$allBooks = ServiceLocator::getBookRepository()->getAll();
@@ -76,7 +72,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(2, count($allBooks->limit(2)->toArray())); // data received
 		$this->assertEquals(1, count($bookTags));
 	}
-
 
 
 	/** @see http://phpfashion.com/mvc-paradox-a-jak-jej-resit */
@@ -101,7 +96,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(array('JUSH', 'Nette'), $array);
 	}
-
 
 
 	/** Tests equality of queries using native & YetORM data access */
@@ -138,7 +132,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 		unset($context->getConnection()->onQuery['queryDump']);
 		$this->assertEquals($native, $repository);
 	}
-
 
 
 	function testCreateAndUpdate()
@@ -217,7 +210,6 @@ class BookRepositoryTest extends PHPUnit_Framework_TestCase
 
 		), $book->toArray());
 	}
-
 
 
 	function testDelete()

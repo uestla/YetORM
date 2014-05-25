@@ -31,7 +31,6 @@ abstract class EntityProperty extends Nette\Object
 	private $type;
 
 
-
 	/**
 	 * @param  EntityType $reflection
 	 * @param  string $name
@@ -47,13 +46,11 @@ abstract class EntityProperty extends Nette\Object
 	}
 
 
-
 	/** @return EntityType */
 	function getEntityReflectioin()
 	{
 		return $this->reflection;
 	}
-
 
 
 	/** @return string */
@@ -63,13 +60,11 @@ abstract class EntityProperty extends Nette\Object
 	}
 
 
-
 	/** @return bool */
 	function isReadonly()
 	{
 		return $this->readonly;
 	}
-
 
 
 	/** @return string */
@@ -79,13 +74,11 @@ abstract class EntityProperty extends Nette\Object
 	}
 
 
-
 	/** @return bool */
 	function isOfNativeType()
 	{
 		return self::isNativeType($this->type);
 	}
-
 
 
 	/**

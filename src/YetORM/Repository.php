@@ -33,7 +33,6 @@ abstract class Repository extends Nette\Object
 	protected $entity = NULL;
 
 
-
 	/** @param  NdbContext $database */
 	function __construct(NdbContext $database)
 	{
@@ -43,7 +42,6 @@ abstract class Repository extends Nette\Object
 			self::$transactionCounter[$dsn] = 0;
 		}
 	}
-
 
 
 	/**
@@ -59,7 +57,6 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	/**
 	 * @param  string $table
 	 * @return NSelection
@@ -68,7 +65,6 @@ abstract class Repository extends Nette\Object
 	{
 		return $this->database->table($table === NULL ? $this->getTableName() : $table);
 	}
-
 
 
 	/** @return string */
@@ -86,7 +82,6 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	/** @return string */
 	final protected function getEntityClass()
 	{
@@ -101,7 +96,6 @@ abstract class Repository extends Nette\Object
 
 		return $this->entity;
 	}
-
 
 
 	/**
@@ -128,7 +122,6 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	/**
 	 * @param  Entity $entity
 	 * @return int
@@ -148,7 +141,6 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	/** @return void */
 	private function checkEntity(Entity $entity)
 	{
@@ -161,7 +153,6 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	// === TRANSACTIONS ====================================================
 
 	/** @return void */
@@ -171,7 +162,6 @@ abstract class Repository extends Nette\Object
 			$this->database->beginTransaction();
 		}
 	}
-
 
 
 	/** @return void */
@@ -187,14 +177,12 @@ abstract class Repository extends Nette\Object
 	}
 
 
-
 	/** @return void */
 	final protected function rollback()
 	{
 		$this->database->rollBack();
 		self::$transactionCounter[$this->database->getConnection()->getDsn()] = 0;
 	}
-
 
 
 	/**
