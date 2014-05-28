@@ -9,7 +9,7 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 
 /**
  * @property-read int $id
- * @property string $bookTitle:book_title
+ * @property string $bookTitle -> book_title
  * @property DateTime|NULL $written
  * @property bool $available
  */

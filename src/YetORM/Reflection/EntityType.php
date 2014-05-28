@@ -28,6 +28,9 @@ class EntityType extends NClassType
 	private static $annProps = array();
 
 
+	const PROP_COLUMN_DELIMITER = '->';
+
+
 	/** @return EntityProperty[] */
 	function getEntityProperties()
 	{
@@ -173,9 +176,8 @@ class EntityType extends NClassType
 
 							// parse column name
 							$column = $name;
-							if (($pos = strpos($name, ':')) !== FALSE) {
-								$column = substr($name, $pos + 1);
-								$name = substr($name, 0, $pos);
+							if (isset($split[2], $split[3]) && $split[2] === self::PROP_COLUMN_DELIMITER) {
+								$column = $split[3];
 							}
 
 							self::$annProps[$class][$name] = new AnnotationProperty(
