@@ -1,18 +1,16 @@
 <?php
 
-use Tracy\Debugger;
-
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/yetorm.php';
 require_once __DIR__ . '/model/ServiceLocator.php';
 
 
-Debugger::enable(Debugger::DEVELOPMENT, FALSE);
-Debugger::$strictMode = TRUE;
-Debugger::$maxDepth = FALSE;
-Debugger::$maxLen = FALSE;
+Tester\Environment::setup();
 
 function id($a) { return $a; }
+function test(\Closure $function) { $function(); }
+
+Tester\Environment::lock();
 
 ServiceLocator::getCacheStorage()->clean(array(
 	Nette\Caching\Cache::ALL => TRUE,

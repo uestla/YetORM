@@ -19,10 +19,9 @@
 	},
 
 	"require-dev": {
-		"tracy/tracy": "*",
+		"nette/tester": "*",
 		"nette/caching": "*",
-		"nette/robot-loader": "*",
-		"phpunit/phpunit": "*"
+		"nette/robot-loader": "*"
 	},
 
 	"autoload": {

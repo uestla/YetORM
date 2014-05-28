@@ -41,7 +41,7 @@ class ServiceLocator
 					self::getCacheStorage()
 			);
 
-			Nette\Database\Helpers::loadFromFile($connection, __DIR__ . '/db/db.sql');
+			Nette\Database\Helpers::loadFromFile($connection, __DIR__ . '/db.sql');
 		}
 
 		return self::$dbContext;
