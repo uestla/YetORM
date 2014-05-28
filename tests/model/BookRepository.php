@@ -47,7 +47,7 @@ class BookRepository extends YetORM\Repository
 
 		return $this->transaction(function () use ($me, $book) {
 
-			$cnt = parent::persist($book);
+			$status = parent::persist($book);
 
 			// persist tags
 			if (count($book->getAddedTags()) || count($book->getRemovedTags())) {
@@ -80,7 +80,7 @@ class BookRepository extends YetORM\Repository
 				}
 			}
 
-			return $cnt;
+			return $status;
 
 		});
 	}

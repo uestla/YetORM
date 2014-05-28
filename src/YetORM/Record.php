@@ -92,18 +92,18 @@ class Record
 	}
 
 
-	/** @return int */
+	/** @return bool */
 	function update()
 	{
 		$this->checkRow();
 
-		$cnt = 0;
+		$status = 0;
 		if (!$this->isPersisted()) {
-			$cnt = $this->row->update($this->modified);
+			$status = $this->row->update($this->modified);
 			$this->reload($this->row);
 		}
 
-		return $cnt;
+		return $status;
 	}
 
 

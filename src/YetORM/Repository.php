@@ -100,7 +100,7 @@ abstract class Repository extends Nette\Object
 
 	/**
 	 * @param  Entity $entity
-	 * @return int
+	 * @return bool
 	 */
 	function persist(Entity $entity)
 	{
@@ -116,7 +116,7 @@ abstract class Repository extends Nette\Object
 
 			$inserted = $me->getTable()->insert($record->getModified());
 			$record->setRow($inserted);
-			return 1;
+			return $inserted instanceof \Nette\Database\IRow || $inserted > 0;
 
 		});
 	}
