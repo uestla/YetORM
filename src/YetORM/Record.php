@@ -97,7 +97,7 @@ class Record
 	{
 		$this->checkRow();
 
-		$status = 0;
+		$status = TRUE;
 		if (!$this->isPersisted()) {
 			$status = $this->row->update($this->modified);
 			$this->reload($this->row);
