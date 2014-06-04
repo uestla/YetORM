@@ -27,10 +27,10 @@ class Book extends BaseEntity
 
 
 	/**
-	 * @param  NActiveRow $row
+	 * @param  NActiveRow|YetORM\Record $row
 	 * @param  string $imageDir
 	 */
-	function __construct(NActiveRow $row = NULL, $imageDir = NULL)
+	function __construct($row = NULL, $imageDir = NULL)
 	{
 		parent::__construct($row);
 

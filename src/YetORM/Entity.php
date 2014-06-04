@@ -25,10 +25,10 @@ abstract class Entity
 	private static $reflections = array();
 
 
-	/** @param  NActiveRow $row */
-	function __construct(NActiveRow $row = NULL)
+	/** @param  NActiveRow|Record $row */
+	function __construct($row = NULL)
 	{
-		$this->record = new Record($row);
+		$this->record = Record::create($row);
 	}
 
 

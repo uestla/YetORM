@@ -36,6 +36,24 @@ class Record
 	}
 
 
+	/**
+	 * @param  NActiveRow|Record $row
+	 * @return Record
+	 */
+	static function create($row = NULL)
+	{
+		if ($row === NULL || $row instanceof NActiveRow) {
+			return new static($row);
+
+		} elseif ($row instanceof Record) {
+			return $row;
+
+		} else {
+			throw new Exception\InvalidArgumentException("Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, '" . get_class($row) . "' given.");
+		}
+	}
+
+
 	/** @return bool */
 	function hasRow()
 	{
@@ -64,12 +82,13 @@ class Record
 	/**
 	 * @param  string $key
 	 * @param  string $throughColumn
-	 * @return NActiveRow|NULL
+	 * @return Record|NULL
 	 */
 	function ref($key, $throughColumn = NULL)
 	{
 		$this->checkRow();
-		return $this->row->ref($key, $throughColumn);
+		$native = $this->row->ref($key, $throughColumn);
+		return $native instanceof NActiveRow ? new static($native) : NULL;
 	}
 
 
@@ -125,7 +144,9 @@ class Record
 			throw new Exception\MemberAccessException("The value of column '$name' not set.");
 		}
 
-		$value = $this->values[$name] = $this->row->$name;
+		$native = $this->row->$name;
+		$value = $this->values[$name] = $native instanceof NActiveRow ? new static($native) : $native;
+
 		return $value;
 	}
 
