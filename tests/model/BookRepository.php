@@ -39,7 +39,7 @@ class BookRepository extends YetORM\Repository
 
 	/**
 	 * @param  Book $book
-	 * @return int
+	 * @return bool
 	 */
 	function persist(YetORM\Entity $book)
 	{
