@@ -124,7 +124,7 @@ abstract class Repository extends Nette\Object
 
 	/**
 	 * @param  Entity $entity
-	 * @return int
+	 * @return bool
 	 */
 	function delete(Entity $entity)
 	{
@@ -133,11 +133,11 @@ abstract class Repository extends Nette\Object
 
 		if ($record->hasRow()) {
 			return $this->transaction(function () use ($record) {
-				return $record->getRow()->delete();
+				return $record->getRow()->delete() > 0;
 			});
 		}
 
-		return 1;
+		return TRUE;
 	}
 
 

@@ -194,6 +194,6 @@ test(function () {
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
 	Assert::equal(5, count($repo->getAll()));
-	Assert::equal(1, $repo->delete($repo->getByID(5)));
+	Assert::equal(TRUE, $repo->delete($repo->getByID(5)));
 	Assert::equal(4, count($repo->getAll()));
 });
