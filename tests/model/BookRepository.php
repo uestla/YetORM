@@ -47,6 +47,7 @@ class BookRepository extends YetORM\Repository
 
 		return $this->transaction(function () use ($me, $book) {
 
+			$book->onPersist($book);
 			$status = parent::persist($book);
 
 			// persist tags

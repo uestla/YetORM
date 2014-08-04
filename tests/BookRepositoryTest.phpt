@@ -197,3 +197,18 @@ test(function () {
 	Assert::equal(TRUE, $repo->delete($repo->getByID(5)));
 	Assert::equal(4, count($repo->getAll()));
 });
+
+
+// events
+test(function () {
+	$fired = FALSE;
+
+	$repo = ServiceLocator::getBookRepository();
+	$book = $repo->getByID(1);
+	$book->onPersist[] = function () use (& $fired) {
+		$fired = TRUE;
+	};
+
+	$repo->persist($book);
+	Assert::true($fired);
+});

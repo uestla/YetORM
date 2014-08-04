@@ -12,6 +12,7 @@
 namespace YetORM;
 
 use Nette;
+use Nette\Utils\Callback as NCallback;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
@@ -42,10 +43,23 @@ abstract class Entity
 	/**
 	 * @param  string $name
 	 * @param  array $args
-	 * @return mixed
+	 * @return void
 	 */
 	function __call($name, $args)
 	{
+		// events support
+		$ref = static::getReflection();
+		if (preg_match('#^on[A-Z]#', $name) && $ref->hasProperty($name)) {
+			$prop = $ref->getProperty($name);
+			if ($prop->isPublic() && !$prop->isStatic() && (is_array($this->$name) || $this->$name instanceof \Traversable)) {
+				foreach ($this->$name as $cb) {
+					NCallback::invokeArgs($cb, $args);
+				}
+
+				return ;
+			}
+		}
+
 		$class = get_class($this);
 		throw new Exception\MemberAccessException("Call to undefined method $class::$name().");
 	}

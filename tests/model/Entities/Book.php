@@ -16,6 +16,9 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 class Book extends BaseEntity
 {
 
+	/** @var array */
+	public $onPersist = array();
+
 	/** @var Tag[] */
 	private $addedTags = array();
 
