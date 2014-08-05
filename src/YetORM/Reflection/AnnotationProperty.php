@@ -31,10 +31,11 @@ class AnnotationProperty extends EntityProperty
 	 * @param  string $type
 	 * @param  string $column
 	 * @param  bool $nullable
+	 * @param  string $description
 	 */
-	function __construct($reflection, $name, $readonly, $type, $column, $nullable)
+	function __construct($reflection, $name, $readonly, $type, $column, $nullable, $description = NULL)
 	{
-		parent::__construct($reflection, $name, $readonly, $type);
+		parent::__construct($reflection, $name, $readonly, $type, $description);
 
 		$this->column = (string) $column;
 		$this->nullable = (bool) $nullable;

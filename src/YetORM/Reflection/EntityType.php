@@ -95,11 +95,14 @@ class EntityType extends NClassType
 					$type = Aliaser::getClass($type, $this);
 				}
 
+				$description = trim(preg_replace('#^\s*@.*#m', '', preg_replace('#^\s*\* ?#m', '', trim($method->getDocComment(), "/* \r\n\t"))));
+
 				$this->properties[$name] = new MethodProperty(
 					$this,
 					$name,
 					!$this->hasMethod('set' . ucfirst($name)),
-					$type
+					$type,
+					strlen($description) ? $description : NULL
 				);
 			}
 		}
@@ -135,60 +138,57 @@ class EntityType extends NClassType
 			foreach ($ref->getAnnotations() as $ann => $values) {
 				if ($ann === 'property' || $ann === 'property-read') {
 					foreach ($values as $tmp) {
-						$split = NStrings::split($tmp, '#\s#');
+						$matches = NStrings::match($tmp, '#^[ \t]*(?P<type>\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*(?:\|\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*)?)[ \t]+(?P<property>\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:[ \t]+->[ \t]+(?P<column>[a-zA-Z0-9_-]+))?[ \t]*(?P<description>.*)\z#');
 
-						if (count($split) >= 2) {
-							list($type, $var) = $split;
+						if ($matches == NULL) {
+							throw new YetORM\Exception\InvalidStateException('Invalid property definition - "@' . $ann . ' ' . $tmp . '" does not match "@property[-read] <type> $<property> [-> <column>][ <description>]" pattern.');
+						}
 
-							// support NULL type
-							$nullable = FALSE;
-							$types = explode('|', $type, 2);
-							if (count($types) === 2) {
-								if (strcasecmp($types[0], 'null') === 0) {
-									$type = $types[1];
-									$nullable = TRUE;
+						$nullable = FALSE;
+						$type = $matches['type'];
+
+						$types = explode('|', $type, 2);
+						if (count($types) === 2) {
+							if (strcasecmp($types[0], 'NULL') === 0) {
+								$nullable = TRUE;
+								$type = $types[1];
+							}
+
+							if (strcasecmp($types[1], 'NULL') === 0) {
+								if ($nullable) {
+									throw new YetORM\Exception\InvalidStateException('Invalid property type (double NULL).');
 								}
 
-								if (strcasecmp($types[1], 'null') === 0) {
-									if ($nullable) {
-										throw new YetORM\Exception\InvalidStateException('Invalid property type (double NULL).');
-									}
-
-									$type = $types[0];
-									$nullable = TRUE;
-								}
+								$nullable = TRUE;
+								$type = $types[0];
 							}
+						}
 
-							// unify type name
-							if ($type === 'bool') {
-								$type = 'boolean';
+						if ($type === 'bool') {
+							$type = 'boolean';
 
-							} elseif ($type === 'int') {
-								$type = 'integer';
-							}
+						} elseif ($type === 'int') {
+							$type = 'integer';
+						}
 
-							if (!EntityProperty::isNativeType($type)) {
-								$type = Aliaser::getClass($type, $ref);
-							}
+						if (!EntityProperty::isNativeType($type)) {
+							$type = Aliaser::getClass($type, $ref);
+						}
 
-							$name = substr($var, 1);
-							$readonly = $ann === 'property-read';
+						$readonly = $ann === 'property-read';
+						$name = substr($matches['property'], 1);
+						$column = strlen($matches['column']) ? $matches['column'] : $name;
+						$description = strlen($matches['description']) ? $matches['description'] : NULL;
 
-							// parse column name
-							$column = $name;
-							if (isset($split[2], $split[3]) && $split[2] === self::PROP_COLUMN_DELIMITER) {
-								$column = $split[3];
-							}
-
-							self::$annProps[$class][$name] = new AnnotationProperty(
+						self::$annProps[$class][$name] = new AnnotationProperty(
 								$ref,
 								$name,
 								$readonly,
 								$type,
 								$column,
-								$nullable
-							);
-						}
+								$nullable,
+								$description
+						);
 					}
 				}
 			}

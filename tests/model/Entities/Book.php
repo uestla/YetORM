@@ -9,7 +9,7 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 
 /**
  * @property-read int $id
- * @property string $bookTitle -> book_title
+ * @property string $bookTitle -> book_title Title   of	the		book
  * @property DateTime|NULL $written
  * @property bool $available
  */
@@ -85,7 +85,15 @@ class Book extends BaseEntity
 	}
 
 
-	/** @return Author */
+	/**
+	 * Returns author of the book.
+	 *
+	 * What a useful method!
+	 * Love it <3
+	 *
+	 * @todo just for description test purposes
+	 * @return Author
+	 */
 	function getAuthor()
 	{
 		return new Author($this->record->author);
@@ -103,7 +111,11 @@ class Book extends BaseEntity
 	}
 
 
-	/** @return YetORM\EntityCollection */
+	/**
+	 *
+	 *
+	 * @return YetORM\EntityCollection
+	 */
 	function getTags()
 	{
 		$selection = $this->record->related('book_tag');

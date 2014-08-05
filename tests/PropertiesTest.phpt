@@ -150,3 +150,28 @@ test(function () {
 
 	}, 'YetORM\Exception\MemberAccessException', "The value of column 'book_title' not set.");
 });
+
+
+// property description
+test(function () {
+	$ref = Model\Entities\Book::getReflection();
+
+	$titleprop = $ref->getEntityProperty('bookTitle');
+	Assert::true($titleprop->hasDescription());
+	Assert::same('Title   of	the		book', $titleprop->getDescription());
+
+	$writtenprop = $ref->getEntityProperty('written');
+	Assert::false($writtenprop->hasDescription());
+	Assert::null($writtenprop->getDescription());
+
+	$authorprop = $ref->getEntityProperty('author');
+	Assert::true($authorprop->hasDescription());
+	Assert::same('Returns author of the book.
+
+What a useful method!
+Love it <3', $authorprop->getDescription());
+
+	$tagsprop = $ref->getEntityProperty('tags');
+	Assert::false($tagsprop->hasDescription());
+	Assert::null($tagsprop->getDescription());
+});

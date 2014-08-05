@@ -9,6 +9,7 @@ Tester\Environment::setup();
 
 function id($a) { return $a; }
 function test(\Closure $function) { $function(); }
+function dd() { call_user_func_array('dump', func_get_args()); die(); }
 
 Tester\Environment::lock();
 
