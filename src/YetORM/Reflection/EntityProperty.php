@@ -47,7 +47,7 @@ abstract class EntityProperty extends Nette\Object
 
 
 	/** @return EntityType */
-	function getEntityReflectioin()
+	function getEntityReflection()
 	{
 		return $this->reflection;
 	}

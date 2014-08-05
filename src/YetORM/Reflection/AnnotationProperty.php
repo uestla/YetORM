@@ -57,7 +57,7 @@ class AnnotationProperty extends EntityProperty
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {
-				$entity = $this->getEntityReflectioin()->getName();
+				$entity = $this->getEntityReflection()->getName();
 				throw new YetORM\Exception\InvalidArgumentException("Property '{$entity}::\${$this->getName()}' cannot be NULL.");
 			}
 
