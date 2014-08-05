@@ -30,6 +30,9 @@ abstract class EntityProperty extends Nette\Object
 	/** @var string */
 	private $type;
 
+	/** @var string */
+	private $description;
+
 
 	/**
 	 * @param  EntityType $reflection
@@ -37,12 +40,13 @@ abstract class EntityProperty extends Nette\Object
 	 * @param  bool $readonly
 	 * @param  string $type
 	 */
-	function __construct(EntityType $reflection, $name, $readonly, $type)
+	function __construct(EntityType $reflection, $name, $readonly, $type, $description)
 	{
 		$this->reflection = $reflection;
 		$this->name = (string) $name;
 		$this->readonly = (bool) $readonly;
 		$this->type = (string) $type;
+		$this->description = (string) $description;
 	}
 
 
@@ -71,6 +75,12 @@ abstract class EntityProperty extends Nette\Object
 	function getType()
 	{
 		return $this->type;
+	}
+
+	/** @return string */
+	function getDescription()
+	{
+		return $this->description;
 	}
 
 

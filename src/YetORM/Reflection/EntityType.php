@@ -90,6 +90,7 @@ class EntityType extends NClassType
 
 				$name = lcfirst(substr($method->name, 3));
 				$type = $method->getAnnotation('return');
+				$description = $method->getAnnotation('description');
 
 				if (!EntityProperty::isNativeType($type)) {
 					$type = Aliaser::getClass($type, $this);
@@ -99,7 +100,8 @@ class EntityType extends NClassType
 					$this,
 					$name,
 					!$this->hasMethod('set' . ucfirst($name)),
-					$type
+					$type,
+					$description
 				);
 			}
 		}
@@ -173,11 +175,17 @@ class EntityType extends NClassType
 
 							$name = substr($var, 1);
 							$readonly = $ann === 'property-read';
+							$description = null;
 
 							// parse column name
 							$column = $name;
 							if (isset($split[2], $split[3]) && $split[2] === self::PROP_COLUMN_DELIMITER) {
 								$column = $split[3];
+								if (isset($split[4])) {
+									$description = implode(' ', array_slice($split, 4));
+								}
+							} else if (isset($split[2])) {
+								$description = implode(' ', array_slice($split, 2));
 							}
 
 							self::$annProps[$class][$name] = new AnnotationProperty(
@@ -185,6 +193,7 @@ class EntityType extends NClassType
 								$name,
 								$readonly,
 								$type,
+								$description,
 								$column,
 								$nullable
 							);
