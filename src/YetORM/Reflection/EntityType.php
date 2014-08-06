@@ -28,9 +28,6 @@ class EntityType extends NClassType
 	private static $annProps = array();
 
 
-	const PROP_COLUMN_DELIMITER = '->';
-
-
 	/** @return EntityProperty[] */
 	function getEntityProperties()
 	{
