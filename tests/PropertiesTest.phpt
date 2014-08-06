@@ -154,24 +154,34 @@ test(function () {
 
 // property description
 test(function () {
-	$ref = Model\Entities\Book::getReflection();
+	$bookref = Model\Entities\Book::getReflection();
 
-	$titleprop = $ref->getEntityProperty('bookTitle');
+	$titleprop = $bookref->getEntityProperty('bookTitle');
 	Assert::true($titleprop->hasDescription());
 	Assert::same('Title   of	the		book', $titleprop->getDescription());
 
-	$writtenprop = $ref->getEntityProperty('written');
+	$writtenprop = $bookref->getEntityProperty('written');
 	Assert::false($writtenprop->hasDescription());
 	Assert::null($writtenprop->getDescription());
 
-	$authorprop = $ref->getEntityProperty('author');
+	$authorprop = $bookref->getEntityProperty('author');
 	Assert::true($authorprop->hasDescription());
 	Assert::same('Returns author of the book.
 
 What a useful method!
 Love it <3', $authorprop->getDescription());
 
-	$tagsprop = $ref->getEntityProperty('tags');
+	$tagsprop = $bookref->getEntityProperty('tags');
 	Assert::false($tagsprop->hasDescription());
 	Assert::null($tagsprop->getDescription());
+
+	$authref = Model\Entities\Author::getReflection();
+
+	$webprop = $authref->getEntityProperty('web');
+	Assert::true($webprop->hasDescription());
+	Assert::same('Author\'s personal website', $webprop->getDescription());
+
+	$birthprop = $authref->getEntityProperty('born');
+	Assert::true($birthprop->hasDescription());
+	Assert::same('person\'s birthday', $birthprop->getDescription());
 });

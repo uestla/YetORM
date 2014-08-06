@@ -7,7 +7,7 @@ use Nette;
 
 /**
  * @property-read int $id
- * @property-read Nette\Utils\DateTime|NULL $born
+ * @property-read Nette\Utils\DateTime|NULL $born   person's birthday
  */
 abstract class Person extends BaseEntity
 {

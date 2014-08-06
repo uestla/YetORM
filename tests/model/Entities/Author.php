@@ -5,7 +5,7 @@ namespace Model\Entities;
 use YetORM;
 
 
-/** @property-read string $web */
+/** @property-read string $web Author's personal website          */
 class Author extends Person
 {
 
