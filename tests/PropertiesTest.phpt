@@ -132,13 +132,21 @@ test(function () {
 });
 
 
-// annotation fail
+// double NULL annotation fail
 test(function () {
 	Assert::exception(function () {
-		$bad = new Model\Entities\BadEntity;
-		$bad->toArray();
+		Model\Entities\BadDoubleNullEntity::getReflection()->getEntityProperties();
 
 	}, 'YetORM\Exception\InvalidStateException', 'Invalid property type (double NULL).');
+});
+
+
+// multiple non-NULL property type fail
+test(function () {
+	Assert::exception(function () {
+		Model\Entities\BadMultipleTypeEntity::getReflection()->getEntityProperties();
+
+	}, 'YetORM\Exception\InvalidStateException', 'Invalid property type (multiple non-NULL types detected).');
 });
 
 

@@ -159,6 +159,10 @@ class EntityType extends NClassType
 								$nullable = TRUE;
 								$type = $types[0];
 							}
+
+							if (!$nullable) {
+								throw new \YetORM\Exception\InvalidStateException('Invalid property type (multiple non-NULL types detected).');
+							}
 						}
 
 						if ($type === 'bool') {
