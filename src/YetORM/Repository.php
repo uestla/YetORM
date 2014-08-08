@@ -180,8 +180,11 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function rollback()
 	{
-		$this->database->rollBack();
-		self::$transactionCounter[$this->database->getConnection()->getDsn()] = 0;
+		if (self::$transactionCounter[$dsn = $this->database->getConnection()->getDsn()] !== 0) {
+			$this->database->rollBack();
+		}
+
+		self::$transactionCounter[$dsn] = 0;
 	}
 
 
