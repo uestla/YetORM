@@ -212,3 +212,18 @@ test(function () {
 	$repo->persist($book);
 	Assert::true($fired);
 });
+
+
+// custom exception
+test(function () {
+	Assert::exception(function () {
+		$repo = ServiceLocator::getBookRepository();
+		$book = $repo->createBook();
+		$book->bookTitle = 'Nette'; // duplicate title
+		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
+		$book->written = new Nette\Utils\DateTime;
+		$book->available = TRUE;
+		$repo->persist($book);
+
+	}, 'Model\Repositories\DuplicateEntryException');
+});

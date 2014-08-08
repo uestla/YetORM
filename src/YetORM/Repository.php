@@ -203,8 +203,17 @@ abstract class Repository extends Nette\Object
 
 		} catch (\Exception $e) {
 			$this->rollback();
+			$this->handleException($e);
 			throw $e;
 		}
 	}
+
+
+	/**
+	 * @param  \Exception $e
+	 * @return void
+	 */
+	protected function handleException(\Exception $e)
+	{}
 
 }

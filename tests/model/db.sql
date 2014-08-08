@@ -27,8 +27,8 @@ CREATE TABLE `book` (
   `written` date DEFAULT NULL,
   `available` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `book_title` (`book_title`),
   KEY `book_author` (`author_id`),
-  KEY `book_title` (`book_title`),
   CONSTRAINT `book_author` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 

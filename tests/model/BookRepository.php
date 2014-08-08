@@ -125,4 +125,16 @@ class BookRepository extends YetORM\Repository
 		return $this->imageDir;
 	}
 
+
+	protected function handleException(\Exception $e)
+	{
+		if ((int) $e->getCode() === 23000) {
+			throw new DuplicateEntryException;
+		}
+	}
+
 }
+
+
+class DuplicateEntryException extends \Exception
+{}
