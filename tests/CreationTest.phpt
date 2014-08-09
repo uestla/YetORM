@@ -9,7 +9,7 @@ use Tester\Assert;
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
 
-	$book = $repo->createBook();
+	$book = $repo->createEntity();
 	$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 	$book->bookTitle = 'Brand new book';
 
@@ -25,7 +25,7 @@ test(function () {
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
 
-	$book = $repo->createBook();
+	$book = $repo->createEntity();
 	$book->bookTitle = 'Testing book';
 	$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 	$book->addTag('PHP');

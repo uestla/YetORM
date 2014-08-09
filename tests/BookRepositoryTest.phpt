@@ -135,7 +135,7 @@ test(function () {
 	$repo = ServiceLocator::getBookRepository();
 
 	// creation
-	$book = $repo->createBook();
+	$book = $repo->createEntity();
 	$book->bookTitle = 'Texy 2';
 	$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(12));
 	$book->written = new Nette\Utils\DateTime('2008-01-01');
@@ -218,7 +218,7 @@ test(function () {
 test(function () {
 	Assert::exception(function () {
 		$repo = ServiceLocator::getBookRepository();
-		$book = $repo->createBook();
+		$book = $repo->createEntity();
 		$book->bookTitle = 'Nette'; // duplicate title
 		$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 		$book->written = new Nette\Utils\DateTime;

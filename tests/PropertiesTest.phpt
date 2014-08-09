@@ -153,7 +153,7 @@ test(function () {
 // uninitialized column value
 test(function () {
 	Assert::exception(function () {
-		$book = ServiceLocator::getBookRepository()->createBook();
+		$book = ServiceLocator::getBookRepository()->createEntity();
 		$book->toRecord()->book_title;
 
 	}, 'YetORM\Exception\MemberAccessException', "The value of column 'book_title' not set.");
@@ -174,10 +174,7 @@ test(function () {
 
 	$authorprop = $bookref->getEntityProperty('author');
 	Assert::true($authorprop->hasDescription());
-	Assert::same('Returns author of the book.
-
-What a useful method!
-Love it <3', $authorprop->getDescription());
+	Assert::same("Returns author of the book.\n\nWhat a useful method!\nLove it <3", Nette\Utils\Strings::normalizeNewLines($authorprop->getDescription()));
 
 	$tagsprop = $bookref->getEntityProperty('tags');
 	Assert::false($tagsprop->hasDescription());

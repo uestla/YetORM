@@ -91,21 +91,21 @@ class BookRepository extends YetORM\Repository
 	function getByID($id)
 	{
 		$row = $this->getTable()->get($id);
-		return $row === FALSE ? NULL : $this->createBook($row);
+		return $row === FALSE ? NULL : $this->createEntity($row);
 	}
 
 
 	/** @return YetORM\EntityCollection */
 	function getByTag($name)
 	{
-		return $this->createCollection($this->getTable()->where(':book_tag.tag.name', $name), $this->createBook);
+		return $this->createCollection($this->getTable()->where(':book_tag.tag.name', $name));
 	}
 
 
 	/** @return YetORM\EntityCollection */
 	function getAll()
 	{
-		return $this->createCollection($this->getTable(), $this->createBook);
+		return $this->createCollection($this->getTable());
 	}
 
 
@@ -113,7 +113,7 @@ class BookRepository extends YetORM\Repository
 	 * @param  NActiveRow $row
 	 * @return Book
 	 */
-	function createBook(NActiveRow $row = NULL)
+	function createEntity(NActiveRow $row = NULL)
 	{
 		return new Book($row, $this->imageDir);
 	}

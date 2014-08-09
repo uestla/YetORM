@@ -14,6 +14,7 @@ namespace YetORM;
 use Nette;
 use Aliaser\Container as Aliaser;
 use Nette\Database\Context as NdbContext;
+use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
 
 
@@ -45,15 +46,26 @@ abstract class Repository extends Nette\Object
 
 
 	/**
+	 * @param  NActiveRow $row
+	 * @return Entity
+	 */
+	function createEntity(NActiveRow $row = NULL)
+	{
+		$class = $this->getEntityClass();
+		return new $class($row);
+	}
+
+
+	/**
 	 * @param  NSelection $selection
-	 * @param  string $entity
+	 * @param  string|callable $entity
 	 * @param  string $refTable
 	 * @param  string $refColumn
 	 * @return EntityCollection
 	 */
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
 	{
-		return new EntityCollection($selection, $entity === NULL ? $this->getEntityClass() : $entity, $refTable, $refColumn);
+		return new EntityCollection($selection, $entity === NULL ? $this->createEntity : $entity, $refTable, $refColumn);
 	}
 
 
