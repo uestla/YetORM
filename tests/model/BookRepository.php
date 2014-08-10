@@ -126,6 +126,10 @@ class BookRepository extends YetORM\Repository
 	}
 
 
+	/**
+	 * @param  \Exception $e
+	 * @return void
+	 */
 	protected function handleException(\Exception $e)
 	{
 		if ((int) $e->getCode() === 23000) {
