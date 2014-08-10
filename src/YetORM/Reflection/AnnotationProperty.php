@@ -66,7 +66,7 @@ class AnnotationProperty extends EntityProperty
 			$class = $this->getType();
 			if (!($value instanceof $class)) {
 				throw new YetORM\Exception\InvalidArgumentException("Instance of '{$class}' expected, '"
-						. get_class($value) . "' given.");
+						. (($valtype = gettype($value)) === 'object' ? get_class($value) : $valtype) . "' given.");
 			}
 
 		} elseif ($need && ($type = gettype($value)) !== $this->getType()) {
