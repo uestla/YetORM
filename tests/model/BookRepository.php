@@ -11,6 +11,8 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 /**
  * @table  book
  * @entity Book
+ * @method Book|NULL getByBook_title(string $title)
+ * @method \YetORM\EntityCollection|Book[] findByAvailable(bool $available)
  */
 class BookRepository extends YetORM\Repository
 {
@@ -87,25 +89,10 @@ class BookRepository extends YetORM\Repository
 	}
 
 
-	/** @return Book|NULL */
-	function getByID($id)
-	{
-		$row = $this->getTable()->get($id);
-		return $row === FALSE ? NULL : $this->createEntity($row);
-	}
-
-
 	/** @return YetORM\EntityCollection */
-	function getByTag($name)
+	function findByTag($name)
 	{
 		return $this->createCollection($this->getTable()->where(':book_tag.tag.name', $name));
-	}
-
-
-	/** @return YetORM\EntityCollection */
-	function getAll()
-	{
-		return $this->createCollection($this->getTable());
 	}
 
 

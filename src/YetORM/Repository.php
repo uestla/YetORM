@@ -58,6 +58,17 @@ abstract class Repository extends Nette\Object
 
 	/**
 	 * @param  NSelection $selection
+	 * @return Entity|NULL
+	 */
+	protected function createEntityFromSelection(NSelection $selection)
+	{
+		$row = $selection->fetch();
+		return $row === FALSE ? NULL : $this->createEntity($row);
+	}
+
+
+	/**
+	 * @param  NSelection $selection
 	 * @param  string|callable $entity
 	 * @param  string $refTable
 	 * @param  string $refColumn
@@ -150,6 +161,78 @@ abstract class Repository extends Nette\Object
 		}
 
 		return TRUE;
+	}
+
+
+	/**
+	 * @param  mixed $id
+	 * @return Entity|NULL
+	 */
+	function getByID($id)
+	{
+		return $this->createEntityFromSelection($this->getTable()->wherePrimary($id));
+	}
+
+
+	/**
+	 * @param  array $criteria
+	 * @return EntityCollection
+	 */
+	function findBy(array $criteria = array())
+	{
+		$selection = $this->getTable();
+		foreach ($criteria as $column => $value) {
+			$selection->where($column, $value);
+		}
+
+		return $this->createCollection($selection);
+	}
+
+
+	/** @return EntityCollection */
+	function findAll()
+	{
+		return $this->findBy();
+	}
+
+
+	/**
+	 * @param  string $name
+	 * @param  array $args
+	 * @return mixed
+	 */
+	function __call($name, $args)
+	{
+		if (strncmp($name, 'getBy', 5) === 0 && strlen($name) > 5) {
+			$selection = $this->getTable()->limit(1);
+			$columns = explode('And', substr($name, 5));
+
+			if (count($columns) !== count($args)) {
+				throw new Exception\InvalidArgumentException;
+			}
+
+			foreach ($columns as $key => $column) {
+				$selection->where(strtolower($column), $args[$key]);
+			}
+
+			return $this->createEntityFromSelection($selection);
+
+		} elseif (strncmp($name, 'findBy', 6) === 0 && strlen($name) > 6) {
+			$selection = $this->getTable();
+			$columns = explode('And', substr($name, 6));
+
+			if (count($columns) !== count($args)) {
+				throw new Exception\InvalidArgumentException;
+			}
+
+			foreach ($columns as $key => $column) {
+				$selection->where(strtolower($column), $args[$key]);
+			}
+
+			return $this->createCollection($selection);
+		}
+
+		return parent::__call($name, $args);
 	}
 
 

@@ -54,7 +54,7 @@ test(function () {
 // backjoin filter
 test(function () {
 	$books = array();
-	foreach (ServiceLocator::getBookRepository()->getByTag('PHP') as $book) {
+	foreach (ServiceLocator::getBookRepository()->findByTag('PHP') as $book) {
 		$books[] = $book->bookTitle;
 	}
 
@@ -65,7 +65,7 @@ test(function () {
 // count
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
-	$allbooks = $repo->getAll();
+	$allbooks = $repo->findAll();
 	$booktags = $repo->getByID(3)->getTags();
 
 	Assert::equal(4, count($allbooks->limit(2))); // data not received yet -> count as non-limited
@@ -80,7 +80,7 @@ test(function () {
  */
 test(function () {
 	// prepare data
-	$books = ServiceLocator::getBookRepository()->getAll();
+	$books = ServiceLocator::getBookRepository()->findAll();
 
 	// paginate result
 	$paginator = new Nette\Utils\Paginator;
@@ -117,7 +117,7 @@ test(function () {
 		$native = ob_get_clean();
 
 	ob_start();
-		foreach (ServiceLocator::getBookRepository()->getAll() as $book) {
+		foreach (ServiceLocator::getBookRepository()->findAll() as $book) {
 			foreach ($book->getTags()->orderBy('tag.name', EC::DESC) as $tag) {
 				echo $tag->name, ', ';
 			}
@@ -193,9 +193,9 @@ test(function () {
 // delete
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
-	Assert::equal(5, count($repo->getAll()));
+	Assert::equal(5, count($repo->findAll()));
 	Assert::equal(TRUE, $repo->delete($repo->getByID(5)));
-	Assert::equal(4, count($repo->getAll()));
+	Assert::equal(4, count($repo->findAll()));
 });
 
 
@@ -226,4 +226,17 @@ test(function () {
 		$repo->persist($book);
 
 	}, 'Model\Repositories\DuplicateEntryException');
+});
+
+
+// magic findBy() method
+test(function () {
+	Assert::same(4, count(ServiceLocator::getBookRepository()->findByAvailable(TRUE)));
+});
+
+
+// magic getBy() method
+test(function () {
+	Assert::true(ServiceLocator::getBookRepository()->getByBook_title('Nette') instanceof \Model\Entities\Book);
+	Assert::null(ServiceLocator::getBookRepository()->getByBook_title('as567tfa6sd54f6'));
 });

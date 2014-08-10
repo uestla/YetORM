@@ -23,7 +23,7 @@ class BookService
 	/** @return YetORM\EntityCollection */
 	function getLatest()
 	{
-		return $this->repository->getAll()
+		return $this->repository->findAll()
 				->orderBy('written', EC::DESC)
 				->limit(3);
 	}
