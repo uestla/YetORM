@@ -178,7 +178,7 @@ abstract class Repository extends Nette\Object
 	 * @param  array $criteria
 	 * @return EntityCollection
 	 */
-	function findBy(array $criteria = array())
+	function findBy(array $criteria)
 	{
 		$selection = $this->getTable();
 		foreach ($criteria as $column => $value) {
@@ -192,7 +192,7 @@ abstract class Repository extends Nette\Object
 	/** @return EntityCollection */
 	function findAll()
 	{
-		return $this->findBy();
+		return $this->findBy(array());
 	}
 
 
