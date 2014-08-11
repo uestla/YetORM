@@ -212,7 +212,7 @@ abstract class Repository extends Nette\Object
 			}
 
 			foreach ($columns as $key => $column) {
-				$selection->where(strtolower($column), $args[$key]);
+				$selection->where(lcfirst($column), $args[$key]);
 			}
 
 			return $this->createEntityFromSelection($selection);
@@ -225,11 +225,12 @@ abstract class Repository extends Nette\Object
 				throw new Exception\InvalidArgumentException;
 			}
 
+			$criteria = array();
 			foreach ($columns as $key => $column) {
-				$selection->where(strtolower($column), $args[$key]);
+				$criteria[lcfirst($column)] = $args[$key];
 			}
 
-			return $this->createCollection($selection);
+			return $this->findBy($criteria);
 		}
 
 		return parent::__call($name, $args);
