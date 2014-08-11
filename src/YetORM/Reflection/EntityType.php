@@ -12,9 +12,9 @@
 namespace YetORM\Reflection;
 
 use YetORM;
-use Aliaser\Container as Aliaser;
 use Nette\Utils\Strings as NStrings;
 use Nette\Reflection\Method as NMethod;
+use Nette\Reflection\AnnotationsParser;
 use Nette\Reflection\ClassType as NClassType;
 
 
@@ -89,7 +89,7 @@ class EntityType extends NClassType
 				$type = $method->getAnnotation('return');
 
 				if (!EntityProperty::isNativeType($type)) {
-					$type = Aliaser::getClass($type, $this);
+					$type = AnnotationsParser::expandClassName($type, $this);
 				}
 
 				$description = trim(preg_replace('#^\s*@.*#m', '', preg_replace('#^\s*\* ?#m', '', trim($method->getDocComment(), "/* \r\n\t"))));
@@ -173,7 +173,7 @@ class EntityType extends NClassType
 						}
 
 						if (!EntityProperty::isNativeType($type)) {
-							$type = Aliaser::getClass($type, $ref);
+							$type = AnnotationsParser::expandClassName($type, $ref);
 						}
 
 						$readonly = $ann === 'property-read';

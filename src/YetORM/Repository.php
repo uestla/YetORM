@@ -12,7 +12,7 @@
 namespace YetORM;
 
 use Nette;
-use Aliaser\Container as Aliaser;
+use Nette\Reflection\AnnotationsParser;
 use Nette\Database\Context as NdbContext;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
@@ -114,7 +114,7 @@ abstract class Repository extends Nette\Object
 				throw new Exception\InvalidStateException('Entity class not set.');
 			}
 
-			$this->entity = Aliaser::getClass($annotation, $ref);
+			$this->entity = AnnotationsParser::expandClassName($annotation, $ref);
 		}
 
 		return $this->entity;
