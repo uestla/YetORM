@@ -67,7 +67,7 @@ class Book extends YetORM\Entity
 
 With `$record->ref($table, $column)` we're accessing related table row in table `$table` through column `$column` - pretty simple.
 
-The M:N relation is realized with `YetORM\EntityCollection` instance - which is a lazy collection of entities. In this case it iterates throw all related rows from `book_tag` table (first argument), creates instances of `Tag` (second argument) and on every related `book_tag` table row it accesses related `tag` table row, which then passes to the constructor of `Tag` entity :-)
+The M:N relation is realized with `YetORM\EntityCollection` instance - which is a lazy collection of entities. In this case it iterates throw all related rows from `book_tag` table (first argument), creates instances of `Tag` (second argument) and on every related `book_tag` table row it accesses related `tag` table row (third argument), which then passes to the constructor of `Tag` entity :-)
 
 This sounds crazy, but it's actually simple to get used to.
 
@@ -102,7 +102,11 @@ class BookRepository extends YetORM\Repository
 {}
 ```
 
-Now we can simply iterate through all books
+#### Fetching collections
+
+`YetORM\Repository` comes with basic `findAll()` and `findBy($criteria)` methods, both returning already mentioned `EntityCollection`.
+
+We can simply iterate through all books
 
 ```php
 $books = new BookRepository($connection); // $connection instanceof Nette\Database\Context
@@ -115,6 +119,51 @@ foreach ($books->findAll() as $book) { // $book instanceof Book
 	}
 }
 ```
+
+#### Fetching single entity
+
+```php
+$book = $books->getByID(123); // instanceof Book or NULL if not found
+```
+
+#### Magic `findBy<Column>()` and `getBy<Column>()` methods
+
+Instead of manually writing `findByTitle($title)` method as this
+
+```php
+function findByTitle($title)
+{
+	return $this->createCollection($this->getTable()->where('title', $title));
+}
+```
+
+we can just call
+
+```php
+$books->findByTitle($title); // without having the method implemented
+```
+
+That will return a collection of books with that exact title.
+
+When having other unique column(s) than primary key (for example `isbn` in `book` table), we can get a single entity via magic `getBy<Column>($value)` method:
+
+```php
+$book = $books->getByIsbn('<isbn_code>'); // instanceof Book or NULL if not found
+```
+
+Just to have the IDE code completion along with this magic methods, we can use the `@method` annotation:
+
+```php
+/**
+ * @table  book
+ * @entity Book
+ * @method YetORM\EntityCollection|Book[] findByTitle(string $title)
+ * @method Book|NULL getByIsbn(string $isbn)
+ */
+class BookRepository extends YetORM\Repository
+{}
+```
+
 
 And that's it!
 
