@@ -18,7 +18,10 @@ Firstly we'll create entity classes according to the schema above. There are two
 #### Tag
 
 ```php
-/** @property string $name */
+/**
+ * @property-read int $id
+ * @property string $name
+ */
 class Tag extends YetORM\Entity
 {}
 ```
@@ -27,6 +30,7 @@ class Tag extends YetORM\Entity
 
 ```php
 /**
+ * @property-read int $id
  * @property string $name
  * @property string $web
  * @property \DateTime $born
@@ -41,6 +45,7 @@ There are some relations at the `Book` entity - two N:1 `Author` and M:N `Tag` r
 
 ```php
 /**
+ * @property-read int $id
  * @property string $title
  * @property string $web
  * @property string $slogan
@@ -166,6 +171,14 @@ class BookRepository extends YetORM\Repository
 
 
 And that's it!
+
+
+Additional notes
+----------------
+
+- **No identity map**
+- **Query efficiency** - the collections (resp. `YetORM\Record`) uses the power of `Nette\Database` efficiency
+- **Collection operations** - collections can be sorted via `$coll->orderBy($column, $dir)` and limitted via `$coll->limit($limit, $offset)`
 
 
 More
