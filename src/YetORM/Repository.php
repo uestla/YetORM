@@ -39,9 +39,43 @@ abstract class Repository extends Nette\Object
 	{
 		$this->database = $database;
 
-		if (!isset(self::$transactionCounter[$dsn = $database->getConnection()->getDsn()])) {
+		$dsn = $database->getConnection()->getDsn();
+		if (!isset(self::$transactionCounter[$dsn])) {
 			self::$transactionCounter[$dsn] = 0;
 		}
+	}
+
+
+	/**
+	 * @param  mixed $id
+	 * @return Entity|NULL
+	 */
+	function getByID($id)
+	{
+		$selection = $this->getTable()->wherePrimary($id);
+		return $this->createEntityFromSelection($selection);
+	}
+
+
+	/**
+	 * @param  array $criteria
+	 * @return EntityCollection
+	 */
+	function findBy(array $criteria)
+	{
+		$selection = $this->getTable();
+		foreach ($criteria as $column => $value) {
+			$selection->where($column, $value);
+		}
+
+		return $this->createCollection($selection);
+	}
+
+
+	/** @return EntityCollection */
+	function findAll()
+	{
+		return $this->findBy(array());
 	}
 
 
@@ -77,6 +111,49 @@ abstract class Repository extends Nette\Object
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
 	{
 		return new EntityCollection($selection, $entity === NULL ? $this->createEntity : $entity, $refTable, $refColumn);
+	}
+
+
+	/**
+	 * @param  Entity $entity
+	 * @return bool
+	 */
+	function persist(Entity $entity)
+	{
+		$this->checkEntity($entity);
+
+		$me = $this;
+		return $this->transaction(function () use ($me, $entity) {
+
+			$record = $entity->toRecord();
+			if ($record->hasRow()) {
+				return $record->update();
+			}
+
+			$inserted = $me->getTable()->insert($record->getModified());
+			$record->setRow($inserted);
+			return $inserted instanceof Nette\Database\IRow || $inserted > 0;
+
+		});
+	}
+
+
+	/**
+	 * @param  Entity $entity
+	 * @return bool
+	 */
+	function delete(Entity $entity)
+	{
+		$this->checkEntity($entity);
+		$record = $entity->toRecord();
+
+		if ($record->hasRow()) {
+			return $this->transaction(function () use ($record) {
+				return $record->getRow()->delete() > 0;
+			});
+		}
+
+		return TRUE;
 	}
 
 
@@ -121,78 +198,15 @@ abstract class Repository extends Nette\Object
 	}
 
 
-	/**
-	 * @param  Entity $entity
-	 * @return bool
-	 */
-	function persist(Entity $entity)
+	/** @return void */
+	private function checkEntity(Entity $entity)
 	{
-		$this->checkEntity($entity);
+		$class = $this->getEntityClass();
 
-		$me = $this;
-		return $this->transaction(function () use ($me, $entity) {
-
-			$record = $entity->toRecord();
-			if ($record->hasRow()) {
-				return $record->update();
-			}
-
-			$inserted = $me->getTable()->insert($record->getModified());
-			$record->setRow($inserted);
-			return $inserted instanceof \Nette\Database\IRow || $inserted > 0;
-
-		});
-	}
-
-
-	/**
-	 * @param  Entity $entity
-	 * @return bool
-	 */
-	function delete(Entity $entity)
-	{
-		$this->checkEntity($entity);
-		$record = $entity->toRecord();
-
-		if ($record->hasRow()) {
-			return $this->transaction(function () use ($record) {
-				return $record->getRow()->delete() > 0;
-			});
+		if (!$entity instanceof $class) {
+			throw new Exception\InvalidArgumentException("Instance of '$class' expected, '"
+				. get_class($entity) . "' given.");
 		}
-
-		return TRUE;
-	}
-
-
-	/**
-	 * @param  mixed $id
-	 * @return Entity|NULL
-	 */
-	function getByID($id)
-	{
-		return $this->createEntityFromSelection($this->getTable()->wherePrimary($id));
-	}
-
-
-	/**
-	 * @param  array $criteria
-	 * @return EntityCollection
-	 */
-	function findBy(array $criteria)
-	{
-		$selection = $this->getTable();
-		foreach ($criteria as $column => $value) {
-			$selection->where($column, $value);
-		}
-
-		return $this->createCollection($selection);
-	}
-
-
-	/** @return EntityCollection */
-	function findAll()
-	{
-		return $this->findBy(array());
 	}
 
 
@@ -237,52 +251,7 @@ abstract class Repository extends Nette\Object
 	}
 
 
-	/** @return void */
-	private function checkEntity(Entity $entity)
-	{
-		$class = $this->getEntityClass();
-
-		if (!($entity instanceof $class)) {
-			throw new Exception\InvalidArgumentException("Instance of '$class' expected, '"
-				. get_class($entity) . "' given.");
-		}
-	}
-
-
-	// === TRANSACTIONS ====================================================
-
-	/** @return void */
-	final protected function begin()
-	{
-		if (self::$transactionCounter[$this->database->getConnection()->getDsn()]++ === 0) {
-			$this->database->beginTransaction();
-		}
-	}
-
-
-	/** @return void */
-	final protected function commit()
-	{
-		if (self::$transactionCounter[$dsn = $this->database->getConnection()->getDsn()] === 0) {
-			throw new Exception\InvalidStateException('No transaction started.');
-		}
-
-		if (--self::$transactionCounter[$dsn] === 0) {
-			$this->database->commit();
-		}
-	}
-
-
-	/** @return void */
-	final protected function rollback()
-	{
-		if (self::$transactionCounter[$dsn = $this->database->getConnection()->getDsn()] !== 0) {
-			$this->database->rollBack();
-		}
-
-		self::$transactionCounter[$dsn] = 0;
-	}
-
+	// === transaction helpers ====================================================
 
 	/**
 	 * @param  \Closure $callback
@@ -311,5 +280,42 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function handleException(\Exception $e)
 	{}
+
+
+	/** @return void */
+	final protected function begin()
+	{
+		if (self::$transactionCounter[$this->database->getConnection()->getDsn()]++ === 0) {
+			$this->database->beginTransaction();
+		}
+	}
+
+
+	/** @return void */
+	final protected function commit()
+	{
+		$dsn = $this->database->getConnection()->getDsn();
+
+		if (self::$transactionCounter[$dsn] === 0) {
+			throw new Exception\InvalidStateException('No transaction started.');
+		}
+
+		if (--self::$transactionCounter[$dsn] === 0) {
+			$this->database->commit();
+		}
+	}
+
+
+	/** @return void */
+	final protected function rollback()
+	{
+		$dsn = $this->database->getConnection()->getDsn();
+
+		if (self::$transactionCounter[$dsn] !== 0) {
+			$this->database->rollBack();
+		}
+
+		self::$transactionCounter[$dsn] = 0;
+	}
 
 }
