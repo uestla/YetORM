@@ -47,6 +47,17 @@ abstract class Repository extends Nette\Object
 
 
 	/**
+	 * @param  NActiveRow|Record $row
+	 * @return Entity
+	 */
+	function createEntity($row = NULL)
+	{
+		$class = $this->getEntityClass();
+		return new $class($row);
+	}
+
+
+	/**
 	 * @param  mixed $id
 	 * @return Entity|NULL
 	 */
@@ -76,17 +87,6 @@ abstract class Repository extends Nette\Object
 	function findAll()
 	{
 		return $this->findBy(array());
-	}
-
-
-	/**
-	 * @param  NActiveRow $row
-	 * @return Entity
-	 */
-	function createEntity(NActiveRow $row = NULL)
-	{
-		$class = $this->getEntityClass();
-		return new $class($row);
 	}
 
 
