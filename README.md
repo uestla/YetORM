@@ -138,7 +138,9 @@ Instead of manually writing `findByTitle($title)` method as this
 ```php
 function findByTitle($title)
 {
-	return $this->createCollection($this->getTable()->where('title', $title));
+	return $this->findBy(array(
+		'title' => $title,
+	));
 }
 ```
 
