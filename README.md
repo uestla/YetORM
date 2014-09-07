@@ -177,11 +177,11 @@ Additional notes
 ----------------
 
 - **No identity map**
-- **Query efficiency** - the collections (resp. `YetORM\Record`) uses the power of `Nette\Database` efficiency
+- **Query efficiency** - the collections (resp. `YetORM\Record`) use the power of `Nette\Database` efficiency
 - **Collection operations** - collections can be sorted via `$coll->orderBy($column, $dir)` and limitted via `$coll->limit($limit, $offset)`
 
 
 More
 ----
 
-For more examples please see [tests](https://github.com/uestla/YetORM/tree/master/tests).
+For more examples please the see [tests](https://github.com/uestla/YetORM/tree/master/tests).
