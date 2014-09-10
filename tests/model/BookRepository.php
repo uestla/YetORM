@@ -9,10 +9,14 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
 /**
+ * Books repository
+ *
+ * @author © 2014 kesspess
+ *
  * @table  book
  * @entity Book
- * @method Book|NULL getByBook_title(string $title)
- * @method \YetORM\EntityCollection|Book[] findByAvailable(bool $available)
+ * @method Book|NULL getByBookTitle(string $title)
+ * @method YetORM\EntityCollection|Book[] findByAvailable(bool $available)
  */
 class BookRepository extends YetORM\Repository
 {
