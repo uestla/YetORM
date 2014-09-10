@@ -196,4 +196,4 @@ Additional notes
 More
 ----
 
-For more examples please the see [tests](https://github.com/uestla/YetORM/tree/master/tests).
+For more examples please see the [tests](https://github.com/uestla/YetORM/tree/master/tests).
