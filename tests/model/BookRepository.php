@@ -97,10 +97,10 @@ class BookRepository extends YetORM\Repository
 
 
 	/**
-	 * @param  NActiveRow $row
+	 * @param  NActiveRow|Record $row
 	 * @return Book
 	 */
-	function createEntity(NActiveRow $row = NULL)
+	function createEntity($row = NULL)
 	{
 		return new Book($row, $this->imageDir);
 	}

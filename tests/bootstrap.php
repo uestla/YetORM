@@ -17,8 +17,6 @@ ServiceLocator::getCacheStorage()->clean(array(
 	Nette\Caching\Cache::ALL => TRUE,
 ));
 
-Aliaser\Container::setCacheStorage(ServiceLocator::getCacheStorage());
-
 $loader = new Nette\Loaders\RobotLoader;
 $loader->setCacheStorage(ServiceLocator::getCacheStorage());
 $loader->addDirectory(__DIR__ . '/model');
