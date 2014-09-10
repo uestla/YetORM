@@ -235,8 +235,26 @@ test(function () {
 });
 
 
+// magic findBy() method - nonexisting property
+test(function () {
+	Assert::exception(function () {
+	 ServiceLocator::getBookRepository()->findByFoo('bar');
+
+	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+});
+
+
 // magic getBy() method
 test(function () {
-	Assert::true(ServiceLocator::getBookRepository()->getByBook_title('Nette') instanceof \Model\Entities\Book);
-	Assert::null(ServiceLocator::getBookRepository()->getByBook_title('as567tfa6sd54f6'));
+	Assert::true(ServiceLocator::getBookRepository()->getByBookTitle('Nette') instanceof \Model\Entities\Book);
+	Assert::null(ServiceLocator::getBookRepository()->getByBookTitle('as567tfa6sd54f6'));
+});
+
+
+// magic getBy() method - nonexisting property
+test(function () {
+	Assert::exception(function () {
+	 ServiceLocator::getBookRepository()->getByFoo('bar');
+
+	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
 });

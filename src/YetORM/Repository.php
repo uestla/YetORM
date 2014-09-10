@@ -219,29 +219,46 @@ abstract class Repository extends Nette\Object
 	{
 		if (strncmp($name, 'getBy', 5) === 0 && strlen($name) > 5) {
 			$selection = $this->getTable()->limit(1);
-			$columns = explode('And', substr($name, 5));
+			$properties = explode('And', substr($name, 5));
 
-			if (count($columns) !== count($args)) {
+			if (count($properties) !== count($args)) {
 				throw new Exception\InvalidArgumentException;
 			}
 
-			foreach ($columns as $key => $column) {
-				$selection->where(lcfirst($column), $args[$key]);
+			$ref = Reflection\EntityType::from($class = $this->getEntityClass());
+			foreach ($properties as $key => $property) {
+				$property = lcfirst($property);
+				$prop = $ref->getEntityProperty($property);
+
+				if ($prop === NULL) {
+					throw new Exception\InvalidArgumentException("Property '\$$property' not found in entity '$class'.");
+				}
+
+				$selection->where($prop->getColumn(), $args[$key]);
 			}
 
 			return $this->createEntityFromSelection($selection);
 
 		} elseif (strncmp($name, 'findBy', 6) === 0 && strlen($name) > 6) {
 			$selection = $this->getTable();
-			$columns = explode('And', substr($name, 6));
+			$properties = explode('And', substr($name, 6));
 
-			if (count($columns) !== count($args)) {
+			if (count($properties) !== count($args)) {
 				throw new Exception\InvalidArgumentException;
 			}
 
 			$criteria = array();
-			foreach ($columns as $key => $column) {
-				$criteria[lcfirst($column)] = $args[$key];
+			$ref = Reflection\EntityType::from($class = $this->getEntityClass());
+
+			foreach ($properties as $key => $property) {
+				$property = lcfirst($property);
+				$prop = $ref->getEntityProperty($property);
+
+				if ($prop === NULL) {
+					throw new Exception\InvalidArgumentException("Property '\$$property' not found in entity '$class'.");
+				}
+
+				$criteria[$prop->getColumn()] = $args[$key];
 			}
 
 			return $this->findBy($criteria);

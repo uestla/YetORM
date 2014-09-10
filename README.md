@@ -131,7 +131,7 @@ foreach ($books->findAll() as $book) { // $book instanceof Book
 $book = $books->getByID(123); // instanceof Book or NULL if not found
 ```
 
-#### Magic `findBy<Column>()` and `getBy<Column>()` methods
+#### Magic `findBy<Property>()` and `getBy<Property>()` methods
 
 Instead of manually writing `findByTitle($title)` method as this
 
@@ -152,7 +152,7 @@ $books->findByTitle($title); // without having the method implemented
 
 That will return a collection of books with that exact title.
 
-When having other unique column(s) than primary key (for example `isbn` in `book` table), we can get a single entity via magic `getBy<Column>($value)` method:
+When having other unique column(s) than primary key (for example `isbn` in `book` table), we can get a single entity via magic `getBy<Property>($value)` method:
 
 ```php
 $book = $books->getByIsbn('<isbn_code>'); // instanceof Book or NULL if not found
