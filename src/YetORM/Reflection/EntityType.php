@@ -161,7 +161,7 @@ class EntityType extends NClassType
 							}
 
 							if (!$nullable) {
-								throw new \YetORM\Exception\InvalidStateException('Invalid property type (multiple non-NULL types detected).');
+								throw new YetORM\Exception\InvalidStateException('Invalid property type (multiple non-NULL types detected).');
 							}
 						}
 
