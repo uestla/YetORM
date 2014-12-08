@@ -70,6 +70,17 @@ abstract class Repository extends Nette\Object
 
 	/**
 	 * @param  array $criteria
+	 * @return Entity|NULL
+	 */
+	function getBy(array $criteria)
+	{
+		$selection = $this->getTable()->where($criteria);
+		return $this->createEntityFromSelection($selection);
+	}
+
+
+	/**
+	 * @param  array $criteria
 	 * @return EntityCollection
 	 */
 	function findBy(array $criteria)
