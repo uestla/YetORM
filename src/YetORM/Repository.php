@@ -85,11 +85,7 @@ abstract class Repository extends Nette\Object
 	 */
 	function findBy(array $criteria)
 	{
-		$selection = $this->getTable();
-		foreach ($criteria as $column => $value) {
-			$selection->where($column, $value);
-		}
-
+		$selection = $this->getTable()->where($criteria);
 		return $this->createCollection($selection);
 	}
 
