@@ -88,7 +88,7 @@ class EntityType extends NClassType
 				$name = lcfirst(substr($method->name, 3));
 				$type = $method->getAnnotation('return');
 
-				if (!EntityProperty::isNativeType($type)) {
+				if ($type !== NULL && !EntityProperty::isNativeType($type)) {
 					$type = AnnotationsParser::expandClassName($type, $this);
 				}
 
