@@ -49,6 +49,13 @@ class AnnotationProperty extends EntityProperty
 	}
 
 
+	/** @return bool */
+	function isNullable()
+	{
+		return $this->nullable;
+	}
+
+
 	/**
 	 * @param  mixed $value
 	 * @param  bool $need
