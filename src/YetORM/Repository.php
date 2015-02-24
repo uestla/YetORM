@@ -21,11 +21,11 @@ use Nette\Database\Table\Selection as NSelection;
 abstract class Repository extends Nette\Object
 {
 
-	/** @var array */
-	private static $transactionCounter = array();
-
 	/** @var NdbContext */
 	protected $database;
+
+	/** @var Transaction */
+	private $transaction;
 
 	/** @var string */
 	protected $table = NULL;
@@ -38,11 +38,7 @@ abstract class Repository extends Nette\Object
 	function __construct(NdbContext $database)
 	{
 		$this->database = $database;
-
-		$dsn = $database->getConnection()->getDsn();
-		if (!isset(self::$transactionCounter[$dsn])) {
-			self::$transactionCounter[$dsn] = 0;
-		}
+		$this->transaction = new Transaction($database->getConnection());
 	}
 
 
@@ -284,14 +280,9 @@ abstract class Repository extends Nette\Object
 	final protected function transaction(\Closure $callback)
 	{
 		try {
-			$this->begin();
-				$return = $callback();
-			$this->commit();
-
-			return $return;
+			return $this->transaction->transaction($callback);
 
 		} catch (\Exception $e) {
-			$this->rollback();
 			$this->handleException($e);
 			throw $e;
 		}
@@ -309,37 +300,21 @@ abstract class Repository extends Nette\Object
 	/** @return void */
 	final protected function begin()
 	{
-		if (self::$transactionCounter[$this->database->getConnection()->getDsn()]++ === 0) {
-			$this->database->beginTransaction();
-		}
+		$this->transaction->begin();
 	}
 
 
 	/** @return void */
 	final protected function commit()
 	{
-		$dsn = $this->database->getConnection()->getDsn();
-
-		if (self::$transactionCounter[$dsn] === 0) {
-			throw new Exception\InvalidStateException('No transaction started.');
-		}
-
-		if (--self::$transactionCounter[$dsn] === 0) {
-			$this->database->commit();
-		}
+		$this->transaction->commit();
 	}
 
 
 	/** @return void */
 	final protected function rollback()
 	{
-		$dsn = $this->database->getConnection()->getDsn();
-
-		if (self::$transactionCounter[$dsn] !== 0) {
-			$this->database->rollBack();
-		}
-
-		self::$transactionCounter[$dsn] = 0;
+		$this->transaction->rollback();
 	}
 
 }
