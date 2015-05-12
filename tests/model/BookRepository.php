@@ -96,7 +96,9 @@ class BookRepository extends YetORM\Repository
 	/** @return YetORM\EntityCollection|Book[] */
 	function findByTag($name)
 	{
-		return $this->createCollection($this->getTable()->where(':book_tag.tag.name', $name));
+		return $this->findBy(array(
+			':book_tag.tag.name' => $name,
+		));
 	}
 
 
@@ -106,7 +108,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	function createEntity($row = NULL)
 	{
-		return new Book($row, $this->imageDir);
+		return new Book($this->imageDir, $row);
 	}
 
 
@@ -123,7 +125,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	protected function handleException(\Exception $e)
 	{
-		if ((int) $e->getCode() === 23000) {
+		if ($e instanceof \Nette\Database\UniqueConstraintViolationException) {
 			throw new DuplicateEntryException;
 		}
 	}

@@ -30,14 +30,14 @@ class Book extends BaseEntity
 
 
 	/**
-	 * @param  NActiveRow|YetORM\Record $row
 	 * @param  string $imageDir
+	 * @param  NActiveRow|YetORM\Record $row
 	 */
-	function __construct($row = NULL, $imageDir = NULL)
+	function __construct($imageDir, $row = NULL)
 	{
 		parent::__construct($row);
 
-		if ($imageDir === NULL || ($this->imageDir = realpath($imageDir)) === FALSE) {
+		if (($this->imageDir = realpath($imageDir)) === FALSE) {
 			throw new \InvalidArgumentException;
 		}
 	}
