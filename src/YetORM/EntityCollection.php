@@ -11,7 +11,6 @@
 
 namespace YetORM;
 
-
 use Nette;
 use Nette\Utils\Callback as NCallback;
 use Nette\Database\Table\Selection as NSelection;
@@ -34,6 +33,9 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 	/** @var Entity[] */
 	protected $data = NULL;
+
+	/** @var int */
+	private $count = NULL;
 
 	/** @var array */
 	private $keys;
@@ -197,7 +199,11 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 			return count($this->data);
 		}
 
-		return $this->selection->count('*');
+		if ($this->count === NULL) {
+			$this->count = $this->selection->count('*');
+		}
+
+		return $this->count;
 	}
 
 }
