@@ -30,7 +30,7 @@ class Record
 
 
 	/** @param  NActiveRow $row */
-	function __construct(NActiveRow $row = NULL)
+	public function __construct(NActiveRow $row = NULL)
 	{
 		$this->row = $row;
 	}
@@ -40,7 +40,7 @@ class Record
 	 * @param  NActiveRow|Record $row
 	 * @return Record
 	 */
-	static function create($row = NULL)
+	public static function create($row = NULL)
 	{
 		if ($row === NULL || $row instanceof NActiveRow) {
 			return new static($row);
@@ -55,14 +55,14 @@ class Record
 
 
 	/** @return bool */
-	function hasRow()
+	public function hasRow()
 	{
 		return $this->row !== NULL;
 	}
 
 
 	/** @return NActiveRow|NULL */
-	function getRow()
+	public function getRow()
 	{
 		return $this->row;
 	}
@@ -72,7 +72,7 @@ class Record
 	 * @param  NActiveRow $row
 	 * @return Record
 	 */
-	function setRow(NActiveRow $row)
+	public function setRow(NActiveRow $row)
 	{
 		$this->reload($row);
 		return $this;
@@ -84,7 +84,7 @@ class Record
 	 * @param  string $throughColumn
 	 * @return Record|NULL
 	 */
-	function ref($key, $throughColumn = NULL)
+	public function ref($key, $throughColumn = NULL)
 	{
 		$this->checkRow();
 		$native = $this->row->ref($key, $throughColumn);
@@ -97,7 +97,7 @@ class Record
 	 * @param  string $throughColumn
 	 * @return NGroupedSelection
 	 */
-	function related($key, $throughColumn = NULL)
+	public function related($key, $throughColumn = NULL)
 	{
 		$this->checkRow();
 		return $this->row->related($key, $throughColumn);
@@ -105,14 +105,14 @@ class Record
 
 
 	/** @return array */
-	function getModified()
+	public function getModified()
 	{
 		return $this->modified;
 	}
 
 
 	/** @return bool */
-	function update()
+	public function update()
 	{
 		$this->checkRow();
 
@@ -130,7 +130,7 @@ class Record
 	 * @param  string $name
 	 * @return mixed
 	 */
-	function & __get($name)
+	public function & __get($name)
 	{
 		if (array_key_exists($name, $this->modified)) {
 			return $this->modified[$name];
@@ -156,7 +156,7 @@ class Record
 	 * @param  mixed $value
 	 * @return void
 	 */
-	function __set($name, $value)
+	public function __set($name, $value)
 	{
 		$this->modified[$name] = $value;
 	}
@@ -166,7 +166,7 @@ class Record
 	 * @param  string $name
 	 * @return bool
 	 */
-	function __isset($name)
+	public function __isset($name)
 	{
 		return isset($this->modified[$name])
 			|| isset($this->values[$name])

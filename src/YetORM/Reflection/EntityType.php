@@ -29,7 +29,7 @@ class EntityType extends NClassType
 
 
 	/** @return EntityProperty[] */
-	function getEntityProperties()
+	public function getEntityProperties()
 	{
 		$this->loadEntityProperties();
 		return $this->properties;
@@ -40,7 +40,7 @@ class EntityType extends NClassType
 	 * @param  string $name
 	 * @return EntityProperty|NULL
 	 */
-	function getEntityProperty($name, $default = NULL)
+	public function getEntityProperty($name, $default = NULL)
 	{
 		return $this->hasEntityProperty($name) ? $this->properties[$name] : $default;
 	}
@@ -50,7 +50,7 @@ class EntityType extends NClassType
 	 * @param  string $name
 	 * @return bool
 	 */
-	function hasEntityProperty($name)
+	public function hasEntityProperty($name)
 	{
 		$this->loadEntityProperties();
 		return isset($this->properties[$name]);

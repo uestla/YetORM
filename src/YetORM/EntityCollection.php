@@ -51,7 +51,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * @param  string $refTable
 	 * @param  string $refColumn
 	 */
-	function __construct(NSelection $selection, $entity, $refTable = NULL, $refColumn = NULL)
+	public function __construct(NSelection $selection, $entity, $refTable = NULL, $refColumn = NULL)
 	{
 		$this->selection = $selection;
 		$this->refTable = $refTable;
@@ -91,7 +91,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/** @return array */
-	function toArray()
+	public function toArray()
 	{
 		return iterator_to_array($this);
 	}
@@ -113,7 +113,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * @param  bool $dir
 	 * @return EntityCollection
 	 */
-	function orderBy($column, $dir = NULL)
+	public function orderBy($column, $dir = NULL)
 	{
 		if (is_array($column)) {
 			foreach ($column as $col => $d) {
@@ -135,7 +135,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	 * @param  int $offset
 	 * @return EntityCollection
 	 */
-	function limit($limit, $offset = NULL)
+	public function limit($limit, $offset = NULL)
 	{
 		$this->selection->limit($limit, $offset);
 		$this->invalidate();
@@ -153,7 +153,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	// === interface \Iterator ======================================
 
 	/** @return void */
-	function rewind()
+	public function rewind()
 	{
 		$this->loadData();
 		$this->keys = array_keys($this->data);
@@ -162,7 +162,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/** @return Entity */
-	function current()
+	public function current()
 	{
 		$key = current($this->keys);
 		return $key === FALSE ? FALSE : $this->data[$key];
@@ -170,21 +170,21 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 
 	/** @return mixed */
-	function key()
+	public function key()
 	{
 		return current($this->keys);
 	}
 
 
 	/** @return void */
-	function next()
+	public function next()
 	{
 		next($this->keys);
 	}
 
 
 	/** @return bool */
-	function valid()
+	public function valid()
 	{
 		return current($this->keys) !== FALSE;
 	}
@@ -193,7 +193,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 	// === interface \Countable ======================================
 
 	/** @return int */
-	function count()
+	public function count()
 	{
 		if ($this->data !== NULL) {
 			return count($this->data);

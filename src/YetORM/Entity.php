@@ -27,14 +27,14 @@ abstract class Entity
 
 
 	/** @param  NActiveRow|Record $row */
-	function __construct($row = NULL)
+	public function __construct($row = NULL)
 	{
 		$this->record = Record::create($row);
 	}
 
 
 	/** @return Record */
-	final function toRecord()
+	final public function toRecord()
 	{
 		return $this->record;
 	}
@@ -45,7 +45,7 @@ abstract class Entity
 	 * @param  array $args
 	 * @return void
 	 */
-	function __call($name, $args)
+	public function __call($name, $args)
 	{
 		// events support
 		$ref = static::getReflection();
@@ -69,7 +69,7 @@ abstract class Entity
 	 * @param  string $name
 	 * @return mixed
 	 */
-	function & __get($name)
+	public function & __get($name)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
@@ -87,7 +87,7 @@ abstract class Entity
 	 * @param  mixed $value
 	 * @return void
 	 */
-	function __set($name, $value)
+	public function __set($name, $value)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty && !$prop->readonly) {
@@ -105,7 +105,7 @@ abstract class Entity
 	 * @param  string $name
 	 * @return bool
 	 */
-	function __isset($name)
+	public function __isset($name)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
@@ -121,14 +121,14 @@ abstract class Entity
 	 * @return void
 	 * @throws Exception\NotSupportedException
 	 */
-	function __unset($name)
+	public function __unset($name)
 	{
 		throw new Exception\NotSupportedException;
 	}
 
 
 	/** @return Reflection\EntityType */
-	static function getReflection()
+	public static function getReflection()
 	{
 		$class = get_called_class();
 		if (!isset(self::$reflections[$class])) {

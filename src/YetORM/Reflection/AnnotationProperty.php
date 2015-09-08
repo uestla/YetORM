@@ -33,7 +33,7 @@ class AnnotationProperty extends EntityProperty
 	 * @param  bool $nullable
 	 * @param  string $description
 	 */
-	function __construct($reflection, $name, $readonly, $type, $column, $nullable, $description = NULL)
+	public function __construct($reflection, $name, $readonly, $type, $column, $nullable, $description = NULL)
 	{
 		parent::__construct($reflection, $name, $readonly, $type, $description);
 
@@ -43,14 +43,14 @@ class AnnotationProperty extends EntityProperty
 
 
 	/** @return string */
-	function getColumn()
+	public function getColumn()
 	{
 		return $this->column;
 	}
 
 
 	/** @return bool */
-	function isNullable()
+	public function isNullable()
 	{
 		return $this->nullable;
 	}
@@ -61,7 +61,7 @@ class AnnotationProperty extends EntityProperty
 	 * @param  bool $need
 	 * @return mixed
 	 */
-	function checkType($value, $need = TRUE)
+	public function checkType($value, $need = TRUE)
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {
@@ -91,7 +91,7 @@ class AnnotationProperty extends EntityProperty
 	 * @param  mixed $value
 	 * @return mixed
 	 */
-	function setType($value)
+	public function setType($value)
 	{
 		if (!$this->checkType($value, FALSE) && @settype($value, $this->getType()) === FALSE) { // intentionally @
 			throw new YetORM\Exception\InvalidArgumentException("Unable to set type '{$this->getType()}' from '"

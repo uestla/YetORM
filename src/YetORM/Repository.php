@@ -35,7 +35,7 @@ abstract class Repository extends Nette\Object
 
 
 	/** @param  NdbContext $database */
-	function __construct(NdbContext $database)
+	public function __construct(NdbContext $database)
 	{
 		$this->database = $database;
 		$this->transaction = new Transaction($database->getConnection());
@@ -46,7 +46,7 @@ abstract class Repository extends Nette\Object
 	 * @param  NActiveRow|Record $row
 	 * @return Entity
 	 */
-	function createEntity($row = NULL)
+	public function createEntity($row = NULL)
 	{
 		$class = $this->getEntityClass();
 		return new $class($row);
@@ -57,7 +57,7 @@ abstract class Repository extends Nette\Object
 	 * @param  mixed $id
 	 * @return Entity|NULL
 	 */
-	function getByID($id)
+	public function getByID($id)
 	{
 		$selection = $this->getTable()->wherePrimary($id);
 		return $this->createEntityFromSelection($selection);
@@ -68,7 +68,7 @@ abstract class Repository extends Nette\Object
 	 * @param  array $criteria
 	 * @return Entity|NULL
 	 */
-	function getBy(array $criteria)
+	public function getBy(array $criteria)
 	{
 		$selection = $this->getTable()->where($criteria);
 		return $this->createEntityFromSelection($selection);
@@ -79,7 +79,7 @@ abstract class Repository extends Nette\Object
 	 * @param  array $criteria
 	 * @return EntityCollection
 	 */
-	function findBy(array $criteria)
+	public function findBy(array $criteria)
 	{
 		$selection = $this->getTable()->where($criteria);
 		return $this->createCollection($selection);
@@ -87,7 +87,7 @@ abstract class Repository extends Nette\Object
 
 
 	/** @return EntityCollection */
-	function findAll()
+	public function findAll()
 	{
 		return $this->findBy(array());
 	}
@@ -121,7 +121,7 @@ abstract class Repository extends Nette\Object
 	 * @param  Entity $entity
 	 * @return bool
 	 */
-	function persist(Entity $entity)
+	public function persist(Entity $entity)
 	{
 		$this->checkEntity($entity);
 
@@ -145,7 +145,7 @@ abstract class Repository extends Nette\Object
 	 * @param  Entity $entity
 	 * @return bool
 	 */
-	function delete(Entity $entity)
+	public function delete(Entity $entity)
 	{
 		$this->checkEntity($entity);
 		$record = $entity->toRecord();
@@ -218,7 +218,7 @@ abstract class Repository extends Nette\Object
 	 * @param  array $args
 	 * @return mixed
 	 */
-	function __call($name, $args)
+	public function __call($name, $args)
 	{
 		if (strncmp($name, 'getBy', 5) === 0 && strlen($name) > 5) {
 			$selection = $this->getTable()->limit(1);

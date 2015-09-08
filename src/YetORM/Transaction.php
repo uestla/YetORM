@@ -25,7 +25,7 @@ class Transaction
 
 
 	/** @param  NdbConnection $connection */
-	function __construct(NdbConnection $connection)
+	public function __construct(NdbConnection $connection)
 	{
 		$this->connection = $connection;
 
@@ -39,7 +39,7 @@ class Transaction
 	 * @param  \Closure $callback
 	 * @return mixed
 	 */
-	function transaction(\Closure $callback)
+	public function transaction(\Closure $callback)
 	{
 		try {
 			$this->begin();
@@ -56,7 +56,7 @@ class Transaction
 
 
 	/** @return void */
-	function begin()
+	public function begin()
 	{
 		if (self::$transactionCounter[$this->getDsnKey()]++ === 0) {
 			$this->connection->beginTransaction();
@@ -65,7 +65,7 @@ class Transaction
 
 
 	/** @return void */
-	function commit()
+	public function commit()
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] === 0) {
 			throw new Exception\InvalidStateException('No transaction started.');
@@ -78,7 +78,7 @@ class Transaction
 
 
 	/** @return void */
-	function rollback()
+	public function rollback()
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] !== 0) {
 			$this->connection->rollBack();

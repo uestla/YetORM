@@ -41,7 +41,7 @@ abstract class EntityProperty extends Nette\Object
 	 * @param  string $type
 	 * @param  string $description
 	 */
-	function __construct(EntityType $reflection, $name, $readonly, $type, $description = NULL)
+	public function __construct(EntityType $reflection, $name, $readonly, $type, $description = NULL)
 	{
 		$this->reflection = $reflection;
 		$this->name = (string) $name;
@@ -52,49 +52,49 @@ abstract class EntityProperty extends Nette\Object
 
 
 	/** @return EntityType */
-	function getEntityReflection()
+	public function getEntityReflection()
 	{
 		return $this->reflection;
 	}
 
 
 	/** @return string */
-	function getName()
+	public function getName()
 	{
 		return $this->name;
 	}
 
 
 	/** @return bool */
-	function isReadonly()
+	public function isReadonly()
 	{
 		return $this->readonly;
 	}
 
 
 	/** @return string */
-	function getType()
+	public function getType()
 	{
 		return $this->type;
 	}
 
 
 	/** @return string|NULL */
-	function getDescription()
+	public function getDescription()
 	{
 		return $this->description;
 	}
 
 
 	/** @return bool */
-	function hasDescription()
+	public function hasDescription()
 	{
 		return $this->description !== NULL;
 	}
 
 
 	/** @return bool */
-	function isOfNativeType()
+	public function isOfNativeType()
 	{
 		return self::isNativeType($this->type);
 	}
@@ -104,7 +104,7 @@ abstract class EntityProperty extends Nette\Object
 	 * @param  string $type
 	 * @return bool
 	 */
-	static function isNativeType($type)
+	public static function isNativeType($type)
 	{
 		return $type !== NULL && ($type === 'integer' || $type === 'float' || $type === 'double'
 				|| $type === 'boolean' ||  $type === 'string' || $type === 'array');
