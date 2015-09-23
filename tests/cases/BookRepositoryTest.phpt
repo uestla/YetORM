@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use Tester\Assert;
 use YetORM\EntityCollection as EC;
