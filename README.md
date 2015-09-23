@@ -1,8 +1,13 @@
 YetORM
 ======
 
-Lightweight ORM built on top of Nette\Database
+[![Build Status](https://img.shields.io/travis/uestla/yetorm.svg?style=flat-square)](https://travis-ci.org/uestla/yetorm)
+[![Code coverage](https://img.shields.io/coveralls/uestla/yetorm.svg?style=flat-square)](https://coveralls.io/r/uestla/yetorm)
+[![Total downloads](https://img.shields.io/packagist/dt/uestla/yetorm.svg?style=flat-square)](https://packagist.org/packages/uestla/yetorm)
+[![Latest stable](https://img.shields.io/packagist/v/uestla/yetorm.svg?style=flat-square)](https://packagist.org/packages/uestla/yetorm)
+[![HHVM Status](https://img.shields.io/hhvm/uestla/yetorm.svg?style=flat-square)](http://hhvm.h4cc.de/package/uestla/yetorm)
 
+Lightweight ORM built on top of Nette\Database
 
 Quickstart
 ----------
