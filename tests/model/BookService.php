@@ -14,14 +14,14 @@ class BookService
 
 
 	/** @param  Model\Repositories\BookRepository $repository */
-	function __construct(Model\Repositories\BookRepository $repository)
+	public function __construct(Model\Repositories\BookRepository $repository)
 	{
 		$this->repository = $repository;
 	}
 
 
 	/** @return YetORM\EntityCollection */
-	function getLatest()
+	public function getLatest()
 	{
 		return $this->repository->findAll()
 				->orderBy('written', EC::DESC)

@@ -33,7 +33,7 @@ class Book extends BaseEntity
 	 * @param  string $imageDir
 	 * @param  NActiveRow|YetORM\Record $row
 	 */
-	function __construct($imageDir, $row = NULL)
+	public function __construct($imageDir, $row = NULL)
 	{
 		parent::__construct($row);
 
@@ -47,7 +47,7 @@ class Book extends BaseEntity
 	 * @param  string $name
 	 * @return Book
 	 */
-	function addTag($name)
+	public function addTag($name)
 	{
 		$tag = new Tag;
 		$tag->name = $name;
@@ -57,7 +57,7 @@ class Book extends BaseEntity
 
 
 	/** @return Tag[] @internal */
-	function getAddedTags()
+	public function getAddedTags()
 	{
 		$tmp = $this->addedTags;
 		return $tmp;
@@ -68,7 +68,7 @@ class Book extends BaseEntity
 	 * @param  string $name
 	 * @return Book
 	 */
-	function removeTag($name)
+	public function removeTag($name)
 	{
 		$tag = new Tag;
 		$tag->name = $name;
@@ -78,7 +78,7 @@ class Book extends BaseEntity
 
 
 	/** @return Tag[] @internal */
-	function getRemovedTags()
+	public function getRemovedTags()
 	{
 		$tmp = $this->removedTags;
 		return $tmp;
@@ -94,7 +94,7 @@ class Book extends BaseEntity
 	 * @todo just for description test purposes
 	 * @return Author
 	 */
-	function getAuthor()
+	public function getAuthor()
 	{
 		return new Author($this->record->author);
 	}
@@ -104,7 +104,7 @@ class Book extends BaseEntity
 	 * @param  Author $author
 	 * @return Book
 	 */
-	function setAuthor(Author $author)
+	public function setAuthor(Author $author)
 	{
 		$this->record->author_id = $author->id;
 		return $this;
@@ -116,22 +116,22 @@ class Book extends BaseEntity
 	 *
 	 * @return YetORM\EntityCollection
 	 */
-	function getTags()
+	public function getTags()
 	{
-		$selection = $this->record->related('book_tag');
+		$selection = $this->record->related('book_tag', 'book_id');
 		return new YetORM\EntityCollection($selection, 'Model\Entities\Tag', 'tag');
 	}
 
 
 	/** @return string @internal */
-	function getImagePath()
+	public function getImagePath()
 	{
 		return $this->imageDir . '/' . $this->id . '.jpg';
 	}
 
 
 	/** @return array */
-	function toArray()
+	public function toArray()
 	{
 		$return = parent::toArray();
 		$return['author'] = $this->getAuthor()->toArray();

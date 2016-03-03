@@ -29,7 +29,7 @@ class BookRepository extends YetORM\Repository
 	 * @param  NdbContext $context
 	 * @param  string $imageDir
 	 */
-	function __construct(NdbContext $context, $imageDir)
+	public function __construct(NdbContext $context, $imageDir)
 	{
 		parent::__construct($context);
 
@@ -47,7 +47,7 @@ class BookRepository extends YetORM\Repository
 	 * @param  Book $book
 	 * @return bool
 	 */
-	function persist(YetORM\Entity $book)
+	public function persist(YetORM\Entity $book)
 	{
 		return $this->transaction(function () use ($book) {
 
@@ -92,7 +92,7 @@ class BookRepository extends YetORM\Repository
 
 
 	/** @return YetORM\EntityCollection|Book[] */
-	function findByTag($name)
+	public function findByTag($name)
 	{
 		return $this->findBy(array(
 			':book_tag.tag.name' => $name,
@@ -104,14 +104,14 @@ class BookRepository extends YetORM\Repository
 	 * @param  NActiveRow|Record $row
 	 * @return Book
 	 */
-	function createEntity($row = NULL)
+	public function createEntity($row = NULL)
 	{
 		return new Book($this->imageDir, $row);
 	}
 
 
 	/** @return string */
-	function getImageDir()
+	public function getImageDir()
 	{
 		return $this->imageDir;
 	}

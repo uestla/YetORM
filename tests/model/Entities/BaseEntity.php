@@ -9,7 +9,7 @@ class BaseEntity extends YetORM\Entity
 {
 
 	/** @return array */
-	function toArray()
+	public function toArray()
 	{
 		$ref = static::getReflection();
 		$values = array();

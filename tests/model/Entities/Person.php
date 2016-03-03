@@ -13,7 +13,7 @@ abstract class Person extends BaseEntity
 {
 
 	/** @return string */
-	function getName()
+	public function getName()
 	{
 		return Nette\Utils\Strings::capitalize($this->record->name);
 	}

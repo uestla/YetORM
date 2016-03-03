@@ -10,7 +10,7 @@ class Author extends Person
 {
 
 	/** @return YetORM\EntityCollection */
-	function getBooks()
+	public function getBooks()
 	{
 		return new YetORM\EntityCollection($this->record->related('book'), 'Model\Entities\Book');
 	}

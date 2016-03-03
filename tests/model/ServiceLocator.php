@@ -21,7 +21,7 @@ class ServiceLocator
 
 
 	/** @return Nette\Caching\Storages\FileStorage */
-	static function getCacheStorage()
+	public static function getCacheStorage()
 	{
 		if (self::$cacheStorage === NULL) {
 			self::$cacheStorage = new Nette\Caching\Storages\FileStorage(__DIR__ . '/../temp');
@@ -48,7 +48,7 @@ class ServiceLocator
 
 
 	/** @return Model\Repositories\BookRepository */
-	static function getBookRepository()
+	public static function getBookRepository()
 	{
 		if (self::$bookRepository === NULL) {
 			self::$bookRepository = new Model\Repositories\BookRepository(self::getDbContext(), __DIR__ . '/books');
@@ -59,7 +59,7 @@ class ServiceLocator
 
 
 	/** @return Model\Repositories\AuthorRepository */
-	static function getAuthorRepository()
+	public static function getAuthorRepository()
 	{
 		if (self::$authorRepository === NULL) {
 			self::$authorRepository = new Model\Repositories\AuthorRepository(self::getDbContext());
@@ -70,7 +70,7 @@ class ServiceLocator
 
 
 	/** @return Model\Services\BookService */
-	static function getBookFacade()
+	public static function getBookFacade()
 	{
 		if (self::$bookService === NULL) {
 			self::$bookService = new Model\Services\BookService(self::getBookRepository());
