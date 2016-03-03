@@ -12,12 +12,13 @@
 
 	"require": {
 		"php": ">=5.3.0",
-		"nette/utils": "2.*",
-		"nette/database": "2.*",
-		"nette/reflection": "2.*"
+		"nette/utils": "^2.3",
+		"nette/database": "^2.3",
+		"nette/reflection": "^2.3"
 	},
 
 	"require-dev": {
+		"tracy/tracy": "*",
 		"nette/tester": "*",
 		"nette/caching": "*",
 		"nette/robot-loader": "*"
