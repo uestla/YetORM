@@ -175,7 +175,7 @@ abstract class Repository extends Nette\Object
 	{
 		if ($this->table === NULL) {
 			if (($annotation = static::getReflection()->getAnnotation('table')) === NULL) {
-				throw new Exception\InvalidStateException("Table name not set.");
+				throw new Exception\InvalidStateException('Table name not set.');
 			}
 
 			$this->table = $annotation;
