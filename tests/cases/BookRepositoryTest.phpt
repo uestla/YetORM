@@ -10,8 +10,17 @@ use Nette\Database\Connection as NConnection;
 
 // entity loading
 test(function () {
-	$book = ServiceLocator::getBookRepository()->getByID(1);
+	$repo = ServiceLocator::getBookRepository();
+
+	$book = $repo->getByID(1);
 	Assert::true($book instanceof Model\Entities\Book);
+
+	$book2 = $repo->getBy([
+		'id' => 1,
+	]);
+
+	Assert::true($book2 instanceof Model\Entities\Book);
+	Assert::equal($book->toArray(), $book2->toArray());
 
 	Assert::equal(array(
 		'id' => 1,
@@ -34,7 +43,7 @@ test(function () {
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(1);
 	$author = $book->getAuthor();
-	Assert::equal('Jakub Vrana', $author->getName());
+	Assert::same('Jakub Vrana', $author->getName());
 });
 
 
@@ -47,7 +56,7 @@ test(function () {
 		$tags[] = $tag->name;
 	}
 
-	Assert::equal(array('PHP', 'MySQL'), $tags);
+	Assert::same(array('PHP', 'MySQL'), $tags);
 });
 
 
@@ -58,7 +67,7 @@ test(function () {
 		$books[] = $book->bookTitle;
 	}
 
-	Assert::equal(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
+	Assert::same(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
 });
 
 
@@ -68,9 +77,9 @@ test(function () {
 	$allbooks = $repo->findAll();
 	$booktags = $repo->getByID(3)->getTags();
 
-	Assert::equal(4, count($allbooks->limit(2))); // data not received yet -> count as non-limited
-	Assert::equal(2, count($allbooks->limit(2)->toArray())); // data received
-	Assert::equal(1, count($booktags));
+	Assert::same(4, count($allbooks->limit(2))); // data not received yet -> count as non-limited
+	Assert::same(2, count($allbooks->limit(2)->toArray())); // data received
+	Assert::same(1, count($booktags));
 });
 
 
@@ -96,7 +105,7 @@ test(function () {
 		$array[] = $book->bookTitle;
 	}
 
-	Assert::equal(array('JUSH', 'Nette'), $array);
+	Assert::same(array('JUSH', 'Nette'), $array);
 });
 
 
@@ -126,7 +135,7 @@ test(function () {
 		$yetorm = ob_get_clean();
 
 	unset($context->getConnection()->onQuery['queryDump']);
-	Assert::equal($native, $yetorm);
+	Assert::same($native, $yetorm);
 });
 
 
@@ -156,23 +165,24 @@ test(function () {
 
 	), $book->toArray());
 
-	Assert::equal('David Grudl', $book->getAuthor()->getName());
+	Assert::same('David Grudl', $book->getAuthor()->getName());
 
 	// update
 	$book = $repo->getByID(5);
 	$book->bookTitle = 'New title';
-	Assert::equal('New title', $book->bookTitle);
-	Assert::equal(TRUE, $repo->persist($book));
-	Assert::equal('New title', $book->bookTitle);
+	Assert::same('New title', $book->bookTitle);
+	Assert::true($repo->persist($book));
+	Assert::same('New title', $book->bookTitle);
 	$author = ServiceLocator::getAuthorRepository()->getByID(13);
-	Assert::equal('Geek', $author->getName());
-	Assert::equal('David Grudl', $book->getAuthor()->getName());
+	Assert::same('Geek', $author->getName());
+	Assert::same('David Grudl', $book->getAuthor()->getName());
 	$book->setAuthor($author);
-	Assert::equal(TRUE, $repo->persist($book));
-	Assert::equal('Geek', $book->getAuthor()->getName());
+	Assert::true($repo->persist($book));
+	Assert::same('Geek', $book->getAuthor()->getName());
 	$book->available = FALSE;
 	$repo->persist($book);
 	Assert::false($book->available);
+
 	Assert::equal(array(
 		'id' => 5,
 		'bookTitle' => 'New title',
@@ -193,9 +203,9 @@ test(function () {
 // delete
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
-	Assert::equal(5, count($repo->findAll()));
-	Assert::equal(TRUE, $repo->delete($repo->getByID(5)));
-	Assert::equal(4, count($repo->findAll()));
+	Assert::same(5, count($repo->findAll()));
+	Assert::true($repo->delete($repo->getByID(5)));
+	Assert::same(4, count($repo->findAll()));
 });
 
 

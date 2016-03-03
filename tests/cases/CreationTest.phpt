@@ -13,11 +13,11 @@ test(function () {
 	$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 	$book->bookTitle = 'Brand new book';
 
-	Assert::equal(TRUE, $repo->persist($book));
+	Assert::true($repo->persist($book));
 
 	// default values
-	Assert::equal(TRUE, $book->available);
-	Assert::equal(NULL, $book->written);
+	Assert::true($book->available);
+	Assert::null($book->written);
 });
 
 
@@ -37,7 +37,7 @@ test(function () {
 		$tags[] = $tag->toArray();
 	}
 
-	Assert::equal(array(
+	Assert::same(array(
 		array(
 			'id' => 21,
 			'name' => 'PHP',
@@ -64,11 +64,20 @@ test(function () {
 		$tags[] = $tag->toArray();
 	}
 
-	Assert::equal(array(
+	Assert::same(array(
 		array(
 			'id' => 21,
 			'name' => 'PHP',
 		),
 
 	), $tags);
+});
+
+
+// not persisted entity
+test(function () {
+	$repo = ServiceLocator::getBookRepository();
+	$book = $repo->createEntity();
+
+	Assert::true($repo->delete($book));
 });

@@ -96,7 +96,7 @@ class Book extends BaseEntity
 	 */
 	public function getAuthor()
 	{
-		return new Author($this->record->author);
+		return new Author($this->record->ref('author', 'author_id'));
 	}
 
 

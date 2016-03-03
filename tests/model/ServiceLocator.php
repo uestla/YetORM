@@ -19,6 +19,9 @@ class ServiceLocator
 	/** @var Model\Services\BookService */
 	private static $bookService = NULL;
 
+	/** @var Model\Repositories\NoTableRepository */
+	private static $invalidRepository = NULL;
+
 
 	/** @return Nette\Caching\Storages\FileStorage */
 	public static function getCacheStorage()
@@ -32,7 +35,7 @@ class ServiceLocator
 
 
 	/** @return Nette\Database\Context */
-	static function getDbContext()
+	public static function getDbContext()
 	{
 		if (self::$dbContext === NULL) {
 			$connection = new Nette\Database\Connection('mysql:host=127.0.0.1;dbname=yetorm_test', 'root', '');
@@ -77,6 +80,17 @@ class ServiceLocator
 		}
 
 		return self::$bookService;
+	}
+
+
+	/** @return Model\Repositories\InvalidRepository */
+	public static function getInvalidRepository()
+	{
+		if (self::$invalidRepository === NULL) {
+			self::$invalidRepository = new Model\Repositories\InvalidRepository(self::getDbContext());
+		}
+
+		return self::$invalidRepository;
 	}
 
 }

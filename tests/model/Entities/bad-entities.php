@@ -2,12 +2,19 @@
 
 namespace Model\Entities;
 
+use YetORM\Entity;
+
 
 /** @property NULL|NULL $badOne */
-class BadDoubleNullEntity extends \YetORM\Entity
+class BadDoubleNullEntity extends Entity
 {}
 
 
 /** @property \DateTime|string $evil */
-class BadMultipleTypeEntity extends \YetORM\Entity
+class BadMultipleTypeEntity extends Entity
+{}
+
+
+/** @property string nodollar */
+class InvalidPropertyDefinitionEntity extends Entity
 {}

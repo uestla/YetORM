@@ -9,37 +9,47 @@ use Tester\Assert;
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(1);
 	$book->bookTitle = 'New title';
-	Assert::equal('New title', $book->bookTitle);
+	Assert::same('New title', $book->bookTitle);
 
 	Assert::exception(function () use ($book) {
 		$book->id = 123;
-	}, 'YetORM\Exception\MemberAccessException', 'Cannot write to an undeclared property Model\Entities\Book::$id.');
+
+	}, 'YetORM\Exception\MemberAccessException',
+			'Cannot write to an undeclared property Model\Entities\Book::$id.');
 
 	Assert::exception(function () use ($book) {
 		$book->bookTitle = 123;
-	}, 'YetORM\Exception\InvalidArgumentException', "Invalid type - 'string' expected, 'integer' given.");
+
+	}, 'YetORM\Exception\InvalidArgumentException',
+			"Invalid type - 'string' expected, 'integer' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->available = 'TRUE';
-	}, 'YetORM\Exception\InvalidArgumentException', "Invalid type - 'boolean' expected, 'string' given.");
+
+	}, 'YetORM\Exception\InvalidArgumentException',
+			"Invalid type - 'boolean' expected, 'string' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->asdf = 'Book title';
-	}, 'YetORM\Exception\MemberAccessException', 'Cannot write to an undeclared property Model\Entities\Book::$asdf.');
+
+	}, 'YetORM\Exception\MemberAccessException',
+			'Cannot write to an undeclared property Model\Entities\Book::$asdf.');
 });
 
 
 // getters
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(1);
-	Assert::equal('1001 tipu a triku pro PHP', $book->bookTitle);
+	Assert::same('1001 tipu a triku pro PHP', $book->bookTitle);
 	Assert::true(is_int($book->id));
 	Assert::true(is_string($book->bookTitle));
 	Assert::true(is_bool($book->available));
 
 	Assert::exception(function () use ($book) {
 		$book->asdf;
-	}, 'YetORM\Exception\MemberAccessException', 'Cannot read an undeclared property Model\Entities\Book::$asdf.');
+
+	}, 'YetORM\Exception\MemberAccessException',
+			'Cannot read an undeclared property Model\Entities\Book::$asdf.');
 });
 
 
@@ -66,6 +76,7 @@ test(function () {
 	Assert::exception(function () {
 		$book = ServiceLocator::getBookRepository()->getByID(1);
 		unset($book->written);
+
 	}, 'YetORM\Exception\NotSupportedException');
 });
 
@@ -94,6 +105,7 @@ test(function () {
 // inheritance
 test(function () {
 	$author = ServiceLocator::getAuthorRepository()->getByID(11);
+
 	Assert::equal(array(
 		'id' => 11,
 		'name' => 'Jakub Vrana',
@@ -108,6 +120,18 @@ test(function () {
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(1);
 	Assert::true($book->written instanceof DateTime);
+
+	Assert::exception(function () use ($book) {
+		$book->written = new \stdClass;
+
+	}, 'YetORM\Exception\InvalidArgumentException',
+			"Instance of 'Nette\Utils\DateTime' expected, 'stdClass' given.");
+
+	Assert::exception(function () use ($book) {
+		$book->written = '';
+
+	}, 'YetORM\Exception\InvalidArgumentException',
+			"Instance of 'Nette\Utils\DateTime' expected, 'string' given.");
 });
 
 
@@ -125,10 +149,13 @@ test(function () {
 	Assert::null($book->written);
 	$repo->persist($book);
 	Assert::null($book->written);
+	Assert::true(Model\Entities\Book::getReflection()->getEntityProperty('written')->isNullable());
 
 	Assert::exception(function () use ($book) {
 		$book->bookTitle = NULL;
-	}, 'YetORM\Exception\InvalidArgumentException', "Property 'Model\Entities\Book::\$bookTitle' cannot be NULL.");
+
+	}, 'YetORM\Exception\InvalidArgumentException',
+			"Property 'Model\Entities\Book::\$bookTitle' cannot be NULL.");
 });
 
 
@@ -137,7 +164,8 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadDoubleNullEntity::getReflection()->getEntityProperties();
 
-	}, 'YetORM\Exception\InvalidStateException', 'Invalid property type (double NULL).');
+	}, 'YetORM\Exception\InvalidStateException',
+			'Invalid property type (double NULL).');
 });
 
 
@@ -146,7 +174,18 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadMultipleTypeEntity::getReflection()->getEntityProperties();
 
-	}, 'YetORM\Exception\InvalidStateException', 'Invalid property type (multiple non-NULL types detected).');
+	}, 'YetORM\Exception\InvalidStateException',
+			'Invalid property type (multiple non-NULL types detected).');
+});
+
+
+// invalid property definition
+test(function () {
+	Assert::exception(function () {
+	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
+
+	}, 'YetORM\Exception\InvalidStateException',
+			'Invalid property definition - "@property string nodollar" does not match "@property[-read] <type> $<property> [-> <column>][ <description>]" pattern.');
 });
 
 
@@ -156,7 +195,8 @@ test(function () {
 		$book = ServiceLocator::getBookRepository()->createEntity();
 		$book->toRecord()->book_title;
 
-	}, 'YetORM\Exception\MemberAccessException', "The value of column 'book_title' not set.");
+	}, 'YetORM\Exception\MemberAccessException',
+			"The value of column 'book_title' not set.");
 });
 
 
