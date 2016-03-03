@@ -49,9 +49,7 @@ class BookRepository extends YetORM\Repository
 	 */
 	function persist(YetORM\Entity $book)
 	{
-		$me = $this;
-
-		return $this->transaction(function () use ($me, $book) {
+		return $this->transaction(function () use ($book) {
 
 			$book->onPersist($book);
 			$status = parent::persist($book);

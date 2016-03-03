@@ -35,7 +35,7 @@ class ServiceLocator
 	static function getDbContext()
 	{
 		if (self::$dbContext === NULL) {
-			$connection = new Nette\Database\Connection('mysql:host=localhost;dbname=yetorm_test', 'root', '');
+			$connection = new Nette\Database\Connection('mysql:host=127.0.0.1;dbname=yetorm_test', 'root', '');
 			Nette\Database\Helpers::loadFromFile($connection, __DIR__ . '/db.sql');
 
 			$structure = new Nette\Database\Structure($connection, self::getCacheStorage());
