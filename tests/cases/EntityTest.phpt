@@ -27,7 +27,7 @@ test(function () {
 
 	// not persisted check
 	Assert::exception(function () {
-		$author = new Model\Entities\Author();
+		$author = new Model\Entities\Author;
 		$author->getBooks();
 
 	}, 'YetORM\Exception\InvalidStateException', 'Row not set yet.');
