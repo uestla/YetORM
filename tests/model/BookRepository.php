@@ -59,18 +59,18 @@ class BookRepository extends YetORM\Repository
 				$tags = $this->getTable('tag')->fetchPairs('name', 'id');
 				foreach ($book->getAddedTags() as $tag) {
 					if (!isset($tags[$tag->name])) {
-						$tags[$tag->name] = $tagID = $this->getTable('tag')->insert(array(
+						$tags[$tag->name] = $tagID = $this->getTable('tag')->insert([
 							'name' => $tag->name,
-						))->id;
+						])->id;
 					}
 
-					$this->getTable('book_tag')->insert(array(
+					$this->getTable('book_tag')->insert([
 						'book_id' => $book->id,
 						'tag_id' => $tags[$tag->name],
-					));
+					]);
 				}
 
-				$toDelete = array();
+				$toDelete = [];
 				foreach ($book->getRemovedTags() as $tag) {
 					if (isset($tags[$tag->name])) {
 						$toDelete[] = $tags[$tag->name];
@@ -94,9 +94,9 @@ class BookRepository extends YetORM\Repository
 	/** @return YetORM\EntityCollection|Book[] */
 	public function findByTag($name)
 	{
-		return $this->findBy(array(
+		return $this->findBy([
 			':book_tag.tag.name' => $name,
-		));
+		]);
 	}
 
 

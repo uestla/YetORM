@@ -7,10 +7,10 @@ use Tester\Assert;
 
 // latest
 test(function () {
-	$books = array();
+	$books = [];
 	foreach (ServiceLocator::getBookService()->getLatest() as $book) {
 		$books[] = $book->bookTitle;
 	}
 
-	Assert::same(array('1001 tipu a triku pro PHP', 'JUSH', 'Dibi'), $books); // intentionally "same" due to orderBy() testing
+	Assert::same(['1001 tipu a triku pro PHP', 'JUSH', 'Dibi'], $books); // intentionally "same" due to orderBy() testing
 });

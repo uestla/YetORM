@@ -45,22 +45,22 @@ test(function () {
 	$book->addTag('New tag');
 	$repo->persist($book);
 
-	$tags = array();
+	$tags = [];
 	foreach ($book->getTags() as $tag) {
 		$tags[] = $tag->toArray();
 	}
 
-	Assert::same(array(
-		array(
+	Assert::same([
+		[
 			'id' => 21,
 			'name' => 'PHP',
-		),
-		array(
+		],
+		[
 			'id' => 25,
 			'name' => 'New tag',
-		),
+		],
 
-	), $tags);
+	], $tags);
 });
 
 
@@ -72,18 +72,18 @@ test(function () {
 	$book->removeTag('New tag');
 	$repo->persist($book);
 
-	$tags = array();
+	$tags = [];
 	foreach ($book->getTags() as $tag) {
 		$tags[] = $tag->toArray();
 	}
 
-	Assert::same(array(
-		array(
+	Assert::same([
+		[
 			'id' => 21,
 			'name' => 'PHP',
-		),
+		],
 
-	), $tags);
+	], $tags);
 });
 
 

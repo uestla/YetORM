@@ -13,9 +13,9 @@ function dd() { call_user_func_array('dump', func_get_args()); die(); }
 
 Tester\Environment::lock('yetorm', __DIR__ . '/temp');
 
-ServiceLocator::getCacheStorage()->clean(array(
+ServiceLocator::getCacheStorage()->clean([
 	Nette\Caching\Cache::ALL => TRUE,
-));
+]);
 
 $loader = new Nette\Loaders\RobotLoader;
 $loader->setCacheStorage(ServiceLocator::getCacheStorage());

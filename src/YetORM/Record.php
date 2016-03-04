@@ -23,10 +23,10 @@ class Record
 	private $row;
 
 	/** @var array */
-	private $values = array();
+	private $values = [];
 
 	/** @var array */
-	private $modified = array();
+	private $modified = [];
 
 
 	/** @param  NActiveRow $row */
@@ -197,7 +197,7 @@ class Record
 	private function reload(NActiveRow $row)
 	{
 		$this->row = $row;
-		$this->modified = $this->values = array();
+		$this->modified = $this->values = [];
 	}
 
 }

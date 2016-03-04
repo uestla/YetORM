@@ -85,20 +85,20 @@ test(function () {
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(2);
 
-	Assert::equal(array(
+	Assert::equal([
 		'id' => 2,
 		'bookTitle' => 'JUSH',
 		'written' => new Nette\Utils\DateTime('2007-01-01'),
 		'available' => TRUE,
-		'author' => array(
+		'author' => [
 			'id' => 11,
 			'name' => 'Jakub Vrana',
 			'web' => 'http://www.vrana.cz/',
 			'born' => NULL,
-		),
-		'tags' => array('JavaScript'),
+		],
+		'tags' => ['JavaScript'],
 
-	), $book->toArray());
+	], $book->toArray());
 });
 
 
@@ -106,13 +106,13 @@ test(function () {
 test(function () {
 	$author = ServiceLocator::getAuthorRepository()->getByID(11);
 
-	Assert::equal(array(
+	Assert::equal([
 		'id' => 11,
 		'name' => 'Jakub Vrana',
 		'web' => 'http://www.vrana.cz/',
 		'born' => NULL,
 
-	), $author->toArray());
+	], $author->toArray());
 });
 
 

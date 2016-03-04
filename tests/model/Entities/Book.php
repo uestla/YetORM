@@ -17,13 +17,13 @@ class Book extends BaseEntity
 {
 
 	/** @var array */
-	public $onPersist = array();
+	public $onPersist = [];
 
 	/** @var Tag[] */
-	private $addedTags = array();
+	private $addedTags = [];
 
 	/** @var Tag[] */
-	private $removedTags = array();
+	private $removedTags = [];
 
 	/** @var string */
 	private $imageDir;
@@ -136,7 +136,7 @@ class Book extends BaseEntity
 		$return = parent::toArray();
 		$return['author'] = $this->getAuthor()->toArray();
 
-		$return['tags'] = array();
+		$return['tags'] = [];
 		foreach ($this->getTags() as $tag) {
 			$return['tags'][] = $tag->name;
 		}

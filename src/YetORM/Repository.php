@@ -89,7 +89,7 @@ abstract class Repository extends Nette\Object
 	/** @return EntityCollection */
 	public function findAll()
 	{
-		return $this->findBy(array());
+		return $this->findBy([]);
 	}
 
 
@@ -250,7 +250,7 @@ abstract class Repository extends Nette\Object
 				throw new Exception\InvalidArgumentException('Wrong number of argument passed to ' . $name . ' method - ' . count($properties) . ' expected, ' . count($args) . ' given.');
 			}
 
-			$criteria = array();
+			$criteria = [];
 			$ref = Reflection\EntityType::from($class = $this->getEntityClass());
 
 			foreach ($properties as $key => $property) {

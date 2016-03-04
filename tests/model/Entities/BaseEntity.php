@@ -12,7 +12,7 @@ class BaseEntity extends YetORM\Entity
 	public function toArray()
 	{
 		$ref = static::getReflection();
-		$values = array();
+		$values = [];
 
 		foreach ($ref->getEntityProperties() as $name => $property) {
 			if ($property instanceof YetORM\Reflection\MethodProperty) {

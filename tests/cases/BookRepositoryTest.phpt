@@ -22,20 +22,20 @@ test(function () {
 	Assert::true($book2 instanceof Model\Entities\Book);
 	Assert::equal($book->toArray(), $book2->toArray());
 
-	Assert::equal(array(
+	Assert::equal([
 		'id' => 1,
 		'bookTitle' => '1001 tipu a triku pro PHP',
-		'author' => array(
+		'author' => [
 			'id' => 11,
 			'name' => 'Jakub Vrana',
 			'web' => 'http://www.vrana.cz/',
 			'born' => NULL,
-		),
+		],
 		'written' => new Nette\Utils\DateTime('2010-01-01'),
 		'available' => TRUE,
-		'tags' => array('PHP', 'MySQL'),
+		'tags' => ['PHP', 'MySQL'],
 
-	), $book->toArray());
+	], $book->toArray());
 });
 
 
@@ -51,23 +51,23 @@ test(function () {
 test(function () {
 	$book = ServiceLocator::getBookRepository()->getByID(1);
 
-	$tags = array();
+	$tags = [];
 	foreach ($book->getTags() as $tag) {
 		$tags[] = $tag->name;
 	}
 
-	Assert::same(array('PHP', 'MySQL'), $tags);
+	Assert::same(['PHP', 'MySQL'], $tags);
 });
 
 
 // backjoin filter
 test(function () {
-	$books = array();
+	$books = [];
 	foreach (ServiceLocator::getBookRepository()->findByTag('PHP') as $book) {
 		$books[] = $book->bookTitle;
 	}
 
-	Assert::same(array('1001 tipu a triku pro PHP', 'Nette', 'Dibi'), $books);
+	Assert::same(['1001 tipu a triku pro PHP', 'Nette', 'Dibi'], $books);
 });
 
 
@@ -83,7 +83,7 @@ test(function () {
 		$data[] = $book->bookTitle;
 	}
 
-	Assert::same(array('1001 tipu a triku pro PHP', 'Dibi', 'JUSH', 'Nette'), $data);
+	Assert::same(['1001 tipu a triku pro PHP', 'Dibi', 'JUSH', 'Nette'], $data);
 });
 
 
@@ -117,12 +117,12 @@ test(function () {
 	$books->limit($paginator->getLength(), $paginator->getOffset());
 
 	// render them ordered in template
-	$array = array();
+	$array = [];
 	foreach ($books->orderBy('book_title') as $book) {
 		$array[] = $book->bookTitle;
 	}
 
-	Assert::same(array('JUSH', 'Nette'), $array);
+	Assert::same(['JUSH', 'Nette'], $array);
 });
 
 
@@ -167,20 +167,20 @@ test(function () {
 	$book->written = new Nette\Utils\DateTime('2008-01-01');
 	$repo->persist($book);
 
-	Assert::equal(array(
+	Assert::equal([
 		'id' => 5,
 		'bookTitle' => 'Texy 2',
-		'author' => array(
+		'author' => [
 			'id' => 12,
 			'name' => 'David Grudl',
 			'web' => 'http://davidgrudl.com/',
 			'born' => NULL,
-		),
+		],
 		'written' => new Nette\Utils\DateTime('2008-01-01'),
 		'available' => TRUE,
-		'tags' => array(),
+		'tags' => [],
 
-	), $book->toArray());
+	], $book->toArray());
 
 	Assert::same('David Grudl', $book->getAuthor()->getName());
 
@@ -200,20 +200,20 @@ test(function () {
 	$repo->persist($book);
 	Assert::false($book->available);
 
-	Assert::equal(array(
+	Assert::equal([
 		'id' => 5,
 		'bookTitle' => 'New title',
-		'author' => array(
+		'author' => [
 			'id' => 13,
 			'name' => 'Geek',
 			'web' => 'http://example.com',
 			'born' => NULL,
-		),
+		],
 		'written' => new Nette\Utils\DateTime('2008-01-01'),
 		'available' => FALSE,
-		'tags' => array(),
+		'tags' => [],
 
-	), $book->toArray());
+	], $book->toArray());
 });
 
 

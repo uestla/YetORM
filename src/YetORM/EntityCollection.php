@@ -81,7 +81,7 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 				};
 			}
 
-			$this->data = array();
+			$this->data = [];
 			foreach ($this->selection as $row) {
 				$record = $this->refTable === NULL ? $row : $row->ref($this->refTable, $this->refColumn);
 				$this->data[] = NCallback::invoke($factory, $record);

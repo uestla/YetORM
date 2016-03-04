@@ -23,7 +23,7 @@ abstract class Entity
 	protected $record;
 
 	/** @var array */
-	private static $reflections = array();
+	private static $reflections = [];
 
 
 	/** @param  NActiveRow|Record $row */

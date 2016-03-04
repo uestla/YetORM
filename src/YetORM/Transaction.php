@@ -21,7 +21,7 @@ class Transaction
 	private $connection;
 
 	/** @var array */
-	private static $transactionCounter = array();
+	private static $transactionCounter = [];
 
 
 	/** @param  NdbConnection $connection */

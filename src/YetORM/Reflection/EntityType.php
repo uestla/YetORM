@@ -25,7 +25,7 @@ class EntityType extends NClassType
 	private $properties = NULL;
 
 	/** @var AnnotationProperty[] */
-	private static $annProps = array();
+	private static $annProps = [];
 
 
 	/** @return EntityProperty[] */
@@ -61,7 +61,7 @@ class EntityType extends NClassType
 	private function loadEntityProperties()
 	{
 		if ($this->properties === NULL) {
-			$this->properties = array();
+			$this->properties = [];
 			$this->loadMethodProperties();
 
 			foreach ($this->getClassTree() as $class) {
@@ -109,7 +109,7 @@ class EntityType extends NClassType
 	/** @return array */
 	private function getClassTree()
 	{
-		$tree = array();
+		$tree = [];
 		$current = $this->name;
 
 		do {
@@ -129,7 +129,7 @@ class EntityType extends NClassType
 	private static function loadAnnotationProperties($class)
 	{
 		if (!isset(self::$annProps[$class])) {
-			self::$annProps[$class] = array();
+			self::$annProps[$class] = [];
 			$ref = $class::getReflection();
 
 			foreach ($ref->getAnnotations() as $ann => $values) {
