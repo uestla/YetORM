@@ -59,7 +59,7 @@ class AnnotationProperty extends EntityProperty
 	/**
 	 * @param  mixed $value
 	 * @param  bool $need
-	 * @return mixed
+	 * @return bool
 	 */
 	public function checkType($value, $need = TRUE)
 	{
