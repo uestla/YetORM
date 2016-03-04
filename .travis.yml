@@ -20,7 +20,6 @@ before_script:
 
     # Setup database
     - mysql -e 'CREATE DATABASE yetorm_test;'
-    - mysql -u root yetorm_test < tests/model/db.sql
 
     # Coveralls
     - travis_retry [ ! -e "./tests/php.ini" ] && touch ./tests/php.ini
