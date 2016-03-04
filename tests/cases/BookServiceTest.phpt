@@ -12,5 +12,5 @@ test(function () {
 		$books[] = $book->bookTitle;
 	}
 
-	Assert::equal(array('1001 tipu a triku pro PHP', 'JUSH', 'Dibi'), $books);
+	Assert::same(array('1001 tipu a triku pro PHP', 'JUSH', 'Dibi'), $books); // intentionally "same" due to orderBy() testing
 });
