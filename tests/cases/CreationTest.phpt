@@ -18,6 +18,19 @@ test(function () {
 	// default values
 	Assert::true($book->available);
 	Assert::null($book->written);
+
+	// invalid constructor
+	Assert::exception(function () {
+		new Model\Entities\Author(new \DateTime);
+
+	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'DateTime' given.");
+
+	// not persisted check
+	Assert::exception(function () {
+		$author = new Model\Entities\Author();
+		$author->getBooks();
+
+	}, 'YetORM\Exception\InvalidStateException', 'Row not set yet.');
 });
 
 
