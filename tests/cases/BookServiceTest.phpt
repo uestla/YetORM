@@ -8,7 +8,7 @@ use Tester\Assert;
 // latest
 test(function () {
 	$books = array();
-	foreach (ServiceLocator::getBookFacade()->getLatest() as $book) {
+	foreach (ServiceLocator::getBookService()->getLatest() as $book) {
 		$books[] = $book->bookTitle;
 	}
 

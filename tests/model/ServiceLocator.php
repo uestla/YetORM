@@ -73,7 +73,7 @@ class ServiceLocator
 
 
 	/** @return Model\Services\BookService */
-	public static function getBookFacade()
+	public static function getBookService()
 	{
 		if (self::$bookService === NULL) {
 			self::$bookService = new Model\Services\BookService(self::getBookRepository());
