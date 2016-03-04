@@ -79,6 +79,7 @@ test(function () {
 
 	Assert::same(4, count($allbooks->limit(2))); // data not received yet -> count as non-limited
 	Assert::same(2, count($allbooks->limit(2)->toArray())); // data received
+	Assert::same(2, count($allbooks)); // count collection after data receival
 	Assert::same(1, count($booktags));
 });
 
