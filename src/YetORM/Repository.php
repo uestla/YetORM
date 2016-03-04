@@ -225,7 +225,7 @@ abstract class Repository extends Nette\Object
 			$properties = explode('And', substr($name, 5));
 
 			if (count($properties) !== count($args)) {
-				throw new Exception\InvalidArgumentException;
+				throw new Exception\InvalidArgumentException('Wrong number of argument passed to ' . $name . ' method - ' . count($properties) . ' expected, ' . count($args) . ' given.');
 			}
 
 			$ref = Reflection\EntityType::from($class = $this->getEntityClass());
@@ -247,7 +247,7 @@ abstract class Repository extends Nette\Object
 			$properties = explode('And', substr($name, 6));
 
 			if (count($properties) !== count($args)) {
-				throw new Exception\InvalidArgumentException;
+				throw new Exception\InvalidArgumentException('Wrong number of argument passed to ' . $name . ' method - ' . count($properties) . ' expected, ' . count($args) . ' given.');
 			}
 
 			$criteria = array();

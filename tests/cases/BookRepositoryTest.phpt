@@ -243,15 +243,18 @@ test(function () {
 // magic findBy() method
 test(function () {
 	Assert::same(4, count(ServiceLocator::getBookRepository()->findByAvailable(TRUE)));
-});
 
-
-// magic findBy() method - nonexisting property
-test(function () {
+	// nonexisting property
 	Assert::exception(function () {
-	 ServiceLocator::getBookRepository()->findByFoo('bar');
+		ServiceLocator::getBookRepository()->findByFoo('bar');
 
 	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+
+	// wrong number of arguments
+	Assert::exception(function () {
+		ServiceLocator::getBookRepository()->findByAvailable(TRUE, FALSE);
+
+	}, 'YetORM\Exception\InvalidArgumentException', 'Wrong number of argument passed to findByAvailable method - 1 expected, 2 given.');
 });
 
 
@@ -259,13 +262,16 @@ test(function () {
 test(function () {
 	Assert::true(ServiceLocator::getBookRepository()->getByBookTitle('Nette') instanceof \Model\Entities\Book);
 	Assert::null(ServiceLocator::getBookRepository()->getByBookTitle('as567tfa6sd54f6'));
-});
 
-
-// magic getBy() method - nonexisting property
-test(function () {
+	// nonexisting property
 	Assert::exception(function () {
-	 ServiceLocator::getBookRepository()->getByFoo('bar');
+		ServiceLocator::getBookRepository()->getByFoo('bar');
 
 	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+
+	// wrong number of arguments
+	Assert::exception(function () {
+		ServiceLocator::getBookRepository()->getByBookTitle('Nette', FALSE);
+
+	}, 'YetORM\Exception\InvalidArgumentException', 'Wrong number of argument passed to getByBookTitle method - 1 expected, 2 given.');
 });
