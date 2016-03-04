@@ -93,9 +93,8 @@ class AnnotationProperty extends EntityProperty
 	 */
 	public function setType($value)
 	{
-		if (!$this->checkType($value, FALSE) && @settype($value, $this->getType()) === FALSE) { // intentionally @
-			throw new YetORM\Exception\InvalidArgumentException("Unable to set type '{$this->getType()}' from '"
-				. gettype($value) . "'.");
+		if (!$this->checkType($value, FALSE)) { // type casting needed
+			settype($value, $this->getType());
 		}
 
 		return $value;
