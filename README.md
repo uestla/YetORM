@@ -5,7 +5,7 @@ YetORM
 [![Code coverage](https://coveralls.io/repos/github/uestla/YetORM/badge.svg?branch=master)](https://coveralls.io/r/uestla/YetORM)
 [![Total downloads](https://poser.pugx.org/uestla/yetorm/downloads)](https://packagist.org/packages/uestla/YetORM)
 [![Latest stable](https://poser.pugx.org/uestla/yetorm/v/stable)](https://packagist.org/packages/uestla/YetORM)
-[![HHVM Status](http://hhvm.h4cc.de/badge/uestla/YetORM.svg)](http://hhvm.h4cc.de/package/uestla/YetORM)
+[![HHVM Status](http://hhvm.h4cc.de/badge/uestla/YetORM.svg?style=flat)](http://hhvm.h4cc.de/package/uestla/YetORM)
 
 Lightweight ORM built on top of Nette\Database
 
