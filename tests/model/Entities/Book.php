@@ -19,6 +19,9 @@ class Book extends BaseEntity
 	/** @var array */
 	public $onPersist = [];
 
+	/** @var string fake event - testing purposes */
+	public $onAndOff = 'wee';
+
 	/** @var Tag[] */
 	private $addedTags = [];
 

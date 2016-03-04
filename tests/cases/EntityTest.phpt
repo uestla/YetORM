@@ -108,4 +108,11 @@ test(function () {
 		ServiceLocator::getBookRepository()->createEntity()->asdf();
 
 	}, 'YetORM\Exception\MemberAccessException', 'Call to undefined method Model\Entities\Book::asdf().');
+
+
+	// fake event
+	Assert::exception(function () {
+		ServiceLocator::getBookRepository()->createEntity()->onAndOff();
+
+	}, 'YetORM\Exception\MemberAccessException', 'Call to undefined method Model\Entities\Book::onAndOff().');
 });
