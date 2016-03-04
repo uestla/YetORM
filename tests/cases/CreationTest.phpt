@@ -94,3 +94,12 @@ test(function () {
 
 	Assert::true($repo->delete($book));
 });
+
+
+// undefined method
+test(function () {
+	Assert::exception(function () {
+		ServiceLocator::getBookRepository()->createEntity()->asdf();
+
+	}, 'YetORM\Exception\MemberAccessException', 'Call to undefined method Model\Entities\Book::asdf().');
+});
