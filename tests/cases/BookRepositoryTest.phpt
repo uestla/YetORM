@@ -71,6 +71,22 @@ test(function () {
 });
 
 
+// orderBy()
+test(function () {
+	$data = [];
+	$books = ServiceLocator::getBookRepository()->findAll()->orderBy([
+		'book_title' => EC::ASC,
+		'author.name' => EC::DESC,
+	]);
+
+	foreach ($books as $book) {
+		$data[] = $book->bookTitle;
+	}
+
+	Assert::same(array('1001 tipu a triku pro PHP', 'Dibi', 'JUSH', 'Nette'), $data);
+});
+
+
 // count
 test(function () {
 	$repo = ServiceLocator::getBookRepository();
