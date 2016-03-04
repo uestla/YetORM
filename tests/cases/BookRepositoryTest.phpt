@@ -275,3 +275,12 @@ test(function () {
 
 	}, 'YetORM\Exception\InvalidArgumentException', 'Wrong number of argument passed to getByBookTitle method - 1 expected, 2 given.');
 });
+
+
+// entity check on perist
+test(function () {
+	Assert::exception(function () {
+		ServiceLocator::getAuthorRepository()->persist(ServiceLocator::getBookRepository()->createEntity());
+
+	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Model\Entities\Author' expected, 'Model\Entities\Book' given.");
+});
