@@ -87,6 +87,12 @@ test(function () {
 });
 
 
+// record value isset() test
+test(function () {
+	Assert::false(ServiceLocator::getAuthorRepository()->createEntity()->hasName());
+});
+
+
 // not persisted entity
 test(function () {
 	$repo = ServiceLocator::getBookRepository();

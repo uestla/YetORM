@@ -18,4 +18,11 @@ abstract class Person extends BaseEntity
 		return Nette\Utils\Strings::capitalize($this->record->name);
 	}
 
+
+	/** @return bool */
+	public function hasName()
+	{
+		return isset($this->record->name) && strlen($this->record->name);
+	}
+
 }
