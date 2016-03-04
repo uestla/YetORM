@@ -300,3 +300,19 @@ test(function () {
 
 	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Model\Entities\Author' expected, 'Model\Entities\Book' given.");
 });
+
+
+// native Nette\Object event support
+test(function () {
+	$repo = ServiceLocator::getBookRepository();
+
+	$repo->onMyEvent[] = function () {
+		echo 'weee';
+	};
+
+	ob_start();
+	$repo->onMyEvent();
+	$buffer = ob_get_clean();
+
+	Assert::same('weee', $buffer);
+});

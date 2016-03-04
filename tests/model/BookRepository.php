@@ -21,6 +21,9 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 class BookRepository extends YetORM\Repository
 {
 
+	/** @var array */
+	public $onMyEvent = [];
+
 	/** @var string */
 	private $imageDir;
 
