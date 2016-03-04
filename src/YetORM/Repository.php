@@ -296,25 +296,4 @@ abstract class Repository extends Nette\Object
 	protected function handleException(\Exception $e)
 	{}
 
-
-	/** @return void */
-	final protected function begin()
-	{
-		$this->transaction->begin();
-	}
-
-
-	/** @return void */
-	final protected function commit()
-	{
-		$this->transaction->commit();
-	}
-
-
-	/** @return void */
-	final protected function rollback()
-	{
-		$this->transaction->rollback();
-	}
-
 }
