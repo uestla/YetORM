@@ -179,7 +179,7 @@ class BookRepository extends YetORM\Repository
 
 #### Persisting
 
-To persist changes we make simply call `$repository->persist($entity)`.
+To persist changes we simply call `$repository->persist($entity)`.
 
 ```php
 $book->web = 'http://example.com';
