@@ -1,11 +1,11 @@
 YetORM
 ======
 
-[![Build Status](https://img.shields.io/travis/uestla/YetORM.svg?style=flat-square)](https://travis-ci.org/uestla/YetORM)
-[![Code coverage](https://img.shields.io/coveralls/uestla/YetORM.svg?style=flat-square)](https://coveralls.io/r/uestla/YetORM)
-[![Total downloads](https://img.shields.io/packagist/dt/uestla/YetORM.svg?style=flat-square)](https://packagist.org/packages/uestla/YetORM)
-[![Latest stable](https://img.shields.io/packagist/v/uestla/YetORM.svg?style=flat-square)](https://packagist.org/packages/uestla/YetORM)
-[![HHVM Status](https://img.shields.io/hhvm/uestla/YetORM.svg?style=flat-square)](http://hhvm.h4cc.de/package/uestla/YetORM)
+[![Build Status](https://travis-ci.org/uestla/YetORM.svg?branch=master)](https://travis-ci.org/uestla/YetORM)
+[![Code coverage](https://coveralls.io/repos/github/uestla/YetORM/badge.svg?branch=master)](https://coveralls.io/r/uestla/YetORM)
+[![Total downloads](https://poser.pugx.org/uestla/yetorm/downloads)](https://packagist.org/packages/uestla/YetORM)
+[![Latest stable](https://poser.pugx.org/uestla/yetorm/v/stable)](https://packagist.org/packages/uestla/YetORM)
+[![HHVM Status](http://hhvm.h4cc.de/badge/uestla/YetORM.svg)](http://hhvm.h4cc.de/package/uestla/YetORM)
 
 Lightweight ORM built on top of Nette\Database
 
