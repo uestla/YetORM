@@ -25,6 +25,11 @@ test(function () {
 
 	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'DateTime' given.");
 
+	Assert::exception(function () {
+		new Model\Entities\Author('wee');
+
+	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'string' given.");
+
 	// not persisted check
 	Assert::exception(function () {
 		$author = new Model\Entities\Author;

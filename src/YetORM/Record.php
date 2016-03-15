@@ -49,7 +49,9 @@ class Record
 			return $row;
 
 		} else {
-			throw new Exception\InvalidArgumentException("Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, '" . get_class($row) . "' given.");
+			throw new Exception\InvalidArgumentException("Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, '"
+					. (is_object($row) ? get_class($row) : gettype($row))
+					. "' given.");
 		}
 	}
 
