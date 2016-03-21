@@ -202,7 +202,7 @@ abstract class Repository extends Nette\Object
 
 
 	/** @return void */
-	private function checkEntity(Entity $entity)
+	final protected function checkEntity(Entity $entity)
 	{
 		$class = $this->getEntityClass();
 
