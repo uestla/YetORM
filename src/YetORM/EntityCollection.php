@@ -192,9 +192,16 @@ class EntityCollection extends Nette\Object implements \Iterator, \Countable
 
 	// === interface \Countable ======================================
 
-	/** @return int */
-	public function count()
+	/**
+	 * @param  string $column
+	 * @return int
+	 */
+	public function count($column = NULL)
 	{
+		if ($column !== NULL) {
+			return $this->selection->count($column);
+		}
+
 		if ($this->data !== NULL) {
 			return count($this->data);
 		}
