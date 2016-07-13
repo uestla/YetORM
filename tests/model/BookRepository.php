@@ -129,6 +129,8 @@ class BookRepository extends YetORM\Repository
 		if ($e instanceof \Nette\Database\UniqueConstraintViolationException) {
 			throw new DuplicateEntryException;
 		}
+
+		parent::handleException($e);
 	}
 
 }
