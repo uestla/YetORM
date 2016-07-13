@@ -5,9 +5,8 @@ require_once __DIR__ . '/../src/yetorm.php';
 require_once __DIR__ . '/model/ServiceLocator.php';
 
 Tester\Environment::setup();
-date_default_timezone_set('Europe/Prague');
+date_default_timezone_set('UTC');
 
-function id($a) { return $a; }
 function test(\Closure $function) { $function(); }
 function dd() { call_user_func_array('dump', func_get_args()); die(); }
 

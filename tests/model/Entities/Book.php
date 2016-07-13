@@ -122,7 +122,7 @@ class Book extends BaseEntity
 	public function getTags()
 	{
 		$selection = $this->record->related('book_tag', 'book_id');
-		return new YetORM\EntityCollection($selection, 'Model\Entities\Tag', 'tag');
+		return new YetORM\EntityCollection($selection, Tag::class, 'tag');
 	}
 
 
