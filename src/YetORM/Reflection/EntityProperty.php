@@ -11,11 +11,8 @@
 
 namespace YetORM\Reflection;
 
-use Nette;
 
-
-/** @property-read bool $readonly */
-abstract class EntityProperty extends Nette\Object
+abstract class EntityProperty
 {
 
 	/** @var EntityType */

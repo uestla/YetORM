@@ -16,7 +16,7 @@ use Nette\Utils\Callback as NCallback;
 use Nette\Database\Table\Selection as NSelection;
 
 
-class EntityCollection extends Nette\Object implements \Iterator, \Countable
+class EntityCollection implements \Iterator, \Countable
 {
 
 	/** @var NSelection */
