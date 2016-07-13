@@ -11,7 +11,7 @@
 
 namespace YetORM\Reflection;
 
-use YetORM;
+use YetORM\Exception;
 
 
 class AnnotationProperty extends EntityProperty
@@ -66,18 +66,18 @@ class AnnotationProperty extends EntityProperty
 		if ($value === NULL) {
 			if (!$this->nullable) {
 				$entity = $this->getEntityReflection()->getName();
-				throw new YetORM\Exception\InvalidArgumentException("Property '{$entity}::\${$this->getName()}' cannot be NULL.");
+				throw new Exception\InvalidArgumentException("Property '{$entity}::\${$this->getName()}' cannot be NULL.");
 			}
 
 		} elseif (!$this->isOfNativeType()) {
 			$class = $this->getType();
 			if (!($value instanceof $class)) {
-				throw new YetORM\Exception\InvalidArgumentException("Instance of '{$class}' expected, '"
+				throw new Exception\InvalidArgumentException("Instance of '{$class}' expected, '"
 						. (($valtype = gettype($value)) === 'object' ? get_class($value) : $valtype) . "' given.");
 			}
 
 		} elseif ($need && ($type = gettype($value)) !== $this->getType()) {
-			throw new YetORM\Exception\InvalidArgumentException("Invalid type - '{$this->getType()}' expected, '$type' given.");
+			throw new Exception\InvalidArgumentException("Invalid type - '{$this->getType()}' expected, '$type' given.");
 
 		} else {
 			return FALSE;

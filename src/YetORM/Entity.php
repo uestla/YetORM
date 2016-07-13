@@ -11,7 +11,6 @@
 
 namespace YetORM;
 
-use Nette;
 use Nette\Utils\Callback as NCallback;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
