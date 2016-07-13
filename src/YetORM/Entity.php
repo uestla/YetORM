@@ -72,7 +72,7 @@ abstract class Entity
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
-			$value = $prop->setType($this->record->{$prop->column});
+			$value = $prop->setType($this->record->{$prop->getColumn()});
 			return $value;
 		}
 
@@ -89,9 +89,9 @@ abstract class Entity
 	public function __set($name, $value)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
-		if ($prop instanceof Reflection\AnnotationProperty && !$prop->readonly) {
+		if ($prop instanceof Reflection\AnnotationProperty && !$prop->isReadonly()) {
 			$prop->checkType($value);
-			$this->record->{$prop->column} = $value;
+			$this->record->{$prop->getColumn()} = $value;
 			return ;
 		}
 
