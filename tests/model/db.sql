@@ -1,4 +1,3 @@
--- Adminer 3.6.3 MySQL dump
 
 SET NAMES utf8;
 SET foreign_key_checks = 0;
@@ -69,5 +68,3 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (22,	'MySQL'),
 (24,	'Neon'),
 (21,	'PHP');
-
--- 2013-05-05 10:30:34
