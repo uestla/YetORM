@@ -116,7 +116,7 @@ class EntityType extends NClassType
 			$tree[] = $current;
 			$current = get_parent_class($current);
 
-		} while ($current !== FALSE && $current !== 'YetORM\\Entity');
+		} while ($current !== FALSE && $current !== YetORM\Entity::class);
 
 		return array_reverse($tree);
 	}
