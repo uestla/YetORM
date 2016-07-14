@@ -81,11 +81,11 @@ class EntityType extends NClassType
 	private function loadMethodProperties()
 	{
 		foreach ($this->getMethods(NMethod::IS_PUBLIC) as $method) {
-			if ($method->declaringClass->name !== 'YetORM\\Entity'
-					&& strlen($method->name) > 3 && substr($method->name, 0, 3) === 'get'
+			if ($method->getDeclaringClass()->getName() !== 'YetORM\\Entity'
+					&& strlen($method->getName()) > 3 && substr($method->getName(), 0, 3) === 'get'
 					&& !$method->hasAnnotation('internal')) {
 
-				$name = lcfirst(substr($method->name, 3));
+				$name = lcfirst(substr($method->getName(), 3));
 				$type = $method->getAnnotation('return');
 
 				if ($type !== NULL && !EntityProperty::isNativeType($type)) {
@@ -110,7 +110,7 @@ class EntityType extends NClassType
 	private function getClassTree()
 	{
 		$tree = [];
-		$current = $this->name;
+		$current = $this->getName();
 
 		do {
 			$tree[] = $current;
