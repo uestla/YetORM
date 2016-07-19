@@ -18,10 +18,10 @@
 	},
 
 	"require-dev": {
-		"tracy/tracy": "*",
-		"nette/tester": "*",
-		"nette/caching": "*",
-		"nette/robot-loader": "*"
+		"tracy/tracy": "^2.4",
+		"nette/tester": "^1.7",
+		"nette/caching": "^2.5",
+		"nette/robot-loader": "^2.4"
 	},
 
 	"autoload": {
