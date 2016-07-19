@@ -12,6 +12,7 @@
 namespace YetORM;
 
 use Nette;
+use Nette\Database\IRow as NIRow;
 use Nette\Reflection\AnnotationsParser;
 use Nette\Database\Context as NdbContext;
 use Nette\Database\Table\ActiveRow as NActiveRow;
@@ -125,17 +126,23 @@ abstract class Repository extends Nette\Object
 	{
 		$this->checkEntity($entity);
 
-		$me = $this;
-		return $this->transaction(function () use ($me, $entity) {
+		return $this->transaction(function () use ($entity) {
 
 			$record = $entity->toRecord();
 			if ($record->hasRow()) {
 				return $record->update();
 			}
 
-			$inserted = $me->getTable()->insert($record->getModified());
+			$inserted = $this->getTable()
+					->insert($record->getModified());
+
+			if (!$inserted instanceof NIRow) {
+				throw new Exception\InvalidStateException('Insert did not return instance of ' . NIRow::class . '. '
+						. 'Does table "' . $this->getTableName() . '" have primary key defined? If so, try cleaning cache.');
+			}
+
 			$record->setRow($inserted);
-			return $inserted instanceof Nette\Database\IRow || $inserted > 0;
+			return TRUE;
 
 		});
 	}

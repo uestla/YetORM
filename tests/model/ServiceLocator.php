@@ -22,6 +22,9 @@ class ServiceLocator
 	/** @var Model\Repositories\NoTableRepository */
 	private static $invalidRepository = NULL;
 
+	/** @var Model\Repositories\NoPrimaryRepository */
+	private static $noPrimaryRepository = NULL;
+
 
 	/** @return Nette\Caching\Storages\FileStorage */
 	public static function getCacheStorage()
@@ -91,6 +94,17 @@ class ServiceLocator
 		}
 
 		return self::$invalidRepository;
+	}
+
+
+	/** @return Model\Repositories\NoPrimaryRepository */
+	public static function getNoPrimaryRepository()
+	{
+		if (self::$noPrimaryRepository === NULL) {
+			self::$noPrimaryRepository = new Model\Repositories\NoPrimaryRepository(self::getDbContext());
+		}
+
+		return self::$noPrimaryRepository;
 	}
 
 }

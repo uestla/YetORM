@@ -68,3 +68,10 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (22,	'MySQL'),
 (24,	'Neon'),
 (21,	'PHP');
+
+DROP TABLE IF EXISTS `no_primary_table`;
+CREATE TABLE `no_primary_table` (
+  `foo` varchar(255) NOT NULL,
+  `barr` varchar(255) NOT NULL,
+  `wee` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
