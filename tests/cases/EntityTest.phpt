@@ -3,6 +3,9 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 use Tester\Assert;
+use YetORM\Exception\InvalidStateException;
+use YetORM\Exception\MemberAccessException;
+use YetORM\Exception\InvalidArgumentException;
 
 
 // creation
@@ -23,19 +26,19 @@ test(function () {
 	Assert::exception(function () {
 		new Model\Entities\Author(new \DateTime);
 
-	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'DateTime' given.");
+	}, InvalidArgumentException::class, "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'DateTime' given.");
 
 	Assert::exception(function () {
 		new Model\Entities\Author('wee');
 
-	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'string' given.");
+	}, InvalidArgumentException::class, "Instance of 'Nette\Database\Table\ActiveRow' or 'YetORM\Record' expected, 'string' given.");
 
 	// not persisted check
 	Assert::exception(function () {
 		$author = new Model\Entities\Author;
 		$author->getBooks();
 
-	}, 'YetORM\Exception\InvalidStateException', 'Row not set yet.');
+	}, InvalidStateException::class, 'Row not set yet.');
 });
 
 
@@ -112,12 +115,12 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->createEntity()->asdf();
 
-	}, 'YetORM\Exception\MemberAccessException', 'Call to undefined method Model\Entities\Book::asdf().');
+	}, MemberAccessException::class, 'Call to undefined method Model\Entities\Book::asdf().');
 
 
 	// fake event
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->createEntity()->onAndOff();
 
-	}, 'YetORM\Exception\MemberAccessException', 'Call to undefined method Model\Entities\Book::onAndOff().');
+	}, MemberAccessException::class, 'Call to undefined method Model\Entities\Book::onAndOff().');
 });

@@ -13,7 +13,7 @@ test(function () {
 	$selection = $context->table('author')
 			->where(':book.written IS NOT NULL');
 
-	$collection = new EntityCollection($selection, 'Model\Entities\Author');
+	$collection = new EntityCollection($selection, Author::class);
 
 	// count($collection)
 	Assert::same(4, count($collection));

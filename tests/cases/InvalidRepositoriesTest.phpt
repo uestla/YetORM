@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 use Tester\Assert;
+use YetORM\Exception\InvalidStateException;
 
 
 test(function () {
@@ -10,11 +11,11 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getInvalidRepository()->testNoTable();
 
-	}, 'YetORM\Exception\InvalidStateException', 'Table name not set.');
+	}, InvalidStateException::class, 'Table name not set.');
 
 	// missing entity
 	Assert::exception(function () {
 		ServiceLocator::getInvalidRepository()->testNoEntity();
 
-	}, 'YetORM\Exception\InvalidStateException', 'Entity class not set.');
+	}, InvalidStateException::class, 'Entity class not set.');
 });

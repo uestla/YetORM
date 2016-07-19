@@ -6,6 +6,8 @@ use Tester\Assert;
 use YetORM\EntityCollection as EC;
 use Nette\Database\ResultSet as NResultSet;
 use Nette\Database\Connection as NConnection;
+use YetORM\Exception\InvalidArgumentException;
+use Model\Repositories\DuplicateEntryException;
 
 
 // entity loading
@@ -252,7 +254,7 @@ test(function () {
 		$book->available = TRUE;
 		$repo->persist($book);
 
-	}, 'Model\Repositories\DuplicateEntryException');
+	}, DuplicateEntryException::class);
 });
 
 
@@ -264,13 +266,13 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->findByFoo('bar');
 
-	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\Entities\Book'.");
 
 	// wrong number of arguments
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->findByAvailable(TRUE, FALSE);
 
-	}, 'YetORM\Exception\InvalidArgumentException', 'Wrong number of argument passed to findByAvailable method - 1 expected, 2 given.');
+	}, InvalidArgumentException::class, 'Wrong number of argument passed to findByAvailable method - 1 expected, 2 given.');
 });
 
 
@@ -283,13 +285,13 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->getByFoo('bar');
 
-	}, 'YetORM\Exception\InvalidArgumentException', "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\Entities\Book'.");
 
 	// wrong number of arguments
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->getByBookTitle('Nette', FALSE);
 
-	}, 'YetORM\Exception\InvalidArgumentException', 'Wrong number of argument passed to getByBookTitle method - 1 expected, 2 given.');
+	}, InvalidArgumentException::class, 'Wrong number of argument passed to getByBookTitle method - 1 expected, 2 given.');
 });
 
 
@@ -298,7 +300,7 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getAuthorRepository()->persist(ServiceLocator::getBookRepository()->createEntity());
 
-	}, 'YetORM\Exception\InvalidArgumentException', "Instance of 'Model\Entities\Author' expected, 'Model\Entities\Book' given.");
+	}, InvalidArgumentException::class, "Instance of 'Model\Entities\Author' expected, 'Model\Entities\Book' given.");
 });
 
 

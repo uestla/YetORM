@@ -23,20 +23,17 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->bookTitle = 123;
 
-	}, 'YetORM\Exception\InvalidArgumentException',
-			"Invalid type - 'string' expected, 'integer' given.");
+	}, InvalidArgumentException::class, "Invalid type - 'string' expected, 'integer' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->available = 'TRUE';
 
-	}, 'YetORM\Exception\InvalidArgumentException',
-			"Invalid type - 'boolean' expected, 'string' given.");
+	}, InvalidArgumentException::class, "Invalid type - 'boolean' expected, 'string' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->asdf = 'Book title';
 
-	}, 'YetORM\Exception\MemberAccessException',
-			'Cannot write to an undeclared property Model\Entities\Book::$asdf.');
+	}, MemberAccessException::class, 'Cannot write to an undeclared property Model\Entities\Book::$asdf.');
 });
 
 
@@ -51,8 +48,7 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->asdf;
 
-	}, 'YetORM\Exception\MemberAccessException',
-			'Cannot read an undeclared property Model\Entities\Book::$asdf.');
+	}, MemberAccessException::class, 'Cannot read an undeclared property Model\Entities\Book::$asdf.');
 });
 
 
@@ -80,7 +76,7 @@ test(function () {
 		$book = ServiceLocator::getBookRepository()->getByID(1);
 		unset($book->written);
 
-	}, 'YetORM\Exception\NotSupportedException');
+	}, NotSupportedException::class);
 });
 
 
@@ -127,14 +123,12 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->written = new \stdClass;
 
-	}, 'YetORM\Exception\InvalidArgumentException',
-			"Instance of 'Nette\Utils\DateTime' expected, 'stdClass' given.");
+	}, InvalidArgumentException::class, "Instance of 'Nette\Utils\DateTime' expected, 'stdClass' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->written = '';
 
-	}, 'YetORM\Exception\InvalidArgumentException',
-			"Instance of 'Nette\Utils\DateTime' expected, 'string' given.");
+	}, InvalidArgumentException::class, "Instance of 'Nette\Utils\DateTime' expected, 'string' given.");
 });
 
 
@@ -157,8 +151,7 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->bookTitle = NULL;
 
-	}, 'YetORM\Exception\InvalidArgumentException',
-			"Property 'Model\Entities\Book::\$bookTitle' cannot be NULL.");
+	}, InvalidArgumentException::class, "Property 'Model\Entities\Book::\$bookTitle' cannot be NULL.");
 });
 
 
@@ -167,8 +160,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadDoubleNullEntity::getReflection()->getEntityProperties();
 
-	}, 'YetORM\Exception\InvalidStateException',
-			'Invalid property type (double NULL).');
+	}, InvalidStateException::class, 'Invalid property type (double NULL).');
 });
 
 
@@ -177,8 +169,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadMultipleTypeEntity::getReflection()->getEntityProperties();
 
-	}, 'YetORM\Exception\InvalidStateException',
-			'Invalid property type (multiple non-NULL types detected).');
+	}, InvalidStateException::class, 'Invalid property type (multiple non-NULL types detected).');
 });
 
 
@@ -187,7 +178,7 @@ test(function () {
 	Assert::exception(function () {
 	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
 
-	}, 'YetORM\Exception\InvalidStateException',
+	}, InvalidStateException::class,
 			'Invalid property definition - "@property string nodollar" does not match "@property[-read] <type> $<property> [-> <column>][ <description>]" pattern.');
 });
 
@@ -198,8 +189,7 @@ test(function () {
 		$book = ServiceLocator::getBookRepository()->createEntity();
 		$book->toRecord()->book_title;
 
-	}, 'YetORM\Exception\MemberAccessException',
-			"The value of column 'book_title' not set.");
+	}, MemberAccessException::class, "The value of column 'book_title' not set.");
 });
 
 
