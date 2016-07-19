@@ -3,6 +3,10 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 use Tester\Assert;
+use YetORM\Exception\MemberAccessException;
+use YetORM\Exception\NotSupportedException;
+use YetORM\Exception\InvalidStateException;
+use YetORM\Exception\InvalidArgumentException;
 
 
 // setters
@@ -14,8 +18,7 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->id = 123;
 
-	}, 'YetORM\Exception\MemberAccessException',
-			'Cannot write to an undeclared property Model\Entities\Book::$id.');
+	}, MemberAccessException::class, 'Cannot write to a read-only property Model\Entities\Book::$id.');
 
 	Assert::exception(function () use ($book) {
 		$book->bookTitle = 123;

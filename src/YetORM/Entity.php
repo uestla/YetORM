@@ -70,14 +70,14 @@ abstract class Entity
 	 */
 	public function & __get($name)
 	{
-		$prop = static::getReflection()->getEntityProperty($name);
+		$ref = static::getReflection();
+		$prop = $ref->getEntityProperty($name);
 		if ($prop instanceof Reflection\AnnotationProperty) {
 			$value = $prop->setType($this->record->{$prop->getColumn()});
 			return $value;
 		}
 
-		$class = get_class($this);
-		throw new Exception\MemberAccessException("Cannot read an undeclared property $class::\$$name.");
+		throw new Exception\MemberAccessException("Cannot read an undeclared property {$ref->getName()}::\$$name.");
 	}
 
 
@@ -88,15 +88,19 @@ abstract class Entity
 	 */
 	public function __set($name, $value)
 	{
-		$prop = static::getReflection()->getEntityProperty($name);
-		if ($prop instanceof Reflection\AnnotationProperty && !$prop->isReadonly()) {
+		$ref = static::getReflection();
+		$prop = $ref->getEntityProperty($name);
+		if ($prop instanceof Reflection\AnnotationProperty) {
+			if ($prop->isReadonly()) {
+				throw new Exception\MemberAccessException("Cannot write to a read-only property {$ref->getName()}::\$$name.");
+			}
+
 			$prop->checkType($value);
 			$this->record->{$prop->getColumn()} = $value;
 			return ;
 		}
 
-		$class = get_class($this);
-		throw new Exception\MemberAccessException("Cannot write to an undeclared property $class::\$$name.");
+		throw new Exception\MemberAccessException("Cannot write to an undeclared property {$ref->getName()}::\$$name.");
 	}
 
 
