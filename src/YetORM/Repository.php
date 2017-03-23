@@ -27,10 +27,10 @@ abstract class Repository extends Nette\Object
 	/** @var Transaction */
 	private $transaction;
 
-	/** @var string */
+	/** @var string|NULL */
 	protected $table = NULL;
 
-	/** @var string */
+	/** @var string|NULL */
 	protected $entity = NULL;
 
 

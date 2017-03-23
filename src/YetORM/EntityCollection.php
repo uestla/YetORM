@@ -30,10 +30,10 @@ class EntityCollection implements \Iterator, \Countable
 	/** @var string|NULL */
 	protected $refColumn;
 
-	/** @var Entity[] */
+	/** @var Entity[]|NULL */
 	protected $data = NULL;
 
-	/** @var int */
+	/** @var int|NULL */
 	private $count = NULL;
 
 	/** @var array */

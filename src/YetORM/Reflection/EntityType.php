@@ -20,10 +20,10 @@ use Nette\Reflection\ClassType as NClassType;
 class EntityType extends NClassType
 {
 
-	/** @var EntityProperty[] */
+	/** @var EntityProperty[]|NULL */
 	private $properties = NULL;
 
-	/** @var AnnotationProperty[] */
+	/** @var array <class> => AnnotationProperty[] */
 	private static $annProps = [];
 
 
