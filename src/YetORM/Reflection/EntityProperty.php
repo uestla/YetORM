@@ -10,6 +10,8 @@
 
 namespace YetORM\Reflection;
 
+use YetORM\Entity;
+
 
 abstract class EntityProperty
 {
@@ -45,6 +47,21 @@ abstract class EntityProperty
 		$this->type = (string) $type;
 		$this->description = $description === NULL ? NULL : (string) $description;
 	}
+
+
+	/**
+	 * @param  Entity $entity
+	 * @return mixed
+	 */
+	abstract public function getValue(Entity $entity);
+
+
+	/**
+	 * @param  Entity $entity
+	 * @param  mixed $value
+	 * @return void
+	 */
+	abstract public function setValue(Entity $entity, $value);
 
 
 	/** @return EntityType */

@@ -10,6 +10,7 @@
 
 namespace YetORM\Reflection;
 
+use YetORM\Entity;
 use YetORM\Exception;
 
 
@@ -38,6 +39,27 @@ class AnnotationProperty extends EntityProperty
 
 		$this->column = (string) $column;
 		$this->nullable = (bool) $nullable;
+	}
+
+
+	/** @inheritdoc */
+	public function getValue(Entity $entity)
+	{
+		$value = $this->setType($entity->toRecord()->{$this->getColumn()});
+		return $value;
+	}
+
+
+	/** @inheritdoc */
+	public function setValue(Entity $entity, $value)
+	{
+		if ($this->isReadonly()) {
+			$ref = $entity::getReflection();
+			throw new Exception\MemberAccessException("Cannot write to a read-only property {$ref->getName()}::\${$this->getName()}.");
+		}
+
+		$this->checkType($value);
+		$entity->toRecord()->{$this->getColumn()} = $value;
 	}
 
 
