@@ -137,7 +137,7 @@ class EntityType extends NClassType
 						$matches = NStrings::match($tmp, '#^[ \t]*(?P<type>\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*(?:\|\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*)?)[ \t]+(?P<property>\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:[ \t]+->[ \t]+(?P<column>[a-zA-Z0-9_-]+))?[ \t]*(?P<description>.*)\z#');
 
 						if ($matches === NULL) {
-							throw new YetORM\Exception\InvalidPropertyDefinitionException('Invalid property definition - "@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@' . $ann . ' ' . $tmp . '" given.');
+							throw new YetORM\Exception\InvalidPropertyDefinitionException('"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@' . $ann . ' ' . $tmp . '" given.');
 						}
 
 						$nullable = FALSE;
@@ -152,7 +152,7 @@ class EntityType extends NClassType
 
 							if (strcasecmp($types[1], 'NULL') === 0) {
 								if ($nullable) {
-									throw new YetORM\Exception\InvalidPropertyDefinitionException('Invalid property type definition - only one NULL is allowed, "' . $matches['type'] . '" given.');
+									throw new YetORM\Exception\InvalidPropertyDefinitionException('Only one NULL is allowed, "' . $matches['type'] . '" given.');
 								}
 
 								$nullable = TRUE;
@@ -160,7 +160,7 @@ class EntityType extends NClassType
 							}
 
 							if (!$nullable) {
-								throw new YetORM\Exception\InvalidPropertyDefinitionException('Invalid property type definition - multiple non-NULL types detected.');
+								throw new YetORM\Exception\InvalidPropertyDefinitionException('Multiple non-NULL types detected.');
 							}
 						}
 
