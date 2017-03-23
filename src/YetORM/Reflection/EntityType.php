@@ -133,11 +133,15 @@ class EntityType extends NClassType
 
 			foreach ($ref->getAnnotations() as $ann => $values) {
 				if ($ann === 'property' || $ann === 'property-read') {
-					foreach ($values as $tmp) {
-						$matches = NStrings::match($tmp, '#^[ \t]*(?P<type>\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*(?:\|\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*)?)[ \t]+(?P<property>\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:[ \t]+->[ \t]+(?P<column>[a-zA-Z0-9_-]+))?[ \t]*(?P<description>.*)\z#');
+					foreach ($values as $line) {
+						$matches = NStrings::match($line, '#^[ \t]*(?P<type>\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*(?:\|\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*)?)[ \t]+(?P<property>[\$a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:[ \t]+->[ \t]+(?P<column>[a-zA-Z0-9_-]+))?[ \t]*(?P<description>.*)\z#');
 
 						if ($matches === NULL) {
-							throw new YetORM\Exception\InvalidPropertyDefinitionException('"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@' . $ann . ' ' . $tmp . '" given.');
+							throw new YetORM\Exception\InvalidPropertyDefinitionException('"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@' . $ann . ' ' . $line . '" given.');
+						}
+
+						if ($matches['property'][0] !== '$') {
+							throw new YetORM\Exception\InvalidPropertyDefinitionException('Missing "$" in property name - "@' . $ann . ' ' . $line . '"');
 						}
 
 						$nullable = FALSE;

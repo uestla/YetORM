@@ -179,7 +179,7 @@ test(function () {
 	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
 
 	}, InvalidPropertyDefinitionException::class,
-			'"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@property string nodollar" given.');
+			'Missing "$" in property name - "@property string nodollar"');
 });
 
 
