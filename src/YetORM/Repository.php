@@ -113,7 +113,7 @@ abstract class Repository extends Nette\Object
 	 */
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
 	{
-		return new EntityCollection($selection, $entity === NULL ? $this->createEntity : $entity, $refTable, $refColumn);
+		return new EntityCollection($selection, $entity === NULL ? [$this, 'createEntity'] : $entity, $refTable, $refColumn);
 	}
 
 
