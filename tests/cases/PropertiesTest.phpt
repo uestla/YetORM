@@ -160,7 +160,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadDoubleNullEntity::getReflection()->getEntityProperties();
 
-	}, InvalidStateException::class, 'Invalid property type (double NULL).');
+	}, InvalidStateException::class, 'Invalid property type definition - only one NULL is allowed, "NULL|NULL" given.');
 });
 
 
@@ -169,7 +169,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadMultipleTypeEntity::getReflection()->getEntityProperties();
 
-	}, InvalidStateException::class, 'Invalid property type (multiple non-NULL types detected).');
+	}, InvalidStateException::class, 'Invalid property type definition - multiple non-NULL types detected.');
 });
 
 
@@ -179,7 +179,7 @@ test(function () {
 	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
 
 	}, InvalidStateException::class,
-			'Invalid property definition - "@property string nodollar" does not match "@property[-read] <type> $<property> [-> <column>][ <description>]" pattern.');
+			'Invalid property definition - "@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@property string nodollar" given.');
 });
 
 
