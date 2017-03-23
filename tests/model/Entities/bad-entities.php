@@ -16,5 +16,10 @@ class BadMultipleTypeEntity extends Entity
 
 
 /** @property string nodollar */
-class InvalidPropertyDefinitionEntity extends Entity
+class MissingDollarEntity extends Entity
+{}
+
+
+/** @property $missingType */
+class MissingTypeEntity extends Entity
 {}

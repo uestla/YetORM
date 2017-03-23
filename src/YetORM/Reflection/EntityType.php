@@ -141,7 +141,7 @@ class EntityType extends NClassType
 						}
 
 						if ($matches['property'][0] !== '$') {
-							throw new YetORM\Exception\InvalidPropertyDefinitionException('Missing "$" in property name - "@' . $ann . ' ' . $line . '"');
+							throw new YetORM\Exception\InvalidPropertyDefinitionException('Missing "$" in property name in "@' . $ann . ' ' . $line . '"');
 						}
 
 						$nullable = FALSE;

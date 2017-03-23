@@ -173,13 +173,23 @@ test(function () {
 });
 
 
-// invalid property definition
+// missing $ in property definition
 test(function () {
 	Assert::exception(function () {
-	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
+		Model\Entities\MissingDollarEntity::getReflection()->getEntityProperties();
 
 	}, InvalidPropertyDefinitionException::class,
-			'Missing "$" in property name - "@property string nodollar"');
+			'Missing "$" in property name in "@property string nodollar"');
+});
+
+
+// invalid property definition (general)
+test(function () {
+	Assert::exception(function () {
+		Model\Entities\MissingTypeEntity::getReflection()->getEntityProperties();
+
+	}, InvalidPropertyDefinitionException::class,
+		'"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@property $missingType" given.');
 });
 
 
