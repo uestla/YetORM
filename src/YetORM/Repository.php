@@ -249,7 +249,6 @@ abstract class Repository extends Nette\Object
 			return $this->createEntityFromSelection($selection);
 
 		} elseif (strncmp($name, 'findBy', 6) === 0 && strlen($name) > 6) {
-			$selection = $this->getTable();
 			$properties = explode('And', substr($name, 6));
 
 			if (count($properties) !== count($args)) {
