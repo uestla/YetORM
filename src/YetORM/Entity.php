@@ -11,6 +11,7 @@
 namespace YetORM;
 
 use Nette\Utils\Callback as NCallback;
+use YetORM\Reflection\AnnotationProperty;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
 
@@ -71,8 +72,9 @@ abstract class Entity
 	{
 		$ref = static::getReflection();
 		$prop = $ref->getEntityProperty($name);
-		if ($prop instanceof Reflection\AnnotationProperty) {
-			$value = $prop->setType($this->record->{$prop->getColumn()});
+
+		if ($prop instanceof AnnotationProperty) {
+			$value = $prop->getValue($this);
 			return $value;
 		}
 
@@ -89,13 +91,9 @@ abstract class Entity
 	{
 		$ref = static::getReflection();
 		$prop = $ref->getEntityProperty($name);
-		if ($prop instanceof Reflection\AnnotationProperty) {
-			if ($prop->isReadonly()) {
-				throw new Exception\MemberAccessException("Cannot write to a read-only property {$ref->getName()}::\$$name.");
-			}
 
-			$prop->checkType($value);
-			$this->record->{$prop->getColumn()} = $value;
+		if ($prop instanceof AnnotationProperty) {
+			$prop->setValue($this, $value);
 			return ;
 		}
 
@@ -110,8 +108,9 @@ abstract class Entity
 	public function __isset($name)
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
-		if ($prop instanceof Reflection\AnnotationProperty) {
-			return $this->__get($name) !== NULL;
+
+		if ($prop instanceof AnnotationProperty) {
+			return $prop->getValue($this) !== NULL;
 		}
 
 		return FALSE;
