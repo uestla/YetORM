@@ -5,8 +5,8 @@ require_once __DIR__ . '/../bootstrap.php';
 use Tester\Assert;
 use YetORM\Exception\MemberAccessException;
 use YetORM\Exception\NotSupportedException;
-use YetORM\Exception\InvalidStateException;
 use YetORM\Exception\InvalidArgumentException;
+use YetORM\Exception\InvalidPropertyDefinitionException;
 
 
 // setters
@@ -160,7 +160,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadDoubleNullEntity::getReflection()->getEntityProperties();
 
-	}, InvalidStateException::class, 'Invalid property type definition - only one NULL is allowed, "NULL|NULL" given.');
+	}, InvalidPropertyDefinitionException::class, 'Invalid property type definition - only one NULL is allowed, "NULL|NULL" given.');
 });
 
 
@@ -169,7 +169,7 @@ test(function () {
 	Assert::exception(function () {
 		Model\Entities\BadMultipleTypeEntity::getReflection()->getEntityProperties();
 
-	}, InvalidStateException::class, 'Invalid property type definition - multiple non-NULL types detected.');
+	}, InvalidPropertyDefinitionException::class, 'Invalid property type definition - multiple non-NULL types detected.');
 });
 
 
@@ -178,7 +178,7 @@ test(function () {
 	Assert::exception(function () {
 	 Model\Entities\InvalidPropertyDefinitionEntity::getReflection()->getEntityProperties();
 
-	}, InvalidStateException::class,
+	}, InvalidPropertyDefinitionException::class,
 			'Invalid property definition - "@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "@property string nodollar" given.');
 });
 
