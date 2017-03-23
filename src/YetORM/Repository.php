@@ -182,8 +182,10 @@ abstract class Repository extends Nette\Object
 	final protected function getTableName()
 	{
 		if ($this->table === NULL) {
-			if (($annotation = static::getReflection()->getAnnotation('table')) === NULL) {
-				throw new Exception\InvalidStateException('Table name not set.');
+			$ref = static::getReflection();
+
+			if (($annotation = $ref->getAnnotation('table')) === NULL) {
+				throw new Exception\InvalidStateException('Table name not set. Use either annotation @table or class member ' . $ref->getName() . '::$table');
 			}
 
 			$this->table = $annotation;
@@ -199,7 +201,7 @@ abstract class Repository extends Nette\Object
 		if ($this->entity === NULL) {
 			$ref = static::getReflection();
 			if (($annotation = $ref->getAnnotation('entity')) === NULL) {
-				throw new Exception\InvalidStateException('Entity class not set.');
+				throw new Exception\InvalidStateException('Entity class not set. Use either annotation @entity or class member ' . $ref->getName() . '::$entity');
 			}
 
 			$this->entity = AnnotationsParser::expandClassName($annotation, $ref);
