@@ -41,10 +41,10 @@ abstract class EntityProperty
 	 */
 	public function __construct(EntityType $reflection, $name, $readonly, $type, $description = NULL)
 	{
+		$this->name = $name;
+		$this->type = $type;
+		$this->readonly = $readonly;
 		$this->reflection = $reflection;
-		$this->name = (string) $name;
-		$this->readonly = (bool) $readonly;
-		$this->type = (string) $type;
 		$this->description = $description === NULL ? NULL : (string) $description;
 	}
 

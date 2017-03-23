@@ -37,8 +37,8 @@ class AnnotationProperty extends EntityProperty
 	{
 		parent::__construct($reflection, $name, $readonly, $type, $description);
 
-		$this->column = (string) $column;
-		$this->nullable = (bool) $nullable;
+		$this->column = $column;
+		$this->nullable = $nullable;
 	}
 
 
