@@ -260,17 +260,25 @@ test(function () {
 
 // magic findBy() method
 test(function () {
-	Assert::same(4, count(ServiceLocator::getBookRepository()->findByAvailable(TRUE)));
+	$repo = ServiceLocator::getBookRepository();
+
+	Assert::same(4, count($repo->findByAvailable(TRUE)));
 
 	// nonexisting property
-	Assert::exception(function () {
-		ServiceLocator::getBookRepository()->findByFoo('bar');
+	Assert::exception(function () use ($repo) {
+		$repo->findByFoo('bar');
 
-	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\\Entities\\Book'.");
+
+	// magic findBy() on method property
+	Assert::exception(function () use ($repo) {
+		$repo->findByAuthor('foo');
+
+	}, InvalidArgumentException::class, "Cannot use Model\\Entities\\Book::findByAuthor() since \$author is a method property.");
 
 	// wrong number of arguments
-	Assert::exception(function () {
-		ServiceLocator::getBookRepository()->findByAvailable(TRUE, FALSE);
+	Assert::exception(function () use ($repo) {
+		$repo->findByAvailable(TRUE, FALSE);
 
 	}, InvalidArgumentException::class, 'Wrong number of argument passed to findByAvailable method - 1 expected, 2 given.');
 });
@@ -285,7 +293,7 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getBookRepository()->getByFoo('bar');
 
-	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\Entities\Book'.");
+	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\\Entities\\Book'.");
 
 	// wrong number of arguments
 	Assert::exception(function () {
@@ -300,7 +308,7 @@ test(function () {
 	Assert::exception(function () {
 		ServiceLocator::getAuthorRepository()->persist(ServiceLocator::getBookRepository()->createEntity());
 
-	}, InvalidArgumentException::class, "Instance of 'Model\Entities\Author' expected, 'Model\Entities\Book' given.");
+	}, InvalidArgumentException::class, "Instance of 'Model\\Entities\\Author' expected, 'Model\\Entities\\Book' given.");
 });
 
 

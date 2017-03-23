@@ -13,7 +13,9 @@ namespace YetORM;
 use Nette;
 use Nette\Database\IRow as NIRow;
 use Nette\Reflection\AnnotationsParser;
+use YetORM\Reflection\AnnotationProperty;
 use Nette\Database\Context as NdbContext;
+use YetORM\Exception\InvalidArgumentException;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
 
@@ -243,6 +245,10 @@ abstract class Repository extends Nette\Object
 					throw new Exception\InvalidArgumentException("Property '\$$property' not found in entity '$class'.");
 				}
 
+				if (!$prop instanceof AnnotationProperty) {
+					throw new InvalidArgumentException("Property $class::'\$$property' must be an annotation property.");
+				}
+
 				$selection->where($prop->getColumn(), $args[$key]);
 			}
 
@@ -264,6 +270,10 @@ abstract class Repository extends Nette\Object
 
 				if ($prop === NULL) {
 					throw new Exception\InvalidArgumentException("Property '\$$property' not found in entity '$class'.");
+				}
+
+				if (!$prop instanceof AnnotationProperty) {
+					throw new InvalidArgumentException("Cannot use $class::$name() since \$$property is a method property.");
 				}
 
 				$criteria[$prop->getColumn()] = $args[$key];
