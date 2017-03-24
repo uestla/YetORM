@@ -158,7 +158,7 @@ $books->findByTitle($title); // without having the method implemented
 
 That will return a collection of books with that exact title.
 
-When having other unique column(s) than primary key (for example `isbn` in `book` table), we can get a single entity via magic `getBy<Property>($value)` method:
+To get a single entity use the magic `getBy<Property>($value)` method:
 
 ```php
 $book = $books->getByIsbn('<isbn_code>'); // instanceof Book or NULL if not found
@@ -175,7 +175,19 @@ Just to have the IDE code completion along with this magic methods, we can use t
  */
 class BookRepository extends YetORM\Repository
 {}
+
+/**
+ * @property-read int $id
+ * @property string $title
+ * @property string $isbn
+ */
+ class Book exetends Entity
+ {}
 ```
+
+> IMPORTANT: When using magic `findBy<Property>()` and `getBy<Property>()` methods, make sure you have the property defined via `@property` annotation!
+
+> NOTE: magic `findBy<Property>()` and `getBy<Property>()` do not work on relational properties of type Entity.
 
 
 #### Persisting
