@@ -11,5 +11,17 @@
 namespace YetORM\Exception;
 
 
+class InvalidArgumentException extends \InvalidArgumentException
+{}
+
+
+class InvalidStateException extends \RuntimeException
+{}
+
+
 class MemberAccessException extends \LogicException
+{}
+
+
+class NotSupportedException extends \LogicException
 {}
