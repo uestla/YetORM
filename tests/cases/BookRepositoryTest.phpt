@@ -268,13 +268,13 @@ test(function () {
 	Assert::exception(function () use ($repo) {
 		$repo->findByFoo('bar');
 
-	}, InvalidArgumentException::class, "Property '\$foo' not found in entity 'Model\\Entities\\Book'.");
+	}, InvalidArgumentException::class, "Missing @property definition of Model\\Entities\\Book::\$foo.");
 
 	// magic findBy() on method property
 	Assert::exception(function () use ($repo) {
 		$repo->findByAuthor('foo');
 
-	}, InvalidArgumentException::class, "Cannot use Model\\Entities\\Book::findByAuthor() since \$author is a method property.");
+	}, InvalidArgumentException::class, "Cannot use Model\\Repositories\\BookRepository::findByAuthor() - missing @property definition of Model\\Entities\\Book::\$author.");
 
 	// wrong number of arguments
 	Assert::exception(function () use ($repo) {

@@ -271,11 +271,11 @@ abstract class Repository extends Nette\Object
 				$prop = $ref->getEntityProperty($property);
 
 				if ($prop === NULL) {
-					throw new Exception\InvalidArgumentException("Property '\$$property' not found in entity '$class'.");
+					throw new Exception\InvalidArgumentException("Missing @property definition of $class::\$$property.");
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					throw new InvalidArgumentException("Cannot use $class::$name() since \$$property is a method property.");
+					throw new InvalidArgumentException("Cannot use " . static::getReflection()->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
 				$criteria[$prop->getColumn()] = $args[$key];
