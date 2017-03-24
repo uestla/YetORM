@@ -230,7 +230,7 @@ abstract class Repository extends Nette\Object
 	 */
 	public function __call($name, $args)
 	{
-		if (strncmp($name, 'getBy', 5) === 0 && strlen($name) > 5) {
+		if (strncmp($name, 'getBy', 5) === 0) {
 			$selection = $this->getTable()->limit(1);
 			$properties = explode('And', substr($name, 5));
 
@@ -256,7 +256,7 @@ abstract class Repository extends Nette\Object
 
 			return $this->createEntityFromSelection($selection);
 
-		} elseif (strncmp($name, 'findBy', 6) === 0 && strlen($name) > 6) {
+		} elseif (strncmp($name, 'findBy', 6) === 0) {
 			$properties = explode('And', substr($name, 6));
 
 			if (count($properties) !== count($args)) {
