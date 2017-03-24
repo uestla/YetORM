@@ -288,7 +288,7 @@ abstract class Repository extends Nette\Object
 	}
 
 
-	// === transaction helpers ====================================================
+	// === TRANSACTION HELPERS ====================================================
 
 	/**
 	 * @param  \Closure $callback

@@ -149,7 +149,7 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	// === interface \Iterator ======================================
+	// === \Iterator INTERFACE ======================================
 
 	/** @return void */
 	public function rewind()
@@ -189,7 +189,7 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	// === interface \Countable ======================================
+	// === \Countable INTERFACE ======================================
 
 	/**
 	 * @param  string $column
