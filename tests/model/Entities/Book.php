@@ -12,6 +12,7 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
  * @property string $bookTitle -> book_title Title   of	the		book
  * @property DateTime|NULL $written
  * @property bool $available
+ * @property float $price
  */
 class Book extends BaseEntity
 {

@@ -95,6 +95,7 @@ test(function () {
 			'web' => 'http://www.vrana.cz/',
 			'born' => NULL,
 		],
+		'price' => 0.0,
 		'tags' => ['JavaScript'],
 
 	], $book->toArray());

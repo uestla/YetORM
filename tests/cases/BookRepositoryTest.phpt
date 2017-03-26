@@ -35,6 +35,7 @@ test(function () {
 		],
 		'written' => new Nette\Utils\DateTime('2010-01-01'),
 		'available' => TRUE,
+		'price' => 0.0,
 		'tags' => ['PHP', 'MySQL'],
 
 	], $book->toArray());
@@ -180,6 +181,7 @@ test(function () {
 		],
 		'written' => new Nette\Utils\DateTime('2008-01-01'),
 		'available' => TRUE,
+		'price' => 0.0,
 		'tags' => [],
 
 	], $book->toArray());
@@ -213,6 +215,7 @@ test(function () {
 		],
 		'written' => new Nette\Utils\DateTime('2008-01-01'),
 		'available' => FALSE,
+		'price' => 0.0,
 		'tags' => [],
 
 	], $book->toArray());

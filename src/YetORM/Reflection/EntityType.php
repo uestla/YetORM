@@ -173,6 +173,9 @@ class EntityType extends NClassType
 
 						} elseif ($type === 'int') {
 							$type = 'integer';
+
+						} elseif ($type === 'float') { // intentionally changed to "double" due to gettype()
+							$type = 'double';
 						}
 
 						if (!EntityProperty::isNativeType($type)) {

@@ -15,6 +15,7 @@ test(function () {
 	$book = $repo->createEntity();
 	$book->setAuthor(ServiceLocator::getAuthorRepository()->getByID(11));
 	$book->bookTitle = 'Brand new book';
+	$book->price = 13.0;
 
 	Assert::true($repo->persist($book));
 

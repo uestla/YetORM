@@ -25,6 +25,7 @@ CREATE TABLE `book` (
   `book_title` varchar(50) COLLATE utf8_czech_ci NOT NULL,
   `written` date DEFAULT NULL,
   `available` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `price` decimal(16,4) unsigned NOT NULL DEFAULT '0.0000',
   PRIMARY KEY (`id`),
   UNIQUE KEY `book_title` (`book_title`),
   KEY `book_author` (`author_id`),
