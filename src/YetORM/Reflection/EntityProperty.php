@@ -119,8 +119,8 @@ abstract class EntityProperty
 	 */
 	public static function isNativeType($type)
 	{
-		return $type !== NULL && ($type === 'integer' || $type === 'float' || $type === 'double'
-				|| $type === 'boolean' ||  $type === 'string' || $type === 'array');
+		return $type !== NULL && ($type === 'int' || $type === 'float' || $type === 'double'
+				|| $type === 'bool' ||  $type === 'string' || $type === 'array');
 	}
 
 }

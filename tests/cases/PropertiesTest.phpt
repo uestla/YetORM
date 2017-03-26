@@ -28,7 +28,7 @@ test(function () {
 	Assert::exception(function () use ($book) {
 		$book->available = 'TRUE';
 
-	}, InvalidArgumentException::class, "Invalid type - 'boolean' expected, 'string' given.");
+	}, InvalidArgumentException::class, "Invalid type - 'bool' expected, 'string' given.");
 
 	Assert::exception(function () use ($book) {
 		$book->asdf = 'Book title';

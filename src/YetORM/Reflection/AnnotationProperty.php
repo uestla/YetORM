@@ -97,8 +97,8 @@ class AnnotationProperty extends EntityProperty
 						. (($valtype = gettype($value)) === 'object' ? get_class($value) : $valtype) . "' given.");
 			}
 
-		} elseif ($need && ($type = gettype($value)) !== $this->getType()) {
-			throw new Exception\InvalidArgumentException("Invalid type - '{$this->getType()}' expected, '$type' given.");
+		} elseif ($need && !call_user_func('is_' . $this->getType(), $value)) {
+			throw new Exception\InvalidArgumentException("Invalid type - '{$this->getType()}' expected, '" . gettype($value) . "' given.");
 
 		} else {
 			return FALSE;

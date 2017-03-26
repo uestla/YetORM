@@ -168,14 +168,11 @@ class EntityType extends NClassType
 							}
 						}
 
-						if ($type === 'bool') {
-							$type = 'boolean';
+						if ($type === 'boolean') {
+							$type = 'bool';
 
-						} elseif ($type === 'int') {
-							$type = 'integer';
-
-						} elseif ($type === 'float') { // intentionally changed to "double" due to gettype()
-							$type = 'double';
+						} elseif ($type === 'integer') {
+							$type = 'int';
 						}
 
 						if (!EntityProperty::isNativeType($type)) {
