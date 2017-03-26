@@ -15,12 +15,7 @@ class BaseEntity extends YetORM\Entity
 		$values = [];
 
 		foreach ($ref->getEntityProperties() as $name => $property) {
-			if ($property instanceof YetORM\Reflection\MethodProperty) {
-				$value = $this->{'get' . $name}();
-
-			} else {
-				$value = $this->$name;
-			}
+			$value = $property->getValue($this);
 
 			if (!($value instanceof YetORM\EntityCollection || $value instanceof YetORM\Entity)) {
 				$values[$name] = $value;
