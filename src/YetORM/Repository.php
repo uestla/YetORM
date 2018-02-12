@@ -23,7 +23,9 @@ use Nette\Database\Table\Selection as NSelection;
 abstract class Repository
 {
 
-	use Nette\SmartObject;
+	use Nette\SmartObject {
+		__call as public netteCall;
+	}
 
 	/** @var NdbContext */
 	protected $database;
@@ -277,7 +279,8 @@ abstract class Repository
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					throw new InvalidArgumentException("Cannot use " . $ref->getName() . "::$name() - missing @property definition of $class::\$$property.");
+					$refs = Nette\Reflection\ClassType::from($this);
+					throw new InvalidArgumentException("Cannot use " . $refs->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
 				$criteria[$prop->getColumn()] = $args[$key];
@@ -286,7 +289,7 @@ abstract class Repository
 			return $this->findBy($criteria);
 		}
 
-		return parent::__call($name, $args);
+		return $this->netteCall($name, $args);
 	}
 
 
