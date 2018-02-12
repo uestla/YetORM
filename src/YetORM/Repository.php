@@ -184,7 +184,7 @@ abstract class Repository
 	final protected function getTableName()
 	{
 		if ($this->table === NULL) {
-			$ref = static::getReflection();
+			$ref = Nette\Reflection\ClassType::from($this);
 
 			if (($annotation = $ref->getAnnotation('table')) === NULL) {
 				throw new Exception\InvalidStateException('Table name not set. Use either annotation @table or class member ' . $ref->getName() . '::$table');
@@ -201,7 +201,7 @@ abstract class Repository
 	final protected function getEntityClass()
 	{
 		if ($this->entity === NULL) {
-			$ref = static::getReflection();
+			$ref = Nette\Reflection\ClassType::from($this);
 			if (($annotation = $ref->getAnnotation('entity')) === NULL) {
 				throw new Exception\InvalidStateException('Entity class not set. Use either annotation @entity or class member ' . $ref->getName() . '::$entity');
 			}
@@ -277,7 +277,7 @@ abstract class Repository
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					throw new InvalidArgumentException("Cannot use " . static::getReflection()->getName() . "::$name() - missing @property definition of $class::\$$property.");
+					throw new InvalidArgumentException("Cannot use " . $ref->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
 				$criteria[$prop->getColumn()] = $args[$key];
