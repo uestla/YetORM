@@ -20,8 +20,10 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
 
 
-abstract class Repository extends Nette\Object
+abstract class Repository
 {
+
+	use Nette\SmartObject;
 
 	/** @var NdbContext */
 	protected $database;
