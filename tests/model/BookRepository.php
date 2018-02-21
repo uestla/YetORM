@@ -123,6 +123,7 @@ class BookRepository extends YetORM\Repository
 	/**
 	 * @param  \Exception $e
 	 * @return void
+	 * @throws DuplicateEntryException
 	 */
 	protected function handleException(\Exception $e)
 	{
