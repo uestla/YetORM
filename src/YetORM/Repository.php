@@ -248,7 +248,7 @@ abstract class Repository extends Nette\Object
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					throw new InvalidArgumentException("Property $class::'\$$property' must be an annotation property.");
+					throw new InvalidArgumentException("Cannot use " . static::getReflection()->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
 				$selection->where($prop->getColumn(), $args[$key]);
