@@ -23,3 +23,14 @@ class MissingDollarEntity extends Entity
 /** @property $missingType */
 class MissingTypeEntity extends Entity
 {}
+
+
+/** @property string $name */
+class BothPropertyDefinitionEntity extends Entity
+{
+	/** @return string */
+	public function getName()
+	{
+		return $this->record->name;
+	}
+}
