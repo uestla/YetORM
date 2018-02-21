@@ -20,8 +20,12 @@ use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
 
 
-abstract class Repository extends Nette\Object
+abstract class Repository
 {
+
+	use Nette\SmartObject {
+		__call as public netteCall;
+	}
 
 	/** @var NdbContext */
 	protected $database;
@@ -182,7 +186,7 @@ abstract class Repository extends Nette\Object
 	final protected function getTableName()
 	{
 		if ($this->table === NULL) {
-			$ref = static::getReflection();
+			$ref = Nette\Reflection\ClassType::from($this);
 
 			if (($annotation = $ref->getAnnotation('table')) === NULL) {
 				throw new Exception\InvalidStateException('Table name not set. Use either annotation @table or class member ' . $ref->getName() . '::$table');
@@ -199,7 +203,7 @@ abstract class Repository extends Nette\Object
 	final protected function getEntityClass()
 	{
 		if ($this->entity === NULL) {
-			$ref = static::getReflection();
+			$ref = Nette\Reflection\ClassType::from($this);
 			if (($annotation = $ref->getAnnotation('entity')) === NULL) {
 				throw new Exception\InvalidStateException('Entity class not set. Use either annotation @entity or class member ' . $ref->getName() . '::$entity');
 			}
@@ -275,7 +279,8 @@ abstract class Repository extends Nette\Object
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					throw new InvalidArgumentException("Cannot use " . static::getReflection()->getName() . "::$name() - missing @property definition of $class::\$$property.");
+					$refs = Nette\Reflection\ClassType::from($this);
+					throw new InvalidArgumentException("Cannot use " . $refs->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
 				$criteria[$prop->getColumn()] = $args[$key];
@@ -284,7 +289,7 @@ abstract class Repository extends Nette\Object
 			return $this->findBy($criteria);
 		}
 
-		return parent::__call($name, $args);
+		return $this->netteCall($name, $args);
 	}
 
 
