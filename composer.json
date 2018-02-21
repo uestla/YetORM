@@ -26,5 +26,9 @@
 
 	"autoload": {
 		"classmap": ["src/"]
+	},
+
+	"scripts": {
+		"test": "tester tests/ -C"
 	}
 }
