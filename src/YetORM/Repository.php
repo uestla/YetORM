@@ -41,10 +41,10 @@ abstract class Repository
 
 
 	/** @param  NdbContext $database */
-	public function __construct(NdbContext $database)
+	public function __construct(NdbContext $database, ?Transaction $transaction = null)
 	{
 		$this->database = $database;
-		$this->transaction = new Transaction($database->getConnection());
+		$this->transaction = $transaction ?? new Transaction($database->getConnection());
 	}
 
 
