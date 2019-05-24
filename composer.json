@@ -13,7 +13,7 @@
 	"require": {
 		"php": ">=7.1.0",
 		"nette/utils": "^3",
-		"nette/database": "^3"		
+		"nette/database": "^3"
 	},
 
 	"require-dev": {
