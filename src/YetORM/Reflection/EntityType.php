@@ -12,6 +12,7 @@ namespace YetORM\Reflection;
 
 use YetORM;
 use Nette\Utils\Strings as NStrings;
+use Nette\Utils\Reflection as NReflection;
 
 class EntityType extends \ReflectionClass
 {
@@ -247,6 +248,10 @@ die;
 
 					} elseif ($type === 'integer') {
 						$type = 'int';
+					}
+
+					if (!EntityProperty::isNativeType($type)) {
+					    $type = NReflection::expandClassName($type, $class::getReflection());
 					}
 
 					$readonly = $match[1] === 'property-read';
