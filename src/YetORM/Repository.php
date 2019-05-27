@@ -12,12 +12,13 @@ namespace YetORM;
 
 use Nette;
 use Nette\Database\IRow as NIRow;
-use Nette\Reflection\AnnotationsParser;
+use Nette\Utils\Reflection as NReflection;
 use YetORM\Reflection\AnnotationProperty;
 use Nette\Database\Context as NdbContext;
 use YetORM\Exception\InvalidArgumentException;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
+use YetORM\Reflection\EntityType;
 
 
 abstract class Repository
@@ -182,33 +183,33 @@ abstract class Repository
 	}
 
 
-	/** @return string */
-	final protected function getTableName()
+	final protected function getTableName(): string
 	{
 		if ($this->table === NULL) {
-			$ref = Nette\Reflection\ClassType::from($this);
 
-			if (($annotation = $ref->getAnnotation('table')) === NULL) {
+			$ref = new \ReflectionClass($this);
+			$this->table = EntityType::parseAnnotation($ref, 'table');
+
+			if(!$this->table)  {
 				throw new Exception\InvalidStateException('Table name not set. Use either annotation @table or class member ' . $ref->getName() . '::$table');
 			}
-
-			$this->table = $annotation;
 		}
 
 		return $this->table;
 	}
 
 
-	/** @return string */
-	final protected function getEntityClass()
+	final protected function getEntityClass(): string
 	{
 		if ($this->entity === NULL) {
-			$ref = Nette\Reflection\ClassType::from($this);
-			if (($annotation = $ref->getAnnotation('entity')) === NULL) {
+			$ref = new \ReflectionClass($this);
+			$annotation = EntityType::parseAnnotation($ref, 'entity');
+
+			if (!$annotation) {
 				throw new Exception\InvalidStateException('Entity class not set. Use either annotation @entity or class member ' . $ref->getName() . '::$entity');
 			}
 
-			$this->entity = AnnotationsParser::expandClassName($annotation, $ref);
+			$this->entity = NReflection::expandClassName($annotation, $ref);
 		}
 
 		return $this->entity;

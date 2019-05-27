@@ -73,17 +73,16 @@ class EntityType extends \ReflectionClass
 	}
 
 
-	/** @return void */
-	private function loadMethodProperties()
+	private function loadMethodProperties(): void
 	{
 		foreach ($this->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
 			if ($method->getDeclaringClass()->getName() !== 'YetORM\\Entity'
 					&& strlen($method->getName()) > 3 && substr($method->getName(), 0, 3) === 'get'
-					&& !$method->hasAnnotation('internal')) {
+					&& !$method->isInternal()) {
 
 				$name = lcfirst(substr($method->getName(), 3));
 
-				$type = $method->getAnnotation('return');
+				$type = $method->getReturnType();
 
 				if ($type !== NULL && !EntityProperty::isNativeType($type)) {
 					$type = AnnotationsParser::expandClassName($type, $this);
@@ -118,81 +117,21 @@ class EntityType extends \ReflectionClass
 		return array_reverse($tree);
 	}
 
-
-	private static function parseBlock($doc) {
-
-	    $re = '/(?m)@(\S+) (\S+) (\S+)(.+)*$/';
-
-	    preg_match_all($re, $doc, $matches, PREG_SET_ORDER, 0);
-
-	    $properitiesList = [];
-
-	    foreach($matches as $property)
-	    {
-		$properitiesList[$property[3]] = [
-		    ''
-		];
-		dump($property);
-	    }
-
-	    die;
-
-
-        foreach(preg_split("/(\r?\n)/", $doc) as $line)
+	/**
+	 * Returns an annotation value.
+	 */
+	public static function parseAnnotation(\Reflector $ref, string $name): ?string
 	{
-    $re = '/(?m)@(\S+) (\S+) (\S+)(.+)*$/';
-    preg_match_all($re, $line, $matches, PREG_SET_ORDER, 0);
+		if (!NReflection::areCommentsAvailable()) {
+			throw new Nette\InvalidStateException('You have to enable phpDoc comments in opcode cache.');
+		}
+		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
+		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
+			return $m[1] ?? '';
+		}
+		return null;
+	}
 
-
-	    dump($matches);
-	    die;
-
-	    if(!empty($matches))
-	    {
-		dump($matches);
-die;
-	    }
-
-
-	    //list($property, $type, $name, $description) = array_pad(explode(' ', $line), 4, null);
-	    continue;
-		if(false);
-                $info = $matches[1];
-
-                // remove wrapping whitespace
-                $info = trim($info);
-
-                // remove leading asterisk
-                $info = preg_replace('/^(\*\s+?)/', '', $info);
-
-                // if it doesn't start with an "@" symbol
-                // then add to the description
-                if( $info[0] !== "@" ) {
-
-                    continue;
-                }else {
-                    // get the name of the param
-                    preg_match('/@(\w+)/', $info, $matches);
-                    $param_name = $matches[1];
-
-                    // remove the param from the string
-                    $value = str_replace("@$param_name ", '', $info);
-
-                    // if the param hasn't been added yet, create a key for it
-                    if( !isset($array[$param_name]) ) {
-                        $array[$param_name] = array();
-                    }
-
-                    // push the param value into place
-                    $array[$param_name][] = $value;
-
-                    continue;
-                }
-            }
-
-
-	//return $array;
-    }
 
 	/**
 	 * @param  string $class
@@ -202,7 +141,7 @@ die;
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];
-			preg_match_all('/(?m)@(\S+) (\S+) (\S+)(.+)*$/', ($class::getReflection())->getDocComment(), $matches, PREG_SET_ORDER, 0);
+			preg_match_all('/(?m)@(\S+) (\S+) (\S+(?: -> \S+)*)(.+)*$/', ($class::getReflection())->getDocComment(), $matches, PREG_SET_ORDER, 0);
 
 			/**
 			 * 0 - @property-read int $id desc
@@ -214,8 +153,7 @@ die;
 			foreach ($matches as $match) {
 
 				if ($match[1] === 'property' || $match[1] === 'property-read') {
-
-					if (NStrings::startsWith('$', $match[3])) {
+					if (!NStrings::startsWith($match[3], '$')) {
 						throw new YetORM\Exception\InvalidPropertyDefinitionException('Missing "$" in property name in "' . trim($match[0]) . '"');
 					}
 
@@ -231,7 +169,7 @@ die;
 
 						if (strcasecmp($types[1], 'NULL') === 0) {
 							if ($nullable) {
-								throw new YetORM\Exception\InvalidPropertyDefinitionException('Only one NULL is allowed, "' . $matches['type'] . '" given.');
+								throw new YetORM\Exception\InvalidPropertyDefinitionException('Only one NULL is allowed, "' . $match[2] . '" given.');
 							}
 
 							$nullable = TRUE;
@@ -255,8 +193,8 @@ die;
 					}
 
 					$readonly = $match[1] === 'property-read';
-					$name = substr($match[3], 1);
-					$column = substr($match[3], 1); /** @todo Column setting & meaning? */
+					$name = trim(substr(NStrings::contains($match[3], '->') ? NStrings::before($match[3], '->') : $match[3], 1));
+					$column = trim(substr(NStrings::contains($match[3], '->') ? NStrings::after($match[3], '->') : $match[3], 1));
 					$description = NStrings::trim($match[4]);
 
 					self::$annProps[$class][$name] = new AnnotationProperty(
