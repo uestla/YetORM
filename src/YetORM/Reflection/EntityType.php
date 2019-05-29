@@ -78,7 +78,7 @@ class EntityType extends \ReflectionClass
 		foreach ($this->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
 			if ($method->getDeclaringClass()->getName() !== 'YetORM\\Entity'
 					&& strlen($method->getName()) > 3 && substr($method->getName(), 0, 3) === 'get'
-					&& !$method->isInternal()) {
+					&& !NStrings::contains($method->getDocComment(), '@internal')) {
 
 				$name = lcfirst(substr($method->getName(), 3));
 
@@ -195,7 +195,7 @@ class EntityType extends \ReflectionClass
 					$readonly = $match[1] === 'property-read';
 					$name = trim(substr(NStrings::contains($match[3], '->') ? NStrings::before($match[3], '->') : $match[3], 1));
 					$column = trim(substr(NStrings::contains($match[3], '->') ? NStrings::after($match[3], '->') : $match[3], 1));
-					$description = NStrings::trim($match[4]);
+					$description = !empty($match[4]) && NStrings::trim($match[4]) ? NStrings::trim($match[4]) : NULL;
 
 					self::$annProps[$class][$name] = new AnnotationProperty(
 							$class::getReflection(),
@@ -214,5 +214,13 @@ class EntityType extends \ReflectionClass
 
 
 	}
-
+        
+	/**
+	 * @param  string|object
+	 * @return static
+	 */
+	public static function from($class)
+	{
+		return new static($class);
+	}
 }
