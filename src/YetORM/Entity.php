@@ -10,7 +10,6 @@
 
 namespace YetORM;
 
-use Nette\Utils\Callback as NCallback;
 use YetORM\Reflection\AnnotationProperty;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 
@@ -52,7 +51,7 @@ abstract class Entity
 			$prop = $ref->getProperty($name);
 			if ($prop->isPublic() && !$prop->isStatic() && (is_array($this->$name) || $this->$name instanceof \Traversable)) {
 				foreach ($this->$name as $cb) {
-					NCallback::invokeArgs($cb, $args);
+					$cb($args);
 				}
 
 				return ;
