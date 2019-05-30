@@ -107,7 +107,7 @@ abstract class Repository
 	protected function createEntityFromSelection(NSelection $selection)
 	{
 		$row = $selection->fetch();
-		return $row === FALSE ? NULL : $this->createEntity($row);
+		return $row === NULL ? NULL : $this->createEntity($row);
 	}
 
 
@@ -280,7 +280,7 @@ abstract class Repository
 				}
 
 				if (!$prop instanceof AnnotationProperty) {
-					$refs = Nette\Reflection\ClassType::from($this);
+					$refs = Reflection\EntityType::from($this);
 					throw new InvalidArgumentException("Cannot use " . $refs->getName() . "::$name() - missing @property definition of $class::\$$property.");
 				}
 
