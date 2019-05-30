@@ -66,7 +66,7 @@ class EntityCollection implements \Iterator, \Countable
 
 
 	/** @return void */
-	private function loadData()
+	private function loadData(): void
 	{
 		if ($this->data === NULL) {
 			if ($this->entity instanceof \Closure) {
@@ -89,7 +89,7 @@ class EntityCollection implements \Iterator, \Countable
 
 
 	/** @return array */
-	public function toArray()
+	public function toArray(): array
 	{
 		return iterator_to_array($this);
 	}
@@ -111,7 +111,7 @@ class EntityCollection implements \Iterator, \Countable
 	 * @param  bool $dir
 	 * @return EntityCollection
 	 */
-	public function orderBy($column, $dir = NULL)
+	public function orderBy($column, $dir = NULL): EntityCollection
 	{
 		if (is_array($column)) {
 			foreach ($column as $col => $d) {
@@ -133,7 +133,7 @@ class EntityCollection implements \Iterator, \Countable
 	 * @param  int $offset
 	 * @return EntityCollection
 	 */
-	public function limit($limit, $offset = NULL)
+	public function limit($limit, $offset = NULL): EntityCollection
 	{
 		$this->selection->limit($limit, $offset);
 		$this->invalidate();
@@ -142,7 +142,7 @@ class EntityCollection implements \Iterator, \Countable
 
 
 	/** @return void */
-	private function invalidate()
+	private function invalidate(): void
 	{
 		$this->data = NULL;
 	}
@@ -151,7 +151,7 @@ class EntityCollection implements \Iterator, \Countable
 	// === \Iterator INTERFACE ======================================
 
 	/** @return void */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->loadData();
 		$this->keys = array_keys($this->data);
@@ -160,7 +160,7 @@ class EntityCollection implements \Iterator, \Countable
 
 
 	/** @return Entity */
-	public function current()
+	public function current(): Entity
 	{
 		$key = current($this->keys);
 		return $key === FALSE ? FALSE : $this->data[$key];
@@ -175,14 +175,14 @@ class EntityCollection implements \Iterator, \Countable
 
 
 	/** @return void */
-	public function next()
+	public function next(): void
 	{
 		next($this->keys);
 	}
 
 
 	/** @return bool */
-	public function valid()
+	public function valid(): bool
 	{
 		return current($this->keys) !== FALSE;
 	}
@@ -194,7 +194,7 @@ class EntityCollection implements \Iterator, \Countable
 	 * @param  string $column
 	 * @return int
 	 */
-	public function count($column = NULL)
+	public function count($column = NULL): int
 	{
 		if ($column !== NULL) {
 			return $this->selection->count($column);

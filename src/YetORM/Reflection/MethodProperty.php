@@ -24,7 +24,7 @@ class MethodProperty extends EntityProperty
 
 
 	/** @inheritdoc */
-	public function setValue(Entity $entity, $value)
+	public function setValue(Entity $entity, $value): void
 	{
 		$entity->{'set' . ucfirst($this->getName())}($value);
 	}

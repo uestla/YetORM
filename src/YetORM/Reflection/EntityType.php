@@ -25,7 +25,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return EntityProperty[] */
-	public function getEntityProperties()
+	public function getEntityProperties(): array
 	{
 		$this->loadEntityProperties();
 		return $this->properties;
@@ -36,7 +36,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $name
 	 * @return EntityProperty|NULL
 	 */
-	public function getEntityProperty($name, $default = NULL)
+	public function getEntityProperty($name, $default = NULL): ?EntityProperty
 	{
 		return $this->hasEntityProperty($name) ? $this->properties[$name] : $default;
 	}
@@ -46,7 +46,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $name
 	 * @return bool
 	 */
-	public function hasEntityProperty($name)
+	public function hasEntityProperty($name): bool
 	{
 		$this->loadEntityProperties();
 		return isset($this->properties[$name]);
@@ -54,7 +54,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return void */
-	private function loadEntityProperties()
+	private function loadEntityProperties(): void
 	{
 		if ($this->properties === NULL) {
 			$this->properties = [];
@@ -78,7 +78,7 @@ class EntityType extends \ReflectionClass
 		foreach ($this->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
 			if ($method->getDeclaringClass()->getName() !== 'YetORM\\Entity'
 					&& strlen($method->getName()) > 3 && substr($method->getName(), 0, 3) === 'get'
-					&& !$method->isInternal()) {
+					&& !NStrings::contains($method->getDocComment(), '@internal')) {
 
 				$name = lcfirst(substr($method->getName(), 3));
 
@@ -103,7 +103,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return array */
-	private function getClassTree()
+	private function getClassTree(): array
 	{
 		$tree = [];
 		$current = $this->getName();
@@ -137,7 +137,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $class
 	 * @return void
 	 */
-	private static function loadAnnotationProperties($class)
+	private static function loadAnnotationProperties($class): void
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];
@@ -195,7 +195,7 @@ class EntityType extends \ReflectionClass
 					$readonly = $match[1] === 'property-read';
 					$name = trim(substr(NStrings::contains($match[3], '->') ? NStrings::before($match[3], '->') : $match[3], 1));
 					$column = trim(substr(NStrings::contains($match[3], '->') ? NStrings::after($match[3], '->') : $match[3], 1));
-					$description = NStrings::trim($match[4]);
+					$description = !empty($match[4]) && NStrings::trim($match[4]) ? NStrings::trim($match[4]) : NULL;
 
 					self::$annProps[$class][$name] = new AnnotationProperty(
 							$class::getReflection(),
@@ -214,5 +214,13 @@ class EntityType extends \ReflectionClass
 
 
 	}
-
+        
+	/**
+	 * @param  string|object
+	 * @return static
+	 */
+	public static function from($class)
+	{
+		return new static($class);
+	}
 }

@@ -39,7 +39,7 @@ class Record
 	 * @param  NActiveRow|Record $row
 	 * @return Record
 	 */
-	public static function create($row = NULL)
+	public static function create($row = NULL): Record
 	{
 		if ($row === NULL || $row instanceof NActiveRow) {
 			return new static($row);
@@ -56,14 +56,14 @@ class Record
 
 
 	/** @return bool */
-	public function hasRow()
+	public function hasRow(): bool
 	{
 		return $this->row !== NULL;
 	}
 
 
 	/** @return NActiveRow|NULL */
-	public function getRow()
+	public function getRow(): ?NActiveRow
 	{
 		return $this->row;
 	}
@@ -73,7 +73,7 @@ class Record
 	 * @param  NActiveRow $row
 	 * @return Record
 	 */
-	public function setRow(NActiveRow $row)
+	public function setRow(NActiveRow $row): Record
 	{
 		$this->reload($row);
 		return $this;
@@ -85,7 +85,7 @@ class Record
 	 * @param  string $throughColumn
 	 * @return Record|NULL
 	 */
-	public function ref($key, $throughColumn = NULL)
+	public function ref($key, $throughColumn = NULL): ?Record
 	{
 		$this->checkRow();
 		$native = $this->row->ref($key, $throughColumn);
@@ -98,7 +98,7 @@ class Record
 	 * @param  string $throughColumn
 	 * @return NGroupedSelection
 	 */
-	public function related($key, $throughColumn = NULL)
+	public function related($key, $throughColumn = NULL): NGroupedSelection
 	{
 		$this->checkRow();
 		return $this->row->related($key, $throughColumn);
@@ -106,14 +106,14 @@ class Record
 
 
 	/** @return array */
-	public function getModified()
+	public function getModified(): array
 	{
 		return $this->modified;
 	}
 
 
 	/** @return bool */
-	public function update()
+	public function update(): bool
 	{
 		$this->checkRow();
 
@@ -157,7 +157,7 @@ class Record
 	 * @param  mixed $value
 	 * @return void
 	 */
-	public function __set($name, $value)
+	public function __set($name, $value): void
 	{
 		$this->modified[$name] = $value;
 	}
@@ -167,7 +167,7 @@ class Record
 	 * @param  string $name
 	 * @return bool
 	 */
-	public function __isset($name)
+	public function __isset($name): bool
 	{
 		return isset($this->modified[$name])
 			|| isset($this->values[$name])
@@ -176,14 +176,14 @@ class Record
 
 
 	/** @return bool */
-	private function isPersisted()
+	private function isPersisted(): bool
 	{
 		return $this->hasRow() && !count($this->modified);
 	}
 
 
 	/** @return void */
-	private function checkRow()
+	private function checkRow(): void
 	{
 		if (!$this->hasRow()) {
 			throw new Exception\InvalidStateException('Row not set yet.');
@@ -195,7 +195,7 @@ class Record
 	 * @param  NActiveRow $row
 	 * @return void
 	 */
-	private function reload(NActiveRow $row)
+	private function reload(NActiveRow $row): void
 	{
 		$this->row = $row;
 		$this->modified = $this->values = [];
