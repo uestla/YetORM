@@ -50,7 +50,7 @@ class BookRepository extends YetORM\Repository
 	 * @param  Book $book
 	 * @return bool
 	 */
-	public function persist(YetORM\Entity $book)
+	public function persist(YetORM\Entity $book): bool
 	{
 		return $this->transaction(function () use ($book) {
 
@@ -95,7 +95,7 @@ class BookRepository extends YetORM\Repository
 
 
 	/** @return YetORM\EntityCollection|Book[] */
-	public function findByTag($name)
+	public function findByTag($name): YetORM\EntityCollection
 	{
 		return $this->findBy([
 			':book_tag.tag.name' => $name,
@@ -107,14 +107,14 @@ class BookRepository extends YetORM\Repository
 	 * @param  NActiveRow|Record $row
 	 * @return Book
 	 */
-	public function createEntity($row = NULL)
+	public function createEntity($row = NULL): YetORM\Entity
 	{
 		return new Book($this->imageDir, $row);
 	}
 
 
 	/** @return string */
-	public function getImageDir()
+	public function getImageDir(): string
 	{
 		return $this->imageDir;
 	}
@@ -125,7 +125,7 @@ class BookRepository extends YetORM\Repository
 	 * @return void
 	 * @throws DuplicateEntryException
 	 */
-	protected function handleException(\Exception $e)
+	protected function handleException(\Exception $e): void
 	{
 		if ($e instanceof \Nette\Database\UniqueConstraintViolationException) {
 			throw new DuplicateEntryException;

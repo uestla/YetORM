@@ -11,14 +11,14 @@ class InvalidRepository extends YetORM\Repository
 {
 
 	/** @return void */
-	public function testNoTable()
+	public function testNoTable(): void
 	{
 		$this->getTable();
 	}
 
 
 	/** @return void */
-	public function testNoEntity()
+	public function testNoEntity(): void
 	{
 		$this->getEntityClass();
 	}
