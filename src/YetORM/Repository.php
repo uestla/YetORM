@@ -53,7 +53,7 @@ abstract class Repository
 	 * @param  NActiveRow|Record $row
 	 * @return Entity
 	 */
-	public function createEntity($row = NULL)
+	public function createEntity($row = NULL): Entity
 	{
 		$class = $this->getEntityClass();
 		return new $class($row);
@@ -64,7 +64,7 @@ abstract class Repository
 	 * @param  mixed $id
 	 * @return Entity|NULL
 	 */
-	public function getByID($id)
+	public function getByID($id): ?Entity
 	{
 		$selection = $this->getTable()->wherePrimary($id);
 		return $this->createEntityFromSelection($selection);
@@ -75,7 +75,7 @@ abstract class Repository
 	 * @param  array $criteria
 	 * @return Entity|NULL
 	 */
-	public function getBy(array $criteria)
+	public function getBy(array $criteria): ?Entity
 	{
 		$selection = $this->getTable()->where($criteria);
 		return $this->createEntityFromSelection($selection);
@@ -86,7 +86,7 @@ abstract class Repository
 	 * @param  array $criteria
 	 * @return EntityCollection
 	 */
-	public function findBy(array $criteria)
+	public function findBy(array $criteria): EntityCollection
 	{
 		$selection = $this->getTable()->where($criteria);
 		return $this->createCollection($selection);
@@ -94,7 +94,7 @@ abstract class Repository
 
 
 	/** @return EntityCollection */
-	public function findAll()
+	public function findAll(): EntityCollection
 	{
 		return $this->findBy([]);
 	}
@@ -104,7 +104,7 @@ abstract class Repository
 	 * @param  NSelection $selection
 	 * @return Entity|NULL
 	 */
-	protected function createEntityFromSelection(NSelection $selection)
+	protected function createEntityFromSelection(NSelection $selection): ?Entity
 	{
 		$row = $selection->fetch();
 		return $row === NULL ? NULL : $this->createEntity($row);
@@ -118,7 +118,7 @@ abstract class Repository
 	 * @param  string $refColumn
 	 * @return EntityCollection
 	 */
-	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL)
+	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL): EntityCollection
 	{
 		return new EntityCollection($selection, $entity === NULL ? [$this, 'createEntity'] : $entity, $refTable, $refColumn);
 	}
@@ -128,7 +128,7 @@ abstract class Repository
 	 * @param  Entity $entity
 	 * @return bool
 	 */
-	public function persist(Entity $entity)
+	public function persist(Entity $entity): bool
 	{
 		$this->checkEntity($entity);
 
@@ -158,7 +158,7 @@ abstract class Repository
 	 * @param  Entity $entity
 	 * @return bool
 	 */
-	public function delete(Entity $entity)
+	public function delete(Entity $entity): bool
 	{
 		$this->checkEntity($entity);
 		$record = $entity->toRecord();
@@ -177,7 +177,7 @@ abstract class Repository
 	 * @param  string $table
 	 * @return NSelection
 	 */
-	protected function getTable($table = NULL)
+	protected function getTable($table = NULL): NSelection
 	{
 		return $this->database->table($table === NULL ? $this->getTableName() : $table);
 	}
@@ -217,7 +217,7 @@ abstract class Repository
 
 
 	/** @return void */
-	final protected function checkEntity(Entity $entity)
+	final protected function checkEntity(Entity $entity): void
 	{
 		$class = $this->getEntityClass();
 
@@ -316,7 +316,7 @@ abstract class Repository
 	 * @param  \Exception $e
 	 * @return void
 	 */
-	protected function handleException(\Exception $e)
+	protected function handleException(\Exception $e): void
 	{}
 
 }

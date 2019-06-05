@@ -55,7 +55,7 @@ class Transaction
 
 
 	/** @return void */
-	public function begin()
+	public function begin(): void
 	{
 		if (self::$transactionCounter[$this->getDsnKey()]++ === 0) {
 			$this->connection->beginTransaction();
@@ -64,7 +64,7 @@ class Transaction
 
 
 	/** @return void */
-	public function commit()
+	public function commit(): void
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] === 0) {
 			throw new Exception\InvalidStateException('No transaction started.');
@@ -77,7 +77,7 @@ class Transaction
 
 
 	/** @return void */
-	public function rollback()
+	public function rollback(): void
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] !== 0) {
 			$this->connection->rollBack();
@@ -88,7 +88,7 @@ class Transaction
 
 
 	/** @return string */
-	private function getDsnKey()
+	private function getDsnKey(): string
 	{
 		return sha1($this->connection->getDsn());
 	}

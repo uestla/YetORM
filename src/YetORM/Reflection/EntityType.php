@@ -25,7 +25,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return EntityProperty[] */
-	public function getEntityProperties()
+	public function getEntityProperties(): array
 	{
 		$this->loadEntityProperties();
 		return $this->properties;
@@ -36,7 +36,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $name
 	 * @return EntityProperty|NULL
 	 */
-	public function getEntityProperty($name, $default = NULL)
+	public function getEntityProperty($name, $default = NULL): ?EntityProperty
 	{
 		return $this->hasEntityProperty($name) ? $this->properties[$name] : $default;
 	}
@@ -46,7 +46,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $name
 	 * @return bool
 	 */
-	public function hasEntityProperty($name)
+	public function hasEntityProperty($name): bool
 	{
 		$this->loadEntityProperties();
 		return isset($this->properties[$name]);
@@ -54,7 +54,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return void */
-	private function loadEntityProperties()
+	private function loadEntityProperties(): void
 	{
 		if ($this->properties === NULL) {
 			$this->properties = [];
@@ -103,7 +103,7 @@ class EntityType extends \ReflectionClass
 
 
 	/** @return array */
-	private function getClassTree()
+	private function getClassTree(): array
 	{
 		$tree = [];
 		$current = $this->getName();
@@ -137,7 +137,7 @@ class EntityType extends \ReflectionClass
 	 * @param  string $class
 	 * @return void
 	 */
-	private static function loadAnnotationProperties($class)
+	private static function loadAnnotationProperties($class): void
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];

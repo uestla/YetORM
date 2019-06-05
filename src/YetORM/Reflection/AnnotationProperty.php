@@ -51,7 +51,7 @@ class AnnotationProperty extends EntityProperty
 
 
 	/** @inheritdoc */
-	public function setValue(Entity $entity, $value)
+	public function setValue(Entity $entity, $value): void
 	{
 		if ($this->isReadonly()) {
 			$ref = $entity::getReflection();
@@ -64,14 +64,14 @@ class AnnotationProperty extends EntityProperty
 
 
 	/** @return string */
-	public function getColumn()
+	public function getColumn(): string
 	{
 		return $this->column;
 	}
 
 
 	/** @return bool */
-	public function isNullable()
+	public function isNullable(): bool
 	{
 		return $this->nullable;
 	}
@@ -82,7 +82,7 @@ class AnnotationProperty extends EntityProperty
 	 * @param  bool $need
 	 * @return bool
 	 */
-	public function checkType($value, $need = TRUE)
+	public function checkType($value, $need = TRUE): bool
 	{
 		if ($value === NULL) {
 			if (!$this->nullable) {

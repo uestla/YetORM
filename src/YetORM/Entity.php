@@ -32,7 +32,7 @@ abstract class Entity
 
 
 	/** @return Record */
-	final public function toRecord()
+	final public function toRecord(): Record
 	{
 		return $this->record;
 	}
@@ -43,7 +43,7 @@ abstract class Entity
 	 * @param  array $args
 	 * @return void
 	 */
-	public function __call($name, $args)
+	public function __call($name, $args): void
 	{
 		// events support
 		$ref = static::getReflection();
@@ -86,7 +86,7 @@ abstract class Entity
 	 * @param  mixed $value
 	 * @return void
 	 */
-	public function __set($name, $value)
+	public function __set($name, $value): void
 	{
 		$ref = static::getReflection();
 		$prop = $ref->getEntityProperty($name);
@@ -104,7 +104,7 @@ abstract class Entity
 	 * @param  string $name
 	 * @return bool
 	 */
-	public function __isset($name)
+	public function __isset($name): bool
 	{
 		$prop = static::getReflection()->getEntityProperty($name);
 
@@ -121,14 +121,14 @@ abstract class Entity
 	 * @return void
 	 * @throws Exception\NotSupportedException
 	 */
-	public function __unset($name)
+	public function __unset($name): void
 	{
 		throw new Exception\NotSupportedException;
 	}
 
 
 	/** @return Reflection\EntityType */
-	public static function getReflection()
+	public static function getReflection(): Reflection\EntityType
 	{
 		$class = get_called_class();
 		if (!isset(self::$reflections[$class])) {
