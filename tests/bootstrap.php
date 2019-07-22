@@ -17,6 +17,6 @@ ServiceLocator::getCacheStorage()->clean([
 ]);
 
 $loader = new Nette\Loaders\RobotLoader;
-$loader->setTempDirectory(__DIR__ . '/temp');
+$loader->setTempDirectory(ServiceLocator::getTempDir());
 $loader->addDirectory(__DIR__ . '/model');
 $loader->register();
