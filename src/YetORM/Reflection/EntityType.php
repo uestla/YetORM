@@ -142,7 +142,7 @@ class EntityType extends \ReflectionClass
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];
-			$matches = NStrings::matchAll(($class::getReflection())->getDocComment(), '/(?m)@(\S+) (\S+) (\S+(?: -> \S+)*)(.+)*$/', PREG_SET_ORDER);
+			$matches = NStrings::matchAll(($class::getReflection())->getDocComment(), '/@(\S+) (\S+) ((?:(?!\*\/)\S(?: -> \S)*)*) ?((?:(?!\*\/).)*)/', PREG_SET_ORDER);
 
 			/**
 			 * 0 - @property-read int $id desc
