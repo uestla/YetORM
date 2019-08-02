@@ -11,15 +11,14 @@
 namespace YetORM;
 
 use Nette;
+use YetORM\Reflection\EntityType;
 use Nette\Database\IRow as NIRow;
-use Nette\Utils\Reflection as NReflection;
 use YetORM\Reflection\AnnotationProperty;
 use Nette\Database\Context as NdbContext;
+use Nette\Utils\Reflection as NReflection;
 use YetORM\Exception\InvalidArgumentException;
 use Nette\Database\Table\ActiveRow as NActiveRow;
 use Nette\Database\Table\Selection as NSelection;
-use YetORM\Reflection\EntityType;
-
 
 abstract class Repository
 {

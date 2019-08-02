@@ -12,15 +12,15 @@
 
 	"require": {
 		"php": ">=7.1.0",
-		"nette/utils": "^3",
-		"nette/database": "^3"
+		"nette/utils": "^3.0",
+		"nette/database": "^3.0"
 	},
 
 	"require-dev": {
 		"tracy/tracy": "^2.6",
 		"nette/tester": "^2.2",
-		"nette/caching": "^3",
-		"nette/robot-loader": "^3"
+		"nette/caching": "^3.0",
+		"nette/robot-loader": "^3.0"
 	},
 
 	"autoload": {

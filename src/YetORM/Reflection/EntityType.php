@@ -126,7 +126,8 @@ class EntityType extends \ReflectionClass
 			throw new Nette\InvalidStateException('You have to enable phpDoc comments in opcode cache.');
 		}
 		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
-		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
+		if ($ref->getDocComment() && $m = NStrings::match(trim($ref->getDocComment(), '/*'), $re)) {
+
 			return $m[1] ?? '';
 		}
 		return null;
@@ -141,7 +142,7 @@ class EntityType extends \ReflectionClass
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];
-			preg_match_all('/(?m)@(\S+) (\S+) (\S+(?: -> \S+)*)(.+)*$/', ($class::getReflection())->getDocComment(), $matches, PREG_SET_ORDER, 0);
+			$matches = NStrings::matchAll(($class::getReflection())->getDocComment(), '/(?m)@(\S+) (\S+) (\S+(?: -> \S+)*)(.+)*$/', PREG_SET_ORDER);
 
 			/**
 			 * 0 - @property-read int $id desc
@@ -214,7 +215,7 @@ class EntityType extends \ReflectionClass
 
 
 	}
-        
+
 	/**
 	 * @param  string|object
 	 * @return static

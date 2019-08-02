@@ -30,10 +30,16 @@ class ServiceLocator
 	public static function getCacheStorage(): Nette\Caching\Storages\FileStorage
 	{
 		if (self::$cacheStorage === NULL) {
-			self::$cacheStorage = new Nette\Caching\Storages\FileStorage(__DIR__ . '/../temp');
+			self::$cacheStorage = new Nette\Caching\Storages\FileStorage(self::getTempDir());
 		}
 
 		return self::$cacheStorage;
+	}
+
+	/** @return string */
+	public static function getTempDir(): string
+	{
+		return __DIR__ . '/../temp';
 	}
 
 
@@ -41,22 +47,7 @@ class ServiceLocator
 	public static function getDbContext(): Nette\Database\Context
 	{
 		if (self::$dbContext === NULL) {
-			$configFile = __DIR__ . '/../config/local.neon';
-                        
-			if(file_exists($configFile)) {
-				$config = Nette\Neon\Neon::decode(file_get_contents($configFile));
-                                
-				$dsn = $config['database']['dsn'];
-				$user = $config['database']['user'];
-				$password = $config['database']['password'];
-			}
-			else {
-				$dsn = 'mysql:host=127.0.0.1;dbname=orm-test';
-				$user = 'root';
-				$password = '';
-			}
-                        
-			$connection = new Nette\Database\Connection($dsn, $user, $password);
+			$connection = new Nette\Database\Connection('mysql:host=127.0.0.1;dbname=yetorm_test', 'root', '');
 			Nette\Database\Helpers::loadFromFile($connection, __DIR__ . '/db.sql');
 
 			$structure = new Nette\Database\Structure($connection, self::getCacheStorage());
