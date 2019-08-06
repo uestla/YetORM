@@ -217,7 +217,7 @@ class EntityType extends \ReflectionClass
 	/**
 	 * @param  string|object
 	 */
-	public static function from($class): self
+	public static function from($class)
 	{
 		return new static($class);
 	}
