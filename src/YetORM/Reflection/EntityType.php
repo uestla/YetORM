@@ -142,7 +142,7 @@ class EntityType extends \ReflectionClass
 	{
 		if (!isset(self::$annProps[$class])) {
 			self::$annProps[$class] = [];
-			$matches = NStrings::matchAll(($class::getReflection())->getDocComment(), '/(?m)@(\S+) (\S+) (\S+(?: -> \S+)*)(.+)*$/', PREG_SET_ORDER);
+			$matches = NStrings::matchAll(($class::getReflection())->getDocComment(), '/@(\S+) (\S+) ((?:(?!\*\/)\S(?: -> \S)*)*) ?((?:(?!\*\/).)*)/', PREG_SET_ORDER);
 
 			/**
 			 * 0 - @property-read int $id desc
@@ -154,6 +154,10 @@ class EntityType extends \ReflectionClass
 			foreach ($matches as $match) {
 
 				if ($match[1] === 'property' || $match[1] === 'property-read') {
+					if (empty($match[3]) || empty($match[2])) {
+						throw new YetORM\Exception\InvalidPropertyDefinitionException('"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "' . trim($match[0]) . '" given.');
+					}
+
 					if (!NStrings::startsWith($match[3], '$')) {
 						throw new YetORM\Exception\InvalidPropertyDefinitionException('Missing "$" in property name in "' . trim($match[0]) . '"');
 					}
