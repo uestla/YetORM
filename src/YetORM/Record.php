@@ -37,7 +37,6 @@ class Record
 
 	/**
 	 * @param  NActiveRow|Record $row
-	 * @return Record
 	 */
 	public static function create($row = NULL): Record
 	{
@@ -55,14 +54,12 @@ class Record
 	}
 
 
-	/** @return bool */
 	public function hasRow(): bool
 	{
 		return $this->row !== NULL;
 	}
 
 
-	/** @return NActiveRow|NULL */
 	public function getRow(): ?NActiveRow
 	{
 		return $this->row;
@@ -71,7 +68,6 @@ class Record
 
 	/**
 	 * @param  NActiveRow $row
-	 * @return Record
 	 */
 	public function setRow(NActiveRow $row): Record
 	{
@@ -83,7 +79,6 @@ class Record
 	/**
 	 * @param  string $key
 	 * @param  string $throughColumn
-	 * @return Record|NULL
 	 */
 	public function ref($key, $throughColumn = NULL): ?Record
 	{
@@ -96,7 +91,6 @@ class Record
 	/**
 	 * @param  string $key
 	 * @param  string $throughColumn
-	 * @return NGroupedSelection
 	 */
 	public function related($key, $throughColumn = NULL): NGroupedSelection
 	{
@@ -105,14 +99,12 @@ class Record
 	}
 
 
-	/** @return array */
 	public function getModified(): array
 	{
 		return $this->modified;
 	}
 
 
-	/** @return bool */
 	public function update(): bool
 	{
 		$this->checkRow();
@@ -129,7 +121,6 @@ class Record
 
 	/**
 	 * @param  string $name
-	 * @return mixed
 	 */
 	public function & __get($name)
 	{
@@ -155,7 +146,6 @@ class Record
 	/**
 	 * @param  string $name
 	 * @param  mixed $value
-	 * @return void
 	 */
 	public function __set($name, $value): void
 	{
@@ -165,7 +155,6 @@ class Record
 
 	/**
 	 * @param  string $name
-	 * @return bool
 	 */
 	public function __isset($name): bool
 	{
@@ -175,14 +164,12 @@ class Record
 	}
 
 
-	/** @return bool */
 	private function isPersisted(): bool
 	{
 		return $this->hasRow() && !count($this->modified);
 	}
 
 
-	/** @return void */
 	private function checkRow(): void
 	{
 		if (!$this->hasRow()) {
@@ -193,7 +180,6 @@ class Record
 
 	/**
 	 * @param  NActiveRow $row
-	 * @return void
 	 */
 	private function reload(NActiveRow $row): void
 	{

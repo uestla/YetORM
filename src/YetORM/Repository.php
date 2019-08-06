@@ -50,7 +50,6 @@ abstract class Repository
 
 	/**
 	 * @param  NActiveRow|Record $row
-	 * @return Entity
 	 */
 	public function createEntity($row = NULL): Entity
 	{
@@ -61,7 +60,6 @@ abstract class Repository
 
 	/**
 	 * @param  mixed $id
-	 * @return Entity|NULL
 	 */
 	public function getByID($id): ?Entity
 	{
@@ -72,7 +70,6 @@ abstract class Repository
 
 	/**
 	 * @param  array $criteria
-	 * @return Entity|NULL
 	 */
 	public function getBy(array $criteria): ?Entity
 	{
@@ -83,7 +80,6 @@ abstract class Repository
 
 	/**
 	 * @param  array $criteria
-	 * @return EntityCollection
 	 */
 	public function findBy(array $criteria): EntityCollection
 	{
@@ -92,7 +88,6 @@ abstract class Repository
 	}
 
 
-	/** @return EntityCollection */
 	public function findAll(): EntityCollection
 	{
 		return $this->findBy([]);
@@ -101,7 +96,6 @@ abstract class Repository
 
 	/**
 	 * @param  NSelection $selection
-	 * @return Entity|NULL
 	 */
 	protected function createEntityFromSelection(NSelection $selection): ?Entity
 	{
@@ -115,7 +109,6 @@ abstract class Repository
 	 * @param  string|callable $entity
 	 * @param  string $refTable
 	 * @param  string $refColumn
-	 * @return EntityCollection
 	 */
 	protected function createCollection($selection, $entity = NULL, $refTable = NULL, $refColumn = NULL): EntityCollection
 	{
@@ -125,7 +118,6 @@ abstract class Repository
 
 	/**
 	 * @param  Entity $entity
-	 * @return bool
 	 */
 	public function persist(Entity $entity): bool
 	{
@@ -155,7 +147,6 @@ abstract class Repository
 
 	/**
 	 * @param  Entity $entity
-	 * @return bool
 	 */
 	public function delete(Entity $entity): bool
 	{
@@ -174,7 +165,6 @@ abstract class Repository
 
 	/**
 	 * @param  string $table
-	 * @return NSelection
 	 */
 	protected function getTable($table = NULL): NSelection
 	{
@@ -215,7 +205,6 @@ abstract class Repository
 	}
 
 
-	/** @return void */
 	final protected function checkEntity(Entity $entity): void
 	{
 		$class = $this->getEntityClass();
@@ -230,7 +219,6 @@ abstract class Repository
 	/**
 	 * @param  string $name
 	 * @param  array $args
-	 * @return mixed
 	 */
 	public function __call($name, $args)
 	{
@@ -297,7 +285,6 @@ abstract class Repository
 
 	/**
 	 * @param  \Closure $callback
-	 * @return mixed
 	 */
 	final protected function transaction(\Closure $callback)
 	{
@@ -313,7 +300,6 @@ abstract class Repository
 
 	/**
 	 * @param  \Exception $e
-	 * @return void
 	 */
 	protected function handleException(\Exception $e): void
 	{}

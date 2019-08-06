@@ -31,7 +31,6 @@ abstract class Entity
 	}
 
 
-	/** @return Record */
 	final public function toRecord(): Record
 	{
 		return $this->record;
@@ -41,7 +40,6 @@ abstract class Entity
 	/**
 	 * @param  string $name
 	 * @param  array $args
-	 * @return void
 	 */
 	public function __call($name, $args): void
 	{
@@ -65,7 +63,6 @@ abstract class Entity
 
 	/**
 	 * @param  string $name
-	 * @return mixed
 	 */
 	public function & __get($name)
 	{
@@ -84,7 +81,6 @@ abstract class Entity
 	/**
 	 * @param  string $name
 	 * @param  mixed $value
-	 * @return void
 	 */
 	public function __set($name, $value): void
 	{
@@ -102,7 +98,6 @@ abstract class Entity
 
 	/**
 	 * @param  string $name
-	 * @return bool
 	 */
 	public function __isset($name): bool
 	{
@@ -118,7 +113,6 @@ abstract class Entity
 
 	/**
 	 * @param  string $name
-	 * @return void
 	 * @throws Exception\NotSupportedException
 	 */
 	public function __unset($name): void
@@ -127,7 +121,6 @@ abstract class Entity
 	}
 
 
-	/** @return Reflection\EntityType */
 	public static function getReflection(): Reflection\EntityType
 	{
 		$class = get_called_class();
