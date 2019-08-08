@@ -24,7 +24,6 @@ class EntityType extends \ReflectionClass
 	private static $annProps = [];
 
 
-	/** @return EntityProperty[] */
 	public function getEntityProperties(): array
 	{
 		$this->loadEntityProperties();
@@ -34,7 +33,6 @@ class EntityType extends \ReflectionClass
 
 	/**
 	 * @param  string $name
-	 * @return EntityProperty|NULL
 	 */
 	public function getEntityProperty($name, $default = NULL): ?EntityProperty
 	{
@@ -44,7 +42,6 @@ class EntityType extends \ReflectionClass
 
 	/**
 	 * @param  string $name
-	 * @return bool
 	 */
 	public function hasEntityProperty($name): bool
 	{
@@ -53,7 +50,6 @@ class EntityType extends \ReflectionClass
 	}
 
 
-	/** @return void */
 	private function loadEntityProperties(): void
 	{
 		if ($this->properties === NULL) {
@@ -102,7 +98,6 @@ class EntityType extends \ReflectionClass
 	}
 
 
-	/** @return array */
 	private function getClassTree(): array
 	{
 		$tree = [];
@@ -136,7 +131,6 @@ class EntityType extends \ReflectionClass
 
 	/**
 	 * @param  string $class
-	 * @return void
 	 */
 	private static function loadAnnotationProperties($class): void
 	{
@@ -154,7 +148,7 @@ class EntityType extends \ReflectionClass
 			foreach ($matches as $match) {
 
 				if ($match[1] === 'property' || $match[1] === 'property-read') {
-					if (empty($match[3]) || empty($match[2])) {
+					if (!(isset($match[3]) && strlen($match[3])) || !(isset($match[2]) && strlen($match[2]))) {
 						throw new YetORM\Exception\InvalidPropertyDefinitionException('"@property[-read] <type> $<property> [-> <column>][ <description>]" expected, "' . trim($match[0]) . '" given.');
 					}
 
@@ -222,7 +216,6 @@ class EntityType extends \ReflectionClass
 
 	/**
 	 * @param  string|object
-	 * @return static
 	 */
 	public static function from($class)
 	{

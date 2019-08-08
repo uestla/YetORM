@@ -63,14 +63,12 @@ class AnnotationProperty extends EntityProperty
 	}
 
 
-	/** @return string */
 	public function getColumn(): string
 	{
 		return $this->column;
 	}
 
 
-	/** @return bool */
 	public function isNullable(): bool
 	{
 		return $this->nullable;
@@ -80,7 +78,6 @@ class AnnotationProperty extends EntityProperty
 	/**
 	 * @param  mixed $value
 	 * @param  bool $need
-	 * @return bool
 	 */
 	public function checkType($value, $need = TRUE): bool
 	{
@@ -110,7 +107,6 @@ class AnnotationProperty extends EntityProperty
 
 	/**
 	 * @param  mixed $value
-	 * @return mixed
 	 */
 	public function setType($value)
 	{

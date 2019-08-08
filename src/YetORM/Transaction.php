@@ -36,7 +36,6 @@ class Transaction
 
 	/**
 	 * @param  \Closure $callback
-	 * @return mixed
 	 */
 	public function transaction(\Closure $callback)
 	{
@@ -54,7 +53,6 @@ class Transaction
 	}
 
 
-	/** @return void */
 	public function begin(): void
 	{
 		if (self::$transactionCounter[$this->getDsnKey()]++ === 0) {
@@ -63,7 +61,6 @@ class Transaction
 	}
 
 
-	/** @return void */
 	public function commit(): void
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] === 0) {
@@ -76,7 +73,6 @@ class Transaction
 	}
 
 
-	/** @return void */
 	public function rollback(): void
 	{
 		if (self::$transactionCounter[$dsn = $this->getDsnKey()] !== 0) {
@@ -87,7 +83,6 @@ class Transaction
 	}
 
 
-	/** @return string */
 	private function getDsnKey(): string
 	{
 		return sha1($this->connection->getDsn());

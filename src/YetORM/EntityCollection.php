@@ -65,7 +65,6 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	/** @return void */
 	private function loadData(): void
 	{
 		if ($this->data === NULL) {
@@ -88,7 +87,6 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	/** @return array */
 	public function toArray(): array
 	{
 		return iterator_to_array($this);
@@ -109,7 +107,6 @@ class EntityCollection implements \Iterator, \Countable
 	 *
 	 * @param  string|array $column
 	 * @param  bool $dir
-	 * @return EntityCollection
 	 */
 	public function orderBy($column, $dir = NULL): EntityCollection
 	{
@@ -131,7 +128,6 @@ class EntityCollection implements \Iterator, \Countable
 	/**
 	 * @param  int $limit
 	 * @param  int $offset
-	 * @return EntityCollection
 	 */
 	public function limit($limit, $offset = NULL): EntityCollection
 	{
@@ -141,7 +137,6 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	/** @return void */
 	private function invalidate(): void
 	{
 		$this->data = NULL;
@@ -150,7 +145,6 @@ class EntityCollection implements \Iterator, \Countable
 
 	// === \Iterator INTERFACE ======================================
 
-	/** @return void */
 	public function rewind(): void
 	{
 		$this->loadData();
@@ -159,7 +153,6 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	/** @return Entity */
 	public function current(): Entity
 	{
 		$key = current($this->keys);
@@ -167,21 +160,18 @@ class EntityCollection implements \Iterator, \Countable
 	}
 
 
-	/** @return mixed */
 	public function key()
 	{
 		return current($this->keys);
 	}
 
 
-	/** @return void */
 	public function next(): void
 	{
 		next($this->keys);
 	}
 
 
-	/** @return bool */
 	public function valid(): bool
 	{
 		return current($this->keys) !== FALSE;
@@ -192,7 +182,6 @@ class EntityCollection implements \Iterator, \Countable
 
 	/**
 	 * @param  string $column
-	 * @return int
 	 */
 	public function count($column = NULL): int
 	{
