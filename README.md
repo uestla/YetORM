@@ -181,7 +181,7 @@ class BookRepository extends YetORM\Repository
  * @property string $title
  * @property string $isbn
  */
- class Book exetends Entity
+ class Book extends Entity
  {}
 ```
 
